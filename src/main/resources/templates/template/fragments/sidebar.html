@@ -89,8 +89,8 @@
                                 <span data-i18n="sidebar.banners">Баннеры</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="commerce.html">
+                        <li th:classappend="${pageActive == 'personal' ? 'mm-active' : ''}">
+                            <a th:href="@{/personal}">
                                 <i class="metismenu-icon"></i>
                                 <span data-i18n="sidebar.systemUsers">Пользователи системы</span>
                             </a>
