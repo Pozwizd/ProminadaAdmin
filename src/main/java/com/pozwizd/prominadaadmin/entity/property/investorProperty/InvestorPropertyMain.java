@@ -25,7 +25,9 @@ public class InvestorPropertyMain {
 
     private String objectCode;
 
-    private String branchName;
+    private Integer branchCode;
+
+    private Integer employeeCode;
 
     @OneToOne
     @JoinColumn(name = "housing_state_id")
@@ -42,7 +44,7 @@ public class InvestorPropertyMain {
     private Double price;
 
     // Срок сдачи
-    private LocalDate completionDate;
+    private DeliveryDate deliveryDate;
 
     // Дата ввода в эксплуатацию
     private LocalDate commissioningDate;
@@ -73,13 +75,11 @@ public class InvestorPropertyMain {
 
     private Heating heating;
 
-
-
     private LocalDate lastCommunication;
 
     private Boolean isVnp;
 
-    private String vnpDate;
+    private LocalDate vnpDate;
 
     private SourceInformation sourceInformation;
 
@@ -95,10 +95,12 @@ public class InvestorPropertyMain {
 
     private Boolean fromMediator;
 
+    @Lob
     private String description;
 
     private String AdvertisingHeadline;
 
+    @Lob
     private String AdvertisingText;
 
     private Boolean isAdvertising;

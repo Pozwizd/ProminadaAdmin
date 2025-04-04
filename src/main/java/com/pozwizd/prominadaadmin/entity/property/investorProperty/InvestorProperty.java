@@ -11,6 +11,7 @@ import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryPro
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -23,7 +24,6 @@ public class InvestorProperty {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
 
     private String street;
 
@@ -43,28 +43,28 @@ public class InvestorProperty {
     @JoinColumn(name = "topozone_id")
     private Topozone topozone;
 
-
     private String houseNumber;
 
     private String houseSection;
 
     private String flatNumber;
 
-
     private String ownerFullName;
 
     private String phoneNumber;
 
-    private String acquisitionDate;
+    private LocalDate acquisitionDate;
 
     private OwnershipDoc ownershipDoc;
 
+    @Lob
     private String importantComment;
 
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "investorProperty")
     private List<InvestorPropertyFile> files;
 
+    @Lob
     private String adminComment;
 
     @OneToOne

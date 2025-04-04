@@ -11,6 +11,7 @@ import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -22,7 +23,7 @@ public class ResidentialLand {
     @Column(nullable = false)
     private Long id;
 
-    private String houseNumber;
+    private Integer houseNumber;
 
     private String street;
 
@@ -46,22 +47,22 @@ public class ResidentialLand {
 
     private String phoneNumber;
 
-    private String acquisitionDate;
+    private LocalDate acquisitionDate;
 
     private OwnershipDoc ownershipDoc;
 
+    @Lob
     private String importantComment;
 
     private String cadastralNumber;
 
     private String langPurpose;
 
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialLand")
     private List<ResidentialLandFile> files;
 
+    @Lob
     private String adminComment;
-
 
     @OneToOne
     @JoinColumn(name = "residential_land_main_id")
@@ -69,6 +70,4 @@ public class ResidentialLand {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialLand")
     private List<ResidentialLandGalleryImage> galleryImages;
-
-
 }

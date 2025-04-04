@@ -3,10 +3,7 @@ server:
     context-path: /
   port: 8082
 
-
 spring:
-
-
   application:
     name: ProminadaAdmin
 

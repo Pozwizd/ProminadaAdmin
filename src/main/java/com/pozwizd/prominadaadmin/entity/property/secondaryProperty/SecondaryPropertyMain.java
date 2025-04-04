@@ -25,7 +25,9 @@ public class SecondaryPropertyMain {
 
     private String objectCode;
 
-    private String branchName;
+    private int branchCode;
+
+    private int employeeCode;
 
     private String personalName;
 
@@ -88,7 +90,6 @@ public class SecondaryPropertyMain {
 
     private EntranceDoor entranceDoor;
 
-
     private LocalDate lastCommunication;
 
     private Boolean isVnp;
@@ -114,10 +115,12 @@ public class SecondaryPropertyMain {
     // С обстановкой
     private Boolean withFurniture;
 
+    @Lob
     private String description;
 
     private String AdvertisingHeadline;
 
+    @Lob
     private String AdvertisingText;
 
     private Boolean isAdvertising;

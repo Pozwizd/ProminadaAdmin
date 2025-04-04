@@ -8,18 +8,16 @@ import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @Entity
 public class SecondaryProperty {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
 
     private String street;
 
@@ -39,28 +37,27 @@ public class SecondaryProperty {
     @JoinColumn(name = "topozone_id")
     private Topozone topozone;
 
-
     private String houseNumber;
 
     private String houseSection;
 
     private String flatNumber;
 
-
     private String ownerFullName;
 
     private String phoneNumber;
 
-    private String acquisitionDate;
+    private LocalDate acquisitionDate;
 
     private OwnershipDoc ownershipDoc;
 
+    @Lob
     private String importantComment;
-
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "secondaryProperty")
     private List<SecondaryPropertyFile> files;
 
+    @Lob
     private String adminComment;
 
     @OneToOne

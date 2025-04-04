@@ -32,29 +32,29 @@ public class SecurityConfig {
         return NoOpPasswordEncoder.getInstance();
     }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/assets/**", "/forgotPassword", "/confirmation", "/resetPassword", "/changePassword", "/success").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .formLogin((form) -> form
-                        .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/", true)
-                        .permitAll()
-                )
-                .rememberMe((rm) -> rm.tokenRepository(persistentTokenRepository(dataSource)))
-                .logout((logout) -> logout
-                        .logoutUrl("/logout")
-                        .permitAll()
-                );
-
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .authorizeHttpRequests((authorize) -> authorize
+//                        .requestMatchers("/assets/**", "/forgotPassword", "/confirmation", "/resetPassword", "/changePassword", "/success").permitAll()
+//                        .requestMatchers("/login").permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .formLogin((form) -> form
+//                        .loginPage("/login")
+//                        .loginProcessingUrl("/login")
+//                        .defaultSuccessUrl("/", true)
+//                        .permitAll()
+//                )
+//                .rememberMe((rm) -> rm.tokenRepository(persistentTokenRepository(dataSource)))
+//                .logout((logout) -> logout
+//                        .logoutUrl("/logout")
+//                        .permitAll()
+//                );
+//
+//        return http.build();
+//    }
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {

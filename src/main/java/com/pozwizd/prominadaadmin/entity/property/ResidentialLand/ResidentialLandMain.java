@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Data
 @Entity
 public class ResidentialLandMain {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -95,6 +94,7 @@ public class ResidentialLandMain {
 
     private Boolean isVnp;
 
+    @Lob
     private String vnpDate;
 
     private SourceInformation sourceInformation;
@@ -111,13 +111,13 @@ public class ResidentialLandMain {
 
     private Boolean fromMediator;
 
+    @Lob
     private String description;
 
     private String AdvertisingHeadline;
 
+    @Lob
     private String AdvertisingText;
 
     private Boolean isAdvertising;
-
-
 }

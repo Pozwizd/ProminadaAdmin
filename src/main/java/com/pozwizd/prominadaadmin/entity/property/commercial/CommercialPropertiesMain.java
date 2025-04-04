@@ -27,7 +27,9 @@ public class CommercialPropertiesMain {
     private String objectCode;
 
     // Код филиала
-    private String branchName;
+    private Integer branchCode;
+
+    private Integer employeeCode;
 
     private String personalName;
 
@@ -56,7 +58,7 @@ public class CommercialPropertiesMain {
 
     private Boolean isVnp;
 
-    private String vnpDate;
+    private LocalDate vnpDate;
 
     private SourceInformation sourceInformation;
 
@@ -67,14 +69,12 @@ public class CommercialPropertiesMain {
     // Метраж комнат
     private String roomSizes;
 
-
     private String ceilingHeight;
     // Площадь участка
     private String siteArea;
 
     // Свободная площадь
     private Double livingSiteArea;
-
 
     private DesignatedUseOfLand designatedUseOfLand;
 
@@ -109,7 +109,6 @@ public class CommercialPropertiesMain {
     private AirConditioner airConditioner;
 
     private Ventilation ventilation;
-
     // Лестница
     private Stairs stairs;
 
@@ -138,11 +137,12 @@ public class CommercialPropertiesMain {
 
     private Boolean fromMediator;
 
+    @Lob
     private String description;
-
 
     private String AdvertisingHeadline;
 
+    @Lob
     private String AdvertisingText;
 
     private Boolean isAdvertising;

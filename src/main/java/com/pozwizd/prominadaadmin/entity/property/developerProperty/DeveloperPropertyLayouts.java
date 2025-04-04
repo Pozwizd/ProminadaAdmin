@@ -29,8 +29,8 @@ public class DeveloperPropertyLayouts {
 
     private Boolean visibleForSite;
 
+    @Lob
     private String description;
-
 
     @OneToMany(mappedBy = "developerPropertyLayouts", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DeveloperPropertyLayoutsImage> developerPropertyLayoutsImages;

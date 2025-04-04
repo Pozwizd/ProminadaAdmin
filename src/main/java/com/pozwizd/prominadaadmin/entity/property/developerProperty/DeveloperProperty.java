@@ -5,6 +5,7 @@ import com.pozwizd.prominadaadmin.entity.other.Distinct;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
+import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -49,7 +50,7 @@ public class DeveloperProperty {
     private BuildingCompany buildingCompany;
 
     // Срок сдачи обьекта
-    private String deliveryDate;
+    private DeliveryDate deliveryDate;
 
     private String phoneNumber;
 
@@ -62,10 +63,12 @@ public class DeveloperProperty {
     // Файл с ценами
     private String priceFile;
 
+    @Lob
     private String description;
 
     private String ActionTitle;
 
+    @Lob
     private String ActionDescription;
 
     private Boolean isAction;

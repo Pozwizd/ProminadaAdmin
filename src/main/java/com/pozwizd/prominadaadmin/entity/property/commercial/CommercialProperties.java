@@ -8,6 +8,7 @@ import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -46,10 +47,11 @@ public class CommercialProperties {
 
     private String phoneNumber;
 
-    private String acquisitionDate;
+    private LocalDate acquisitionDate;
 
     private OwnershipDoc ownershipDoc;
 
+    @Lob
     private String comment;
 
     private String cadastralNumber;
@@ -61,6 +63,7 @@ public class CommercialProperties {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "commercialProperties")
     private List<CommercialPropertiesFile> files;
 
+    @Lob
     private String adminComment;
 
     @OneToOne
@@ -69,6 +72,4 @@ public class CommercialProperties {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "commercialProperties")
     private List<CommercialPropertiesGalleryImage> galleryImages;
-
-
 }
