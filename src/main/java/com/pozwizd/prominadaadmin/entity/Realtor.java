@@ -1,5 +1,6 @@
 package com.pozwizd.prominadaadmin.entity;
 
+import com.pozwizd.prominadaadmin.entity.customer.Customer;
 import jakarta.persistence.*;
 import lombok.Data;
 

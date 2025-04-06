@@ -25,9 +25,9 @@ public class SecondaryPropertyMain {
 
     private String objectCode;
 
-    private int branchCode;
+    private Integer branchCode;
 
-    private int employeeCode;
+    private Integer employeeCode;
 
     private String personalName;
 

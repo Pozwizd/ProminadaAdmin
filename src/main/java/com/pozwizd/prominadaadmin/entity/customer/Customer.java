@@ -1,5 +1,7 @@
-package com.pozwizd.prominadaadmin.entity;
+package com.pozwizd.prominadaadmin.entity.customer;
 
+import com.pozwizd.prominadaadmin.entity.Realtor;
+import com.pozwizd.prominadaadmin.entity.SourceInformation;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,9 +35,11 @@ public class Customer {
     private LocalDate dateOfBirth;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "customer")
-    private List<DocumentCustomer> documentCustomers;
+    private List<CustomerDocument> documentCustomers;
 
     @Enumerated(EnumType.STRING)
     private SourceInformation sourceInformation;
 
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerNote> customerNotes;
 }

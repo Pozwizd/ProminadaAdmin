@@ -1,4 +1,4 @@
-package com.pozwizd.prominadaadmin.entity;
+package com.pozwizd.prominadaadmin.entity.customer;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "document_customer")
-public class DocumentCustomer {
+public class CustomerDocument {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

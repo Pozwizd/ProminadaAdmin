@@ -1,4 +1,4 @@
-package com.pozwizd.prominadaadmin.entity.property.developerProperty;
+package com.pozwizd.prominadaadmin.entity.property.builderProperty;
 
 import com.pozwizd.prominadaadmin.entity.other.City;
 import com.pozwizd.prominadaadmin.entity.other.Distinct;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Data
 @Entity
-public class DeveloperProperty {
+public class BuilderProperty {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -73,10 +73,10 @@ public class DeveloperProperty {
 
     private Boolean isAction;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "developerProperty")
-    private List<DeveloperPropertyGalleryImage> developerPropertyGalleryImages;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty")
+    private List<BuilderPropertyGalleryImage> builderPropertyGalleryImages;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "developerProperty")
-    private List<DeveloperPropertyLayouts> developerPropertyLayouts;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty")
+    private List<BuilderPropertyLayouts> builderPropertyLayouts;
 
 }

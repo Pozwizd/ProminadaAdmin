@@ -14,12 +14,9 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
 
-
 @Data
 @Entity
 public class InvestorProperty {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -59,7 +56,6 @@ public class InvestorProperty {
 
     @Lob
     private String importantComment;
-
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "investorProperty")
     private List<InvestorPropertyFile> files;
