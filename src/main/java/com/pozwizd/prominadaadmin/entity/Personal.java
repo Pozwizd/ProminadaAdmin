@@ -15,9 +15,9 @@ public class Personal {
     @Column(nullable = false)
     private Long id;
 
-    private String name;
-
     private String surname;
+
+    private String name;
 
     private String lastName;
 

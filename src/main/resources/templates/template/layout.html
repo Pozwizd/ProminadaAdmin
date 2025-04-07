@@ -1,440 +1,339 @@
 <!DOCTYPE html>
 <html
         lang="en"
-        class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar"
+        class="light-style layout-navbar-fixed layout-menu-fixed"
+        dir="ltr"
+        data-theme="theme-default"
+        th:data-assets-path="@{/assets/}"
+        data-template="vertical-menu-template"
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         xmlns:th="http://www.thymeleaf.org">
 
 <head layout:replace="~{template/fragments/head}">
+    <title></title>
 </head>
 
 <body>
 <!-- Layout wrapper -->
-<div class="app-container app-theme-white body-tabs-shadow fixed-header fixed-sidebar">
-    <!-- Header -->
-    <div layout:replace="~{template/fragments/header}">
-    </div>
-    <div layout:replace="~{template/fragments/options}">
-    </div>
-    <!-- Sidebar -->
-    <div class="app-main">
-        <div layout:replace="~{template/fragments/sidebar}">
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <!-- Menu -->
 
-        </div>
+        <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+            <div class="app-brand demo">
+                <a th:href="@{/}" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                <svg width="32" height="22" viewBox="0 0 32 22" fill="none" xmlns="http://www.w3.org/2000/svg"
+                     layout:replace="~{template/fragments/svgLogo}">
+                  <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M0.00172773 0V6.85398C0.00172773 6.85398 -0.133178 9.01207 1.98092 10.8388L13.6912 21.9964L19.7809 21.9181L18.8042 9.88248L16.4951 7.17289L9.23799 0H0.00172773Z"
+                          fill="#7367F0"
+                  />
+                  <path
+                          opacity="0.06"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M7.69824 16.4364L12.5199 3.23696L16.5541 7.25596L7.69824 16.4364Z"
+                          fill="#161616"
+                  />
+                  <path
+                          opacity="0.06"
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M8.07751 15.9175L13.9419 4.63989L16.5849 7.28475L8.07751 15.9175Z"
+                          fill="#161616"
+                  />
+                  <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M7.77295 16.3566L23.6563 0H32V6.88383C32 6.88383 31.8262 9.17836 30.6591 10.4057L19.7824 22H13.6938L7.77295 16.3566Z"
+                          fill="#7367F0"
+                  />
+                </svg>
+              </span>
+                    <span class="app-brand-text demo menu-text fw-bold" th:text="${appName}">appName</span>
+                </a>
 
-        <!-- Main Content -->
-        <div class="app-main__outer">
+                <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+                    <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+                    <i class="ti ti-x d-block d-xl-none ti-sm align-middle"></i>
+                </a>
+            </div>
 
-            <div layout:fragment="content" class="app-main__inner">
+            <div class="menu-inner-shadow"></div>
+
+            <ul class="menu-inner py-1">
+                 <li th:classappend="${pageActive == 'objects-builder' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/static}" class="menu-link"> <!-- Placeholder Link -->
+                         <i class="menu-icon tf-icons ti ti-building-skyscraper"></i>
+                         <div data-i18n="builderObjects">Объекты от строителей</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'objects-investor' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/static}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-building-bank"></i>
+                        <div data-i18n="investorObjects">Объекты от инвесторов</div>
+                    </a>
+                </li>
+                 <li th:classappend="${pageActive == 'objects-secondary' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/static}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-home-2"></i>
+                        <div data-i18n="secondaryRealEstate">Вторичная недвижимость</div>
+                    </a>
+                </li>
+                 <li th:classappend="${pageActive == 'housesAndLots' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/order}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-home"></i>
+                        <div data-i18n="housesAndLots">Дома и участки</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'commercial' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/customer}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-building-store"></i>
+                        <div data-i18n="commercial">Коммерческая</div>
+                    </a>
+                </li>
+                 <li th:classappend="${pageActive == 'buyers' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/cleaning}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-users"></i>
+                        <div data-i18n="buyers">Покупатели</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'applications' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/specifications}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-file-text"></i>
+                        <div data-i18n="applications">Заявки</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'branches' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/category}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-map-pin"></i>
+                        <div data-i18n="branches">Филиалы</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'realtors' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/static}" class="menu-link"> <!-- Placeholder Link -->
+                        <i class="menu-icon tf-icons ti ti-user-check"></i>
+                        <div data-i18n="realtors">Риелторы</div>
+                    </a>
+                </li>
+<!--                th:classappend="${#strings.startsWith(pageActive, 'site-') ? 'active open' : ''}"-->
+                <li  class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link menu-toggle">
+                        <i class="menu-icon tf-icons ti ti-settings"></i>
+                        <div data-i18n="websiteManagement">Управление сайтом</div>
+                    </a>
+                    <ul class="menu-sub">
+                        <li th:classappend="${pageActive == 'site-banners' ? 'active' : ''}" class="menu-item">
+                            <a href="analytics.html" class="menu-link"> <!-- Placeholder Link -->
+                                <div data-i18n="banners">Баннеры</div>
+                            </a>
+                        </li>
+                        <li th:classappend="${pageActive == 'personal' ? 'active' : ''}" class="menu-item">
+                            <a th:href="@{/personal}" class="menu-link"> <!-- Placeholder Link -->
+                                <div data-i18n="systemUsers">Пользователи системы</div>
+                            </a>
+                        </li>
+                        <li th:classappend="${pageActive == 'site-pages' ? 'active' : ''}" class="menu-item">
+                            <a href="sales.html" class="menu-link"> <!-- Placeholder Link -->
+                                <div data-i18n="pages">Страницы</div>
+                            </a>
+                        </li>
+                        <li th:classappend="${pageActive == 'site-changes' ? 'active' : ''}" class="menu-item">
+                            <a href="sales.html" class="menu-link"> <!-- Placeholder Link -->
+                                <div data-i18n="changes">Изменения</div>
+                            </a>
+                        </li>
+                        <li th:classappend="${pageActive == 'site-requests' ? 'active' : ''}" class="menu-item">
+                            <a href="crm.html" class="menu-link"> <!-- Placeholder Link -->
+                                <div data-i18n="websiteRequests">Заявки с сайта</div>
+                            </a>
+                        </li>
+                        <li th:classappend="${pageActive == 'site-questions' ? 'active' : ''}" class="menu-item">
+                            <a href="crm.html" class="menu-link"> <!-- Placeholder Link -->
+                                <div data-i18n="questions">Вопросы</div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </aside>
+        <!-- / Menu -->
+
+        <!-- Layout container -->
+        <div class="layout-page">
+            <!-- Navbar -->
+
+            <nav
+                    class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+                    id="layout-navbar"
+            >
+                <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+                    <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                        <i class="ti ti-menu-2 ti-sm"></i>
+                    </a>
+                </div>
+
+                <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+                    <div class="navbar-nav align-items-center">
+                        <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
+                            <i class="ti ti-sm"></i>
+                        </a>
+                    </div>
+                    <ul class="navbar-nav flex-row align-items-center ms-auto">
+                        <!-- Language -->
+                        <li class="nav-item dropdown-language dropdown me-2 me-xl-0">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                               data-bs-toggle="dropdown">
+                                <i class="fi fi-us fis rounded-circle me-1 fs-3"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" data-language="en">
+                                        <i class="fi fi-us fis rounded-circle me-1 fs-3"></i>
+                                        <span class="align-middle">English</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" data-language="ru">
+                                        <i class="fi fi-ru fis rounded-circle me-1 fs-3"></i>
+                                        <span class="align-middle">Русский</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="javascript:void(0);" data-language="uk">
+                                        <i class="fi fi-ua fis rounded-circle me-1 fs-3"></i>
+                                        <span class="align-middle">Українська</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!--/ Language -->
+
+                        <!-- Style Switcher -->
+                        <li class="nav-item me-2 me-xl-0">
+                            <a class="nav-link style-switcher-toggle hide-arrow" href="javascript:void(0);">
+                                <i class="ti ti-md"></i>
+                            </a>
+                        </li>
+                        <!--/ Style Switcher -->
 
 
+                        <!-- User -->
+                        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+                            <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
+                               data-bs-toggle="dropdown">
+                                <div class="avatar avatar-online">
+                                    <img th:src="@{/assets/img/avatars/1.png}"
+                                         alt class="h-auto rounded-circle"/>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/admin/profile}">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 me-3">
+                                                <div class="avatar avatar-online">
+                                                    <img th:src="@{/assets/img/avatars/1.png}"
+                                                         alt class="h-auto rounded-circle"/>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1">
+<!--                                                th:text="${currentUser.name}"-->
+<!--                                                th:text="${currentUser.role}"-->
+                                                <span class="fw-semibold d-block" >John Doe</span>
+                                                <small class="text-muted" >Admin</small>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" th:href="@{/logout}">
+                                        <i class="ti ti-logout me-2 ti-sm"></i>
+                                        <span class="align-middle">Log Out</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                </div>
+            </nav>
+
+            <div layout:replace="~{template/fragments/scripts}">
+            </div>
+            <!-- Content wrapper -->
+            <div class="content-wrapper">
                 <!-- Content -->
-                <div layout:fragment="content">
-                    <h4 class="page-title">Пример заголовка</h4>
+
+                <div class="container-xxl flex-grow-1 container-p-y" layout:fragment="content">
+                    <h4 class="fw-bold py-3 mb-4">Page 1</h4>
                     <p>
                         Sample page.<br/>For more layout options refer
-                        <a href="javascript:void(0);" class="fw-bold">Layout docs</a>.
+                        <a
+                                href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation//layouts.html"
+                                target="_blank"
+                                class="fw-bold"
+                        >Layout docs</a
+                        >.
                     </p>
                 </div>
-            </div>
+                <!-- / Content -->
 
-            <!-- Footer -->
-            <div class="app-wrapper-footer">
-                <div class="app-footer">
-                    <div class="app-footer__inner" layout:replace="~{template/fragments/footer}">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--DRAWER START-->
-<div class="app-drawer-wrapper">
-    <div class="drawer-nav-btn">
-        <button type="button" class="hamburger hamburger--elastic is-active">
-            <span class="hamburger-box"><span class="hamburger-inner"></span></span></button>
-    </div>
-    <div class="drawer-content-wrapper">
-        <div class="scrollbar-container">
-            <h3 class="drawer-heading">Servers Status</h3>
-            <div class="drawer-section">
-                <div class="row">
-                    <div class="col">
-                        <div class="progress-box"><h4>Server Load 1</h4>
-                            <div class="circle-progress circle-progress-gradient-xl mx-auto">
-                                <small></small>
+                <!-- Footer -->
+                <footer class="content-footer footer bg-footer-theme">
+                    <div class="container-xxl">
+                        <div
+                                class="footer-container d-flex align-items-center justify-content-between py-2 flex-md-row flex-column"
+                        >
+                            <div>
+                                ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                , Разработано SpaceLab
                             </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="progress-box"><h4>Server Load 2</h4>
-                            <div class="circle-progress circle-progress-success-xl mx-auto">
-                                <small></small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <div class="progress-box"><h4>Server Load 3</h4>
-                            <div class="circle-progress circle-progress-danger-xl mx-auto">
-                                <small></small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="divider"></div>
-                <div class="mt-3"><h5 class="text-center card-title">Live Statistics</h5>
-                    <div id="sparkline-carousel-3"></div>
-                    <div class="row">
-                        <div class="col">
-                            <div class="widget-chart p-0">
-                                <div class="widget-chart-content">
-                                    <div class="widget-numbers text-warning fsize-3">43</div>
-                                    <div class="widget-subheading pt-1">Packages</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="widget-chart p-0">
-                                <div class="widget-chart-content">
-                                    <div class="widget-numbers text-danger fsize-3">65</div>
-                                    <div class="widget-subheading pt-1">Dropped</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="widget-chart p-0">
-                                <div class="widget-chart-content">
-                                    <div class="widget-numbers text-success fsize-3">18</div>
-                                    <div class="widget-subheading pt-1">Invalid</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="text-center mt-2 d-block">
-                        <button class="mr-2 border-0 btn-transition btn btn-outline-danger">Escalate Issue</button>
-                        <button class="border-0 btn-transition btn btn-outline-success">Support Center</button>
-                    </div>
-                </div>
-            </div>
-            <h3 class="drawer-heading">File Transfers</h3>
-            <div class="drawer-section p-0">
-                <div class="files-box">
-                    <ul class="list-group list-group-flush">
-                        <li class="pt-2 pb-2 pr-2 list-group-item">
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left opacity-6 fsize-2 mr-3 text-primary center-elem">
-                                        <i class="fa fa-file-alt"></i>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading font-weight-normal">TPSReport.docx</div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="btn-icon btn-icon-only btn btn-link btn-sm">
-                                            <i class="fa fa-cloud-download-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="pt-2 pb-2 pr-2 list-group-item">
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left opacity-6 fsize-2 mr-3 text-warning center-elem">
-                                        <i class="fa fa-file-archive"></i>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading font-weight-normal">Latest_photos.zip</div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="btn-icon btn-icon-only btn btn-link btn-sm">
-                                            <i class="fa fa-cloud-download-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="pt-2 pb-2 pr-2 list-group-item">
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left opacity-6 fsize-2 mr-3 text-danger center-elem">
-                                        <i class="fa fa-file-pdf"></i>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading font-weight-normal">Annual Revenue.pdf</div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="btn-icon btn-icon-only btn btn-link btn-sm">
-                                            <i class="fa fa-cloud-download-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="pt-2 pb-2 pr-2 list-group-item">
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left opacity-6 fsize-2 mr-3 text-success center-elem">
-                                        <i class="fa fa-file-excel"></i>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading font-weight-normal">Analytics_GrowthReport.xls</div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="btn-icon btn-icon-only btn btn-link btn-sm">
-                                            <i class="fa fa-cloud-download-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <h3 class="drawer-heading">Tasks in Progress</h3>
-            <div class="drawer-section p-0">
-                <div class="todo-box">
-                    <ul class="todo-list-wrapper list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-warning"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox1266" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox1266">&nbsp;</label></div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Wash the car
-                                            <div class="badge badge-danger ml-2">Rejected</div>
-                                        </div>
-                                        <div class="widget-subheading"><i>Written by Bob</i></div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="border-0 btn-transition btn btn-outline-success">
-                                            <i class="fa fa-check"></i>
-                                        </button>
-                                        <button class="border-0 btn-transition btn btn-outline-danger">
-                                            <i class="fa fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-focus"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox1666" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox1666">&nbsp;</label></div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Task with hover dropdown menu</div>
-                                        <div class="widget-subheading">
-                                            <div>By Johnny
-                                                <div class="badge badge-pill badge-info ml-2">NEW</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <div class="d-inline-block dropdown">
-                                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="border-0 btn-transition btn btn-link">
-                                                <i class="fa fa-ellipsis-h">
-                                                </i>
-                                            </button>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"><h6 tabindex="-1" class="dropdown-header">Header</h6>
-                                                <button type="button" disabled="" tabindex="-1" class="disabled dropdown-item">Action</button>
-                                                <button type="button" tabindex="0" class="dropdown-item">Another Action</button>
-                                                <div tabindex="-1" class="dropdown-divider"></div>
-                                                <button type="button" tabindex="0" class="dropdown-item">Another Action</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-primary"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox4777" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox4777">&nbsp;</label></div>
-                                    </div>
-                                    <div class="widget-content-left flex2">
-                                        <div class="widget-heading">Badge on the right task</div>
-                                        <div class="widget-subheading">This task has show on hover actions!</div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="border-0 btn-transition btn btn-outline-success">
-                                            <i class="fa fa-check">
-                                            </i>
-                                        </button>
-                                    </div>
-                                    <div class="widget-content-right ml-3">
-                                        <div class="badge badge-pill badge-success">Latest Task</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-info"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox2444" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox2444">&nbsp;</label></div>
-                                    </div>
-                                    <div class="widget-content-left mr-3">
-                                        <div class="widget-content-left"><img width="42" class="rounded" src="../assets/images/avatars/1.jpg" alt=""/></div>
-                                    </div>
-                                    <div class="widget-content-left">
-                                        <div class="widget-heading">Go grocery shopping</div>
-                                        <div class="widget-subheading">A short description ...</div>
-                                    </div>
-                                    <div class="widget-content-right widget-content-actions">
-                                        <button class="border-0 btn-transition btn btn-sm btn-outline-success">
-                                            <i class="fa fa-check"></i>
-                                        </button>
-                                        <button class="border-0 btn-transition btn btn-sm btn-outline-danger">
-                                            <i class="fa fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="todo-indicator bg-success"></div>
-                            <div class="widget-content p-0">
-                                <div class="widget-content-wrapper">
-                                    <div class="widget-content-left mr-2">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" id="exampleCustomCheckbox3222" class="custom-control-input">
-                                            <label class="custom-control-label" for="exampleCustomCheckbox3222">&nbsp;</label></div>
-                                    </div>
-                                    <div class="widget-content-left flex2">
-                                        <div class="widget-heading">Development Task</div>
-                                        <div class="widget-subheading">Finish React ToDo List App</div>
-                                    </div>
-                                    <div class="widget-content-right">
-                                        <div class="badge badge-warning mr-2">69</div>
-                                    </div>
-                                    <div class="widget-content-right">
-                                        <button class="border-0 btn-transition btn btn-outline-success">
-                                            <i class="fa fa-check">
-                                            </i>
-                                        </button>
-                                        <button class="border-0 btn-transition btn btn-outline-danger">
-                                            <i class="fa fa-trash-alt">
-                                            </i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <h3 class="drawer-heading">Urgent Notifications</h3>
-            <div class="drawer-section">
-                <div class="notifications-box">
-                    <div class="vertical-time-simple vertical-without-time vertical-timeline vertical-timeline--one-column">
-                        <div class="vertical-timeline-item dot-danger vertical-timeline-element">
-                            <div><span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in"><h4 class="timeline-title">All Hands Meeting</h4><span class="vertical-timeline-element-date"></span></div>
-                            </div>
-                        </div>
-                        <div class="vertical-timeline-item dot-warning vertical-timeline-element">
-                            <div><span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in"><p>Yet another one, at <span class="text-success">15:00 PM</span></p><span class="vertical-timeline-element-date"></span></div>
-                            </div>
-                        </div>
-                        <div class="vertical-timeline-item dot-success vertical-timeline-element">
-                            <div><span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Build the production release
-                                        <div class="badge badge-danger ml-2">NEW</div>
-                                    </h4>
-                                    <span class="vertical-timeline-element-date"></span></div>
-                            </div>
-                        </div>
-                        <div class="vertical-timeline-item dot-primary vertical-timeline-element">
-                            <div><span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in">
-                                    <h4 class="timeline-title">Something not important
-                                        <div class="avatar-wrapper mt-2 avatar-wrapper-overlap">
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/1.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/2.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/3.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/4.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/5.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/6.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/7.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm">
-                                                <div class="avatar-icon"><img
-                                                        src="../assets/images/avatars/8.jpg"
-                                                        alt=""></div>
-                                            </div>
-                                            <div class="avatar-icon-wrapper avatar-icon-sm avatar-icon-add">
-                                                <div class="avatar-icon"><i>+</i></div>
-                                            </div>
-                                        </div>
-                                    </h4>
-                                    <span class="vertical-timeline-element-date"></span></div>
-                            </div>
-                        </div>
-                        <div class="vertical-timeline-item dot-info vertical-timeline-element">
-                            <div><span class="vertical-timeline-element-icon bounce-in"></span>
-                                <div class="vertical-timeline-element-content bounce-in"><h4 class="timeline-title">This dot has an info state</h4><span class="vertical-timeline-element-date"></span></div>
-                            </div>
-                        </div>
-                        <div class="vertical-timeline-item dot-dark vertical-timeline-element">
-                            <div><span class="vertical-timeline-element-icon is-hidden"></span>
-                                <div class="vertical-timeline-element-content is-hidden"><h4 class="timeline-title">This dot has a dark state</h4><span class="vertical-timeline-element-date"></span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="app-drawer-overlay d-none animated fadeIn"></div><!--DRAWER END-->
+                            <div>
+                                <a href="https://themeforest.net/licenses/standard" class="footer-link me-4"
+                                   target="_blank"
+                                >License</a
+                                >
+                                <a href="https://1.envato.market/pixinvent_portfolio" target="_blank"
+                                   class="footer-link me-4"
+                                >More Themes</a
+                                >
 
-<div layout:replace="~{template/fragments/scripts}">
+                                <a
+                                        href="https://pixinvent.com/demo/vuexy-html-bootstrap-admin-template/documentation/"
+                                        target="_blank"
+                                        class="footer-link me-4"
+                                >Documentation</a
+                                >
+
+                                <a href="https://pixinvent.ticksy.com/" target="_blank"
+                                   class="footer-link d-none d-sm-inline-block"
+                                >Support</a
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <!-- / Footer -->
+
+                <div class="content-backdrop fade"></div>
+            </div>
+            <!-- Content wrapper -->
+        </div>
+        <!-- / Layout page -->
+    </div>
+
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+
+    <div class="drag-target"></div>
 </div>
+
 </body>
-</html> 
+</html>

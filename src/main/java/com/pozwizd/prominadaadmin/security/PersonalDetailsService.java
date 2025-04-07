@@ -33,7 +33,7 @@ public class PersonalDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Personal personal) {
-        // Spring Security expects roles to be prefixed with "ROLE_"
+        // Spring Security ожидает, что роли будут префикс с помощью "ROLE_"
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + personal.getRole().name()));
     }
 }

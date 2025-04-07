@@ -1,87 +1,11 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{template/layout}">
-<head>
-    <title>Sample Template Page</title>
-</head>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/layout.html}">
 <body>
-    <div layout:fragment="content">
-        <div class="app-page-title">
-            <div class="page-title-wrapper">
-                <div class="page-title-heading">
-                    <div class="page-title-icon">
-                        <i class="pe-7s-display1 icon-gradient bg-premium-dark"></i>
-                    </div>
-                    <div>Template Sample Page
-                        <div class="page-title-subheading">This is a sample page using Template layout</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+<div layout:fragment="content">
+    <div class="container">
 
-        <div class="row">
-            <div class="col-md-6 col-xl-4">
-                <div class="card mb-3 widget-content bg-midnight-bloom">
-                    <div class="widget-content-wrapper text-white">
-                        <div class="widget-content-left">
-                            <div class="widget-heading">Total Orders</div>
-                            <div class="widget-subheading">Last year expenses</div>
-                        </div>
-                        <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span>1896</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <div class="card mb-3 widget-content bg-arielle-smile">
-                    <div class="widget-content-wrapper text-white">
-                        <div class="widget-content-left">
-                            <div class="widget-heading">Clients</div>
-                            <div class="widget-subheading">Total Clients Profit</div>
-                        </div>
-                        <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span>$ 568</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-xl-4">
-                <div class="card mb-3 widget-content bg-grow-early">
-                    <div class="widget-content-wrapper text-white">
-                        <div class="widget-content-left">
-                            <div class="widget-heading">Followers</div>
-                            <div class="widget-subheading">People Interested</div>
-                        </div>
-                        <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span>46%</span></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="main-card mb-3 card">
-                    <div class="card-header">Sample Content
-                    </div>
-                    <div class="card-body">
-                        <p>This is a sample page that uses the template2 layout. You can add your content here.</p>
-
-                        <div class="divider"></div>
-
-                        <h5 class="card-title">Special Features</h5>
-                        <p>
-                            This template includes various components and layouts that you can use in your application.
-                            It has a different visual style compared to the first template.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+</div>
 </body>
 </html>

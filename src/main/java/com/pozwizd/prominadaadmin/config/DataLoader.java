@@ -38,7 +38,7 @@ public class DataLoader {
 
     public void loadFakeUsers() {
         Faker faker = new Faker(new Locale("uk"));
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             Personal personal = new Personal();
             personal.setName(faker.name().firstName());
             personal.setSurname(faker.name().lastName());
