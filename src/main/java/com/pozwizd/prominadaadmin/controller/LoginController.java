@@ -10,8 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 @AllArgsConstructor
 public class LoginController {
 
-
-
     @GetMapping("/login")
     public ModelAndView login(Model model) {
         model.addAttribute("title", "Вход в систему");

@@ -1,5 +1,6 @@
 package com.pozwizd.prominadaadmin.entity.property.secondaryProperty;
 
+import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.entity.other.City;
 import com.pozwizd.prominadaadmin.entity.other.Distinct;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
@@ -60,6 +61,9 @@ public class SecondaryProperty {
     @Lob
     private String adminComment;
 
+    @ManyToOne
+    private Realtor realtor;
+
     @OneToOne
     @JoinColumn(name = "secondary_property_main_id")
     private SecondaryPropertyMain secondaryPropertyMain;
@@ -67,4 +71,5 @@ public class SecondaryProperty {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "secondaryProperty")
     private List<SecondaryPropertyGalleryImage> galleryImages;
 
+    private LocalDate dateOfCreating;
 }

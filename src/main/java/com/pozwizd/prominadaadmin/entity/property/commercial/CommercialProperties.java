@@ -1,5 +1,6 @@
 package com.pozwizd.prominadaadmin.entity.property.commercial;
 
+import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.entity.other.City;
 import com.pozwizd.prominadaadmin.entity.other.Distinct;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
@@ -59,7 +60,6 @@ public class CommercialProperties {
     // Назначение коммерческой недвижимости
     private String langPurpose;
 
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "commercialProperties")
     private List<CommercialPropertiesFile> files;
 
@@ -72,4 +72,9 @@ public class CommercialProperties {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "commercialProperties")
     private List<CommercialPropertiesGalleryImage> galleryImages;
+
+    private LocalDate dateOfCreating;
+
+    @ManyToOne
+    private Realtor realtor;
 }

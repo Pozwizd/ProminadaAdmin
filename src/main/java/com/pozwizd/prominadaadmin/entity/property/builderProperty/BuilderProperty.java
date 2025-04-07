@@ -9,6 +9,7 @@ import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -79,4 +80,5 @@ public class BuilderProperty {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty")
     private List<BuilderPropertyLayouts> builderPropertyLayouts;
 
+    private LocalDate dateOfCreating;
 }

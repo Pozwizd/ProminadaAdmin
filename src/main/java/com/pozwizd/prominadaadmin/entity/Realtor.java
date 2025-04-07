@@ -1,6 +1,10 @@
 package com.pozwizd.prominadaadmin.entity;
 
 import com.pozwizd.prominadaadmin.entity.customer.Customer;
+import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
+import com.pozwizd.prominadaadmin.entity.property.investorProperty.InvestorProperty;
+import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -33,4 +37,16 @@ public class Realtor {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "realtor")
     private List<Customer> customer;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
+    private List<InvestorProperty> investorProperties;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
+    private List<SecondaryProperty> secondaryProperties;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
+    private List<ResidentialLand> residentialLands;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
+    private List<CommercialProperties> commercialProperties;
 }

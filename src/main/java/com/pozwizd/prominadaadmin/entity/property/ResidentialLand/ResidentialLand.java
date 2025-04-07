@@ -1,5 +1,6 @@
 package com.pozwizd.prominadaadmin.entity.property.ResidentialLand;
 
+import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.entity.other.City;
 import com.pozwizd.prominadaadmin.entity.other.Distinct;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
@@ -70,4 +71,9 @@ public class ResidentialLand {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialLand")
     private List<ResidentialLandGalleryImage> galleryImages;
+
+    private LocalDate dateOfCreating;
+
+    @ManyToOne
+    private Realtor realtor;
 }

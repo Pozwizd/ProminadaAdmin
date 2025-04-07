@@ -1,13 +1,11 @@
 package com.pozwizd.prominadaadmin.entity.property.investorProperty;
 
+import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.entity.other.City;
 import com.pozwizd.prominadaadmin.entity.other.Distinct;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
-import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryPropertyFile;
-import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryPropertyGalleryImage;
-import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryPropertyMain;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -69,4 +67,9 @@ public class InvestorProperty {
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "investorProperty")
     private List<InvestorPropertyGalleryImage> galleryImages;
+
+    private LocalDate dateOfCreating;
+
+    @ManyToOne
+    private Realtor realtor;
 }
