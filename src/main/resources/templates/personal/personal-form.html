@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/layout.html}">
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <h4 class="fw-bold m-0" data-i18n="personal.createUser">Создать пользователя</h4>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form id="personalForm" class="row g-3 needs-validation" novalidate>
+                <input type="hidden" id="userId">
+
+                <div class="col-md-6">
+                    <label for="role" class="form-label" data-i18n="personal.role">Роль</label>
+                    <select class="form-select" id="role" required>
+                        <option value="" data-i18n="personal.selectRole">Выберите роль</option>
+                        <option value="ADMIN" data-i18n="personal.admin">Администратор</option>
+                        <option value="USER" data-i18n="personal.user">Пользователь</option>
+                    </select>
+                    <div class="invalid-feedback" data-i18n="personal.roleRequired">Пожалуйста, выберите роль</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="surname" class="form-label" data-i18n="personal.surname">Фамилия</label>
+                    <input type="text" class="form-control" id="surname" required>
+                    <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста, введите фамилию</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="name" class="form-label" data-i18n="personal.name">Имя</label>
+                    <input type="text" class="form-control" id="name" required>
+                    <div class="invalid-feedback" data-i18n="personal.nameRequired">Пожалуйста, введите имя</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label" data-i18n="personal.lastName">Отчество</label>
+                    <input type="text" class="form-control" id="lastName">
+                </div>
+
+                <div class="col-md-6">
+                    <label for="phoneNumber" class="form-label" data-i18n="personal.phoneNumber">Телефон</label>
+                    <input type="tel" class="form-control" id="phoneNumber" required>
+                    <div class="invalid-feedback" data-i18n="personal.phoneRequired">Пожалуйста, введите телефон</div>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="email" class="form-label" data-i18n="personal.email">Email</label>
+                    <input type="email" class="form-control" id="email" required>
+                    <div class="invalid-feedback" data-i18n="personal.emailRequired">Пожалуйста, введите корректный email</div>
+                </div>
+
+                <div class="col-md-6" th:if="${!isEdit}">
+                    <label for="password" class="form-label" data-i18n="personal.password">Пароль</label>
+                    <input type="password" class="form-control" id="password" required>
+                    <div class="invalid-feedback" data-i18n="personal.passwordRequired">Пожалуйста, введите пароль</div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <button type="submit" class="btn btn-primary me-2" data-i18n="personal.save">Сохранить</button>
+                    <a href="/personal" class="btn btn-label-secondary" data-i18n="personal.cancel">Отмена</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('personalForm');
+            const userIdInput = document.getElementById('userId');
+            const titleElement = document.querySelector('[data-i18n="personal.createUser"]');
+            const passwordField = document.querySelector('.col-md-6:has(#password)');
+
+            // Определяем режим редактирования из URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const userId = urlParams.get('id');
+            const isEdit = !!userId;
+
+            if (isEdit) {
+                userIdInput.value = userId;
+                titleElement.textContent = 'Редактировать пользователя';
+                if (passwordField) {
+                    passwordField.style.display = 'none';
+                }
+
+                // Загружаем данные пользователя
+                fetch(`/api/personal/${userId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('role').value = data.role;
+                        document.getElementById('surname').value = data.surname;
+                        document.getElementById('name').value = data.name;
+                        document.getElementById('lastName').value = data.lastName || '';
+                        document.getElementById('phoneNumber').value = data.phoneNumber;
+                        document.getElementById('email').value = data.email;
+                    })
+                    .catch(error => {
+                        console.error('Error loading user data:', error);
+                        showErrorMessage('Ошибка при загрузке данных пользователя');
+                    });
+            }
+
+            // Обработка отправки формы
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                form.classList.add('was-validated');
+
+                if (form.checkValidity()) {
+                    const formData = {
+                        role: document.getElementById('role').value,
+                        surname: document.getElementById('surname').value,
+                        name: document.getElementById('name').value,
+                        lastName: document.getElementById('lastName').value,
+                        phoneNumber: document.getElementById('phoneNumber').value,
+                        email: document.getElementById('email').value
+                    };
+
+                    if (!isEdit) {
+                        formData.password = document.getElementById('password').value;
+                    }
+
+                    const url = isEdit ? `/api/personal/${userId}` : '/api/personal';
+                    const method = isEdit ? 'PUT' : 'POST';
+
+                    fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = '/personal';
+                        } else {
+                            showErrorMessage(data.message || 'Произошла ошибка при сохранении');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showErrorMessage('Произошла ошибка при сохранении');
+                    });
+                }
+            });
+        });
+
+        function showErrorMessage(message) {
+            // Здесь можно добавить логику отображения ошибок пользователю
+            // Например, через всплывающее уведомление или в определенном месте на странице
+            alert(message);
+        }
+    </script>
+</div>
+</body>
+</html>
