@@ -1,4 +1,5 @@
 {
+  "Personal": "Персонал",
   "search": "Поиск",
   "megaMenu": "Мега Меню",
   "overview": "Обзор",
@@ -55,6 +56,7 @@
   "questions": "Вопросы",
   "language": "Язык",
   "personal": {
+    "personal": "Пользователь",
     "users": "Пользователи",
     "addUser": "Добавить пользователя",
     "role": "Роль",

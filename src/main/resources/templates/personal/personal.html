@@ -9,14 +9,12 @@
         <h4 class="fw-bold m-0" data-i18n="personal.users">Пользователи</h4>
     </div>
 
-    <!-- Column Search -->
     <div class="main-card mb-3 card" id="card-block">
         <div class="card-header py-2">
             <div class="row w-100 align-items-center justify-content-end">
 
 
                 <div class="col-lg-2 col-md-4 col-sm-4">
-                    <!-- Changed button to an anchor tag for direct navigation, using Thymeleaf URL -->
                     <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
                         <span data-i18n="personal.addUser">Добавить пользователя</span>
                         <i class="ti ti-plus"></i>
@@ -24,7 +22,6 @@
                 </div>
             </div>
         </div>
-        <p data-i18n="personal.role"></p>
         <div class="card-body">
             <div class="table-responsive">
                 <table style="width: 100%;" class="table table-hover table-striped table-bordered">
@@ -64,7 +61,6 @@
                     </tr>
                     </thead>
                     <tbody id="personalTableBody">
-                    <!-- Data will be loaded here by JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -72,7 +68,7 @@
         <div class="card-footer d-flex justify-content-between align-items-center py-3">
             <label class="d-flex align-items-center gap-1 mb-0">
                 <select id="pageSize" class="custom-select custom-select-sm form-control form-control-sm mx-2"
-                        style="width: auto;"> <!-- Added width: auto -->
+                        style="width: auto;">
                     <option value="10" selected>10</option>
                     <option value="25">25</option>
                     <option value="50">50</option>
@@ -116,48 +112,143 @@
             </div>
         </div>
     </div>
-    <!--/ Column Search -->
-    <script th:src="@{/assets/vendor/libs/i18n/i18n.js}"></script>
-    <script th:src="@{/assets/js/main.js}"></script>
     <script>
-        // Запускаем код после полной загрузки DOM
-        document.addEventListener('DOMContentLoaded', function () {
-            // Конфигурация приложения
+        let personalAppInstance = null;
+
+        function initializePersonalTable() {
+            // If an existing app instance exists and has a destroy method, destroy it
+            if (personalAppInstance && typeof personalAppInstance.destroy === 'function') {
+                personalAppInstance.destroy();
+            }
+
+            // Optionally clear the table body to avoid duplicates
+            const tbody = document.getElementById('personalTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+            }
+
+            // Rebuild the config with updated translations
             const appConfig = {
                 api: {
-                    // Настройки API
-                    baseURL: '', // Базовый URL API (пустой, так как контроллер на /personal)
+                    baseURL: '[[@{/}]]'.replaceAll("\"", ""),
                     endpoints: {
-                        getAll: '/personal/getAllPersonal',        // Получить всех пользователей
-                        delete: '/api/personal/{id}',              // Удалить пользователя по ID
+                        getAll: 'personal/getAllPersonal',
+                        delete: 'personal/{id}',
                     }
                 },
-                entityName: 'Пользователь', // Имя сущности для отображения
-                tableBodyId: 'personalTableBody', // ID tbody для вставки строк таблицы
+                entityName: i18next.t('personal.personal'),
+                tableBodyId: 'personalTableBody',
                 columns: [
                     {key: 'role', render: (item) => item.role || 'N/A'},
-                    {key: 'surname'},        // Фамилия
-                    {key: 'name'},           // Имя
-                    {key: 'lastName'},       // Отчество
-                    {key: 'phoneNumber'},    // Телефон
-                    {key: 'email'}           // Email
+                    {key: 'surname'},
+                    {key: 'name'},
+                    {key: 'lastName'},
+                    {key: 'phoneNumber'},
+                    {key: 'email'}
                 ],
-                paginationId: 'pagination',                   // ID блока пагинации
-                paginationEdgePages: 3,                       // Количество страниц вокруг текущей
-                deleteModalId: 'deleteConfirmModal',          // ID модального окна подтверждения удаления
-                confirmDeleteBtnId: 'confirm-delete-btn',     // ID кнопки подтверждения удаления
-                pageSizeSelectId: 'pageSize',                 // ID селектора размера страницы
-                createButtonId: 'createEntity',               // ID кнопки создания пользователя
-                filterInputSelector: '.filter-input',         // Селектор для полей фильтрации
-                clearFiltersBtnId: 'clearFiltersBtn',         // ID кнопки очистки фильтров
-                createUrl: /*[[@{/personal/create}]]*/ '/personal/create', // URL для создания пользователя
-                editUrl: /*[[@{/personal/edit/}]]*/ '/personal/edit/',     // URL для редактирования пользователя
-                notificationKeyword: 'message'                // Ключ для уведомлений
+                paginationId: 'pagination',
+                paginationEdgePages: 3,
+                deleteModalId: 'deleteConfirmModal',
+                confirmDeleteBtnId: 'confirm-delete-btn',
+                pageSizeSelectId: 'pageSize',
+                createButtonId: 'createEntity',
+                filterInputSelector: '.filter-input',
+                clearFiltersBtnId: 'clearFiltersBtn',
+                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/create',
+                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/edit/',
+                notificationKeyword: 'message'
             };
 
-            // Инициализация CRUD-приложения с данной конфигурацией
-            new GenericCRUDApp(appConfig);
-            localize();
+            personalAppInstance = new GenericCRUDApp(appConfig);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializePersonalTable();
+        });
+    </script>
+    <script>
+        if (typeof i18next !== 'undefined' && typeof i18NextHttpBackend !== 'undefined') {
+
+            const storedLang = localStorage.getItem('userLanguage');
+            const defaultLang = 'en';
+            let initialLang = storedLang || defaultLang;
+
+            if (!storedLang) {
+                localStorage.setItem('userLanguage', defaultLang);
+            }
+
+
+            i18next
+                .use(i18NextHttpBackend)
+                .init({
+                    lng: initialLang,
+                    debug: false,
+                    fallbackLng: 'en',
+                    backend: {
+                        loadPath: assetsPath + 'json/locales/{{lng}}.json'
+                    },
+                    returnObjects: true
+                })
+                .then(function (t) {
+                    localize();
+                    initializePersonalTable();
+                });
+        }
+
+        let languageDropdown = document.getElementsByClassName('dropdown-language');
+
+        if (languageDropdown.length) {
+            let dropdownItems = languageDropdown[0].querySelectorAll('.dropdown-item');
+
+            for (let i = 0; i < dropdownItems.length; i++) {
+                dropdownItems[i].addEventListener('click', function () {
+                    let currentLanguage = this.getAttribute('data-language'),
+                        selectedLangFlag = this.querySelector('.fi').getAttribute('class');
+
+                    for (let sibling of this.parentNode.children) {
+                        sibling.classList.remove('selected');
+                    }
+                    this.classList.add('selected');
+
+                    languageDropdown[0].querySelector('.dropdown-toggle .fi').className = selectedLangFlag;
+
+
+                    localStorage.setItem('userLanguage', currentLanguage);
+
+                    i18next.changeLanguage(currentLanguage, (err, t) => {
+                        if (err) return console.log('something went wrong loading', err);
+                        localize();
+                        initializePersonalTable();
+                    });
+                });
+            }
+        }
+
+        function localize() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+
+            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+            if (currentLanguageEle) {
+                currentLanguageEle.click();
+            }
+
+            i18nList.forEach(function (item) {
+                item.innerHTML = i18next.t(item.dataset.i18n);
+            });
+        }
+    </script>
+    <script>
+        let i18nList = document.querySelectorAll('[data-i18n]');
+
+        let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+        if (currentLanguageEle) {
+            currentLanguageEle.click();
+        }
+
+        i18nList.forEach(function (item) {
+            item.innerHTML = i18next.t(item.dataset.i18n);
         });
     </script>
 

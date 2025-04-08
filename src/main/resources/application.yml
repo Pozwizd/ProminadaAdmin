@@ -1,6 +1,6 @@
 server:
   servlet:
-    context-path: /
+    context-path: /admin
   port: 8082
 
 spring:
@@ -35,6 +35,4 @@ logging:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
   level:
     file: INFO
-  file:
-    name: "/home/slj/projects/Cleonora-R.Miahkykh/logs/CleonoraDocker.log"
 

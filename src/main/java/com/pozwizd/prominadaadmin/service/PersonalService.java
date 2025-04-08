@@ -9,6 +9,7 @@ import com.pozwizd.prominadaadmin.specification.PersonalSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,5 +65,13 @@ public class PersonalService {
                 role),
                 pageRequest));
 
+    }
+
+    public void deletePersonal(Long id) {
+        personalRepository.deleteById(id);
+    }
+
+    public Personal getPersonalById(Long id) {
+        return personalRepository.findById(id).orElseThrow();
     }
 }
