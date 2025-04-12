@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.entity.customer;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
-import com.pozwizd.prominadaadmin.entity.other.Distinct;
+import com.pozwizd.prominadaadmin.entity.other.District;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.HousingState;
 import com.pozwizd.prominadaadmin.entity.property.enums.ConditionInterior;
@@ -17,11 +17,11 @@ public class CustomerApplication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "distinct_id")
-    private Distinct distinct;
+    private District distinct;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "topozone_id")
     private Topozone topozone;
 

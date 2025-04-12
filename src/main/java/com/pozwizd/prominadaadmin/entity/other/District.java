@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Distinct {
+public class District {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

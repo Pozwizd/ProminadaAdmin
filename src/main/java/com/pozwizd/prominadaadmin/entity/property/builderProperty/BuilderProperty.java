@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.entity.property.builderProperty;
 
 import com.pozwizd.prominadaadmin.entity.other.City;
-import com.pozwizd.prominadaadmin.entity.other.Distinct;
+import com.pozwizd.prominadaadmin.entity.other.District;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
@@ -22,19 +22,19 @@ public class BuilderProperty {
 
     private String name;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reg_district_id")
     private RegDistrict regDistrict;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "distinct_id")
-    private Distinct distinct;
+    private District distinct;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "topozone_id")
     private Topozone topozone;
 
@@ -46,7 +46,7 @@ public class BuilderProperty {
 
     private Integer totalFloor;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "building_company_id")
     private BuildingCompany buildingCompany;
 
@@ -67,10 +67,10 @@ public class BuilderProperty {
     @Lob
     private String description;
 
-    private String ActionTitle;
+    private String actionTitle;
 
     @Lob
-    private String ActionDescription;
+    private String actionDescription;
 
     private Boolean isAction;
 
