@@ -36,3 +36,9 @@ logging:
   level:
     file: INFO
 
+file:
+  upload:
+    dir: "${user.dir}/uploads"
+  temp:
+    dir: "${user.dir}/temp-uploads"
+

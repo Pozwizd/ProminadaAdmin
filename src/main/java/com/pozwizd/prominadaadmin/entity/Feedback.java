@@ -1,31 +1,36 @@
 package com.pozwizd.prominadaadmin.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 
 @Entity
 @Data
+@Builder
+@AllArgsConstructor
 public class Feedback {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String code;
-
-    private String phoneNumber;
 
     private String name;
 
-    private String email;
+    private String phoneNumber;
 
-    private String address;
+    private String description;
 
-    private String pathImage;
-    
     @ManyToOne
     @JoinColumn(name = "personal_id")
     private Personal personal;
+
+    @ManyToOne
+    @JoinColumn(name = "realtor_id")
+    private Realtor realtor;
+
+
+    public Feedback() {
+
+    }
 }

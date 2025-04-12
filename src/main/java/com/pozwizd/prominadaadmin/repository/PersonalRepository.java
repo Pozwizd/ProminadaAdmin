@@ -13,6 +13,6 @@ import java.util.Optional;
 
 @Repository
 public interface PersonalRepository extends JpaRepository<Personal, Long>, JpaSpecificationExecutor<Personal> {
-    Optional<Personal> findByEmail(String email); // Needed for security
+    Optional<Personal> findByEmail(String email);
 
 }
