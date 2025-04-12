@@ -19,8 +19,7 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
         
         ex.getBindingResult().getAllErrors().forEach((error) -> {
-            if (error instanceof org.springframework.validation.FieldError) {
-                org.springframework.validation.FieldError fieldError = (org.springframework.validation.FieldError) error;
+            if (error instanceof org.springframework.validation.FieldError fieldError) {
                 String fieldName = fieldError.getField();
                 String errorMessage = fieldError.getDefaultMessage();
                 errors.put(fieldName, errorMessage);

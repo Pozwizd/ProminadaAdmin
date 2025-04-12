@@ -36,10 +36,9 @@ public class Personal {
     private List<Feedback> feedBacks;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "personal_id")
     private List<DocumentFeedback> documentFeedbacks;
 
-    @OneToMany(mappedBy = "personal", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "personals")
     private List<Branch> branches;
 
 }
