@@ -2,7 +2,7 @@ package com.pozwizd.prominadaadmin.entity.property.investorProperty;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.entity.other.City;
-import com.pozwizd.prominadaadmin.entity.other.Distinct;
+import com.pozwizd.prominadaadmin.entity.other.District;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
@@ -22,19 +22,19 @@ public class InvestorProperty {
 
     private String street;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "reg_district_id")
     private RegDistrict regDistrict;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "distinct_id")
-    private Distinct distinct;
+    private District distinct;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "topozone_id")
     private Topozone topozone;
 

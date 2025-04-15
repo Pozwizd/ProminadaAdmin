@@ -38,9 +38,9 @@ public class DataLoader {
     public void loadEntity() {
         loadAdmin();
         loadFakeUsers();
+        loadFakeRegDistrict();
         loadFakeCities();
         loadFakeDistrict();
-        loadFakeRegDistrict();
         loadFakeTopozone();
         loadFakeBuildingCompany();
         loadFakeBuilderProperties();
@@ -73,9 +73,11 @@ public class DataLoader {
 
     public void loadFakeCities() {
         Faker faker = new Faker(new Locale("uk"));
+        List<RegDistrict> regDistricts = regDistrictService.getAll();
         for (int i = 0; i < 10; i++) {
             City city = new City();
             city.setName(faker.address().cityName());
+            city.setRegDistrict(getRandomEntity(regDistricts));
             cityService.save(city);
         }
     }
@@ -84,25 +86,29 @@ public class DataLoader {
         Faker faker = new Faker(new Locale("uk"));
         for (int i = 0; i < 10; i++) {
             RegDistrict regDistrict = new RegDistrict();
-            regDistrict.setName(faker.address().cityName());
+            regDistrict.setName(faker.address().state());
             regDistrictService.save(regDistrict);
         }
     }
 
     public void loadFakeDistrict() {
         Faker faker = new Faker(new Locale("uk"));
+        List<City> cities = cityService.getAll();
         for (int i = 0; i < 10; i++) {
             District district = new District();
-            district.setName(faker.address().cityName());
+            district.setName(faker.address().streetName());
+            district.setCity(getRandomEntity(cities));
             districtService.save(district);
         }
     }
 
     public void loadFakeTopozone() {
         Faker faker = new Faker(new Locale("uk"));
+        List<District> districts = districtService.getAll();
         for (int i = 0; i < 10; i++) {
             Topozone topozone = new Topozone();
-            topozone.setName(faker.address().cityName());
+            topozone.setName(faker.address().buildingNumber());
+            topozone.setDistrict(getRandomEntity(districts));
             topozoneService.save(topozone);
         }
     }

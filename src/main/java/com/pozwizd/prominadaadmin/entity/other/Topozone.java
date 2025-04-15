@@ -10,6 +10,7 @@ public class Topozone {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
     private String name;
+    @ManyToOne
+    private District district;
 }

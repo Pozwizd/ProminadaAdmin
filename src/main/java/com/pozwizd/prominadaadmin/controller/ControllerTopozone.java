@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -23,5 +24,10 @@ public class ControllerTopozone {
     @GetMapping("/getAll")
     public ResponseEntity<List<Topozone>> getAll() {
         return new ResponseEntity<>(topozoneService.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/get")
+    public ResponseEntity<List<Topozone>> getByDistrict(@RequestParam Long districtId) {
+        return new ResponseEntity<>(topozoneService.getAllByDistrictId(districtId), HttpStatus.OK);
     }
 }

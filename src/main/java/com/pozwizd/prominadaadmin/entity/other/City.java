@@ -10,7 +10,7 @@ public class City {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
     private String name;
-
+    @ManyToOne
+    private RegDistrict regDistrict;
 }

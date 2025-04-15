@@ -8,4 +8,8 @@ public interface TopozoneService {
     Topozone save(Topozone topozone);
 
     List<Topozone> getAll();
+
+    List<Topozone> getAllByDistrictId(Long districtId);
+
+    Topozone getById(Long topozoneId);
 }

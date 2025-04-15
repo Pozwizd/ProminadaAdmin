@@ -2,7 +2,9 @@ package com.pozwizd.prominadaadmin.service.serviceImp;
 
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.repository.TopozoneRepository;
+import com.pozwizd.prominadaadmin.service.DistrictService;
 import com.pozwizd.prominadaadmin.service.TopozoneService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TopozoneServiceImp implements TopozoneService {
     private final TopozoneRepository topozoneRepository;
+    private final DistrictService districtService;
+
     @Override
     public Topozone save(Topozone topozone) {
         return topozoneRepository.save(topozone);
@@ -20,5 +24,16 @@ public class TopozoneServiceImp implements TopozoneService {
     @Override
     public List<Topozone> getAll() {
         return topozoneRepository.findAll();
+    }
+
+    @Override
+    public List<Topozone> getAllByDistrictId(Long districtId) {
+        return topozoneRepository.getAllByDistrict(districtService.getById(districtId));
+    }
+
+    @Override
+    public Topozone getById(Long topozoneId) {
+        return topozoneRepository.findById(topozoneId)
+                .orElseThrow(() -> new EntityNotFoundException("Topozone with id:" + topozoneId + " was not found!"));
     }
 }

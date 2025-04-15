@@ -10,7 +10,7 @@ public class District {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
-
     private String name;
-
+    @ManyToOne
+    private City city;
 }

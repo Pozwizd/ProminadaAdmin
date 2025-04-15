@@ -8,4 +8,6 @@ public interface RegDistrictService {
     RegDistrict save(RegDistrict regDistrict);
 
     List<RegDistrict> getAll();
+
+    RegDistrict getById(Long id);
 }

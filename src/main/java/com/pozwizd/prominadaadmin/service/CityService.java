@@ -8,4 +8,8 @@ public interface CityService {
     City save(City city);
 
     List<City> getAll();
+
+    List<City> getAllByRegDistrictId(Long regDistrictId);
+
+    City getById(Long id);
 }
