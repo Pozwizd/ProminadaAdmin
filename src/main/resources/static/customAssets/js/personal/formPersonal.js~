@@ -1,0 +1,809 @@
+loadBranchesSelect();
+
+// Загрузка списка филиалов
+function loadBranchesSelect(selectedBranchIds = []) {
+    axios.get(contextPath + 'branch/list')
+        .then(response => {
+            const branches = response.data;
+            const select = document.getElementById('branchesSelect');
+            select.innerHTML = '';
+
+            branches.forEach(branch => {
+                const option = document.createElement('option');
+                option.value = branch.id;
+                option.text = branch.name;
+                if (selectedBranchIds.includes(String(branch.id))) {
+                    option.selected = true;
+                }
+                select.appendChild(option);
+            });
+
+            // Инициализируем или обновляем select2
+            if ($(select).hasClass('select2-hidden-accessible')) {
+                $(select).trigger('change');
+            } else {
+                $(select).select2({
+                    placeholder: 'Выберите филиал',
+                    width: '100%'
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке филиалов:', error);
+        });
+}
+
+function loadRolesSelect() {
+    const selectElement = document.getElementById('rolePersonal');
+    selectElement.innerHTML = '<option value="" disabled selected>' + i18next.t('loading') + '</option>';
+
+    axios.get(`${contextPath}personal/getRoles`)
+        .then(function (response) {
+            selectElement.innerHTML = '<option value="" disabled selected>' + i18next.t('selectRole') + '</option>';
+
+            if (response.data && Array.isArray(response.data)) {
+                response.data.forEach(function (role) {
+                    const option = document.createElement('option');
+                    // Сохраняем оригинальное значение enum в value
+                    option.value = role;
+                    // Используем i18n для перевода
+                    option.textContent = i18next.t(role);
+                    selectElement.appendChild(option);
+                });
+            } else {
+                console.error('Неверный формат данных ролей', response.data);
+                selectElement.innerHTML = '<option value="" disabled selected >' + i18next.t('errorLoadingRoles') + '</option>';
+            }
+        })
+        .catch(function (error) {
+            console.error('Ошибка при загрузке ролей:', error);
+            selectElement.innerHTML = '<option value="" disabled selected >' + i18next.t('errorLoadingRoles') + '</option>';
+        });
+}
+
+
+// Вызов функции при загрузке страницы
+document.addEventListener('DOMContentLoaded', function () {
+    loadRolesSelect();
+});
+
+
+// Погрузка файлов
+const fileInput = document.getElementById('fileUpload');
+const fileListDiv = document.getElementById('uploadedFilesList');
+let files = [];
+
+fileInput.addEventListener('change', (e) => {
+    const invalidFiles = [];
+
+    for (const file of e.target.files) {
+        // Проверка формата файла - только PDF
+        if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+            files.push({
+                id: null,
+                name: file.name,
+                file: file,
+                path: null,
+            });
+        } else {
+            invalidFiles.push(file.name);
+        }
+    }
+
+    // Показать сообщение об ошибке, если есть недопустимые файлы
+    if (invalidFiles.length > 0) {
+        alert(`Следующие файлы не были загружены, так как они не в формате PDF: ${invalidFiles.join(', ')}`);
+    }
+
+    console.log(files);
+    renderFiles();
+});
+
+
+function getFileIcon(file) {
+    // Пример простого определения по типу
+    if (file.file && file.file.type) {
+        if (file.file.type.startsWith('image/')) return '<i class="ti ti-photo me-2"></i>';
+        if (file.file.type === 'application/pdf') return '<i class="ti ti-file-text me-2"></i>';
+        if (file.file.type.startsWith('video/')) return '<i class="ti ti-video me-2"></i>';
+    }
+    return '<i class="ti ti-file me-2"></i>';
+}
+
+function renderFiles() {
+    fileListDiv.innerHTML = '';
+    files.forEach((file, idx) => {
+        let downloadUrl;
+        let fileIcon = '<i class="ti ti-file me-2"></i>';
+        let fileName = file.name;
+
+        // Определяем тип файла по наличию свойств id и file
+        if (file.file) {
+            // Это локально загруженный файл
+            downloadUrl = URL.createObjectURL(file.file);
+            fileIcon = getFileIcon(file);
+        } else if (file.id) {
+            // Это файл с сервера
+            downloadUrl = `${contextPath}personal/documents/${file.id}/download`;
+            // Определяем иконку по расширению файла
+            if (file.name.toLowerCase().endsWith('.pdf')) {
+                fileIcon = '<i class="ti ti-file-text me-2"></i>';
+            } else if (/\.(jpg|jpeg|png|gif)$/i.test(file.name)) {
+                fileIcon = '<i class="ti ti-photo me-2"></i>';
+            }
+        } else {
+            // Неизвестный тип файла, считаем локальным
+            downloadUrl = '#';
+        }
+
+        fileListDiv.innerHTML += `
+            <div class="d-flex align-items-center justify-content-between p-2 border rounded mb-2">
+                <span class="d-flex align-items-center">
+                    ${fileIcon}
+                    ${fileName}
+                </span>
+                <div class="d-flex gap-2">
+                    <a href="${downloadUrl}" download="${fileName}" class="btn btn-icon btn-sm btn-outline-primary" title="Скачать">
+                        <i class="ti ti-download"></i>
+                    </a>
+                    <button class="btn btn-icon btn-sm btn-outline-danger" title="Удалить" onclick="deleteFile(${idx})">
+                        <i class="ti ti-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+window.deleteFile = function (idx) {
+    const file = files[idx];
+    if (file.id) {
+        // Если у файла есть id, это файл с сервера - нужно удалить его там
+        if (confirm('Вы уверены, что хотите удалить этот документ?')) {
+            axios.delete(`${contextPath}personal/documents/${file.id}`)
+                .then(() => {
+                    files.splice(idx, 1);
+                    renderFiles();
+                })
+                .catch(error => {
+                    console.error('Ошибка при удалении документа:', error);
+                });
+        }
+    } else {
+        // Если у файла нет id, это локальный файл - просто удаляем из массива
+        files.splice(idx, 1);
+        renderFiles();
+    }
+};
+
+
+// Загрузка данных
+function fillFormData(data) {
+    document.getElementById('userId').value = data.id || '';
+    document.getElementById('surname').value = data.surname || '';
+    document.getElementById('name').value = data.name || '';
+    document.getElementById('lastName').value = data.lastName || '';
+    document.getElementById('phoneNumber').value = data.phoneNumber || '';
+    document.getElementById('email').value = data.email || '';
+    // Role initialization
+    const roleElement = document.getElementById('rolePersonal');
+    if (data.role) {
+        roleElement.value = data.role;
+    } else {
+        console.log('Role not found');
+        roleElement.value = 'ADMIN';
+    }
+
+    let selectedBranchIds = [];
+    if (data.branches && Array.isArray(data.branches)) {
+        selectedBranchIds = data.branches.map(b => String(b.id));
+    }
+    loadBranchesSelect(selectedBranchIds);
+    console.log(window.contextPath + data.pathAvatar);
+    if (data.pathAvatar) {
+        console.log(window.contextPath + data.pathAvatar);
+        document.getElementById('uploadedAvatar').src = window.contextPath + data.pathAvatar;
+    }
+
+    // Заполнение отзывов
+    if (data.feedBacks && data.feedBacks.length > 0) {
+        const container = document.getElementById('reviewSectionsContainer');
+        container.innerHTML = '';
+        data.feedBacks.forEach((feedback, index) => {
+            const reviewSection = createReviewSection(index + 1, feedback);
+            container.appendChild(reviewSection);
+        });
+    }
+
+    // Заполнение документов
+    if (data.documentFeedbacks && data.documentFeedbacks.length > 0) {
+        files = []; // Очистим текущий массив файлов
+        data.documentFeedbacks.forEach(doc => {
+            files.push({
+                id: doc.id,
+                name: doc.name,
+                path: doc.pathImage,
+                file: null
+            });
+        });
+        renderFiles(); // Обновляем интерфейс
+    }
+}
+
+async function loadPersonalData(userId) {
+    try {
+        const response = await axios.get(`${contextPath}personal/${userId}`);
+        console.log(response.data);
+        fillFormData(response.data);
+    } catch (error) {
+        console.error('Error loading personal data:', error);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const userId = new URLSearchParams(window.location.search).get('id') ||
+        window.location.pathname.split('/').filter(Boolean).pop();
+    const isEditMode = Boolean(userId);
+
+    if (isEditMode) {
+        loadPersonalData(userId);
+    } else {
+        loadBranchesSelect();
+    }
+
+    setupFormSubmission();
+    setupFileUpload();
+});
+
+
+function createReviewSection(index, feedback = {}) {
+    const section = document.createElement('div');
+    section.className = 'review-section mb-4 border p-3 rounded position-relative';
+    section.innerHTML = `
+            <input type="hidden" class="feedback-id" value="${feedback.id || ''}">
+            <button type="button" class="btn btn-icon btn-sm btn-outline-danger position-absolute top-0 end-0 mt-2 me-2"
+                    title="Удалить отзыв" onclick="removeReviewSection(this)">
+                <i class="ti ti-trash"></i>
+            </button>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="reviewerName${index}" class="form-label">Имя</label>
+                    <input type="text" class="form-control" id="reviewerName${index}" value="${feedback.name || ''}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="reviewerContact${index}" class="form-label">Контакт</label>
+                    <input type="text" class="form-control" id="reviewerContact${index}" value="${feedback.phoneNumber || ''}">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="reviewText${index}" class="form-label">Отзыв</label>
+                <textarea class="form-control" id="reviewText${index}" rows="3">${feedback.text || ''}</textarea>
+            </div>
+        `;
+    return section;
+}
+
+function createFileListItem(doc) {
+    const item = document.createElement('div');
+    item.className = 'd-flex align-items-center justify-content-between p-2 border rounded mb-2';
+    item.innerHTML = `
+            <span class="d-flex align-items-center">
+                <i class="ti ti-file-text me-2"></i>
+                ${doc.fileName || 'Document'}
+            </span>
+            <div class="d-flex gap-2">
+                <button class="btn btn-icon btn-sm btn-outline-primary" title="Скачать"
+                        onclick="downloadDocument('${doc.id}')">
+                    <i class="ti ti-download"></i>
+                </button>
+                <button class="btn btn-icon btn-sm btn-outline-danger" title="Удалить"
+                        onclick="deleteDocument('${doc.id}')">
+                    <i class="ti ti-trash"></i>
+                </button>
+            </div>
+        `;
+    return item;
+}
+
+function setupFormSubmission() {
+    const form = document.getElementById('formAdminUserProfile');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const userId = formData.get('userId');
+        const url = `${contextPath}personal${userId ? `/${userId}` : ''}`;
+        const method = userId ? 'put' : 'post';
+
+        try {
+            const response = await axios[method](url, Object.fromEntries(formData), {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            window.location.href = `${contextPath}personal`;
+        } catch (error) {
+            console.error('Error saving personal data:', error);
+        }
+    });
+}
+
+// В функции setupFileUpload обновим атрибут accept для fileUpload
+function setupFileUpload() {
+    const upload = document.getElementById('upload');
+    const uploadedAvatar = document.getElementById('uploadedAvatar');
+    const resetButton = document.querySelector('.account-image-reset');
+    const pdfUpload = document.getElementById('fileUpload');
+    const pdfUploadStatus = document.getElementById('pdfUploadStatus');
+
+    if (upload) {
+        upload.onchange = () => {
+            if (upload.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    uploadedAvatar.src = e.target.result;
+                };
+                reader.readAsDataURL(upload.files[0]);
+            }
+        };
+    }
+
+    if (resetButton) {
+        resetButton.onclick = () => {
+            uploadedAvatar.src = defaultAvatarPath;
+        };
+    }
+
+    if (pdfUpload) {
+        // Устанавливаем атрибут accept только для PDF
+        pdfUpload.setAttribute('accept', 'application/pdf, .pdf');
+
+        pdfUpload.onchange = () => {
+            const filesCount = pdfUpload.files.length;
+            pdfUploadStatus.textContent = filesCount > 0
+                ? `Выбрано файлов: ${filesCount}`
+                : 'Файл не выбран';
+        };
+    }
+}
+
+
+async function downloadDocument(docId) {
+    try {
+        const response = await axios.get(`${contextPath}personal/documents/${docId}/download`, {
+            responseType: 'blob'
+        });
+
+        const blob = response.data;
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'document.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        a.remove();
+    } catch (error) {
+        console.error('Error downloading document:', error);
+    }
+}
+
+async function deleteDocument(docId) {
+    if (!confirm('Вы уверены, что хотите удалить этот документ?')) return;
+
+    try {
+        await axios.delete(`${contextPath}personal/documents/${docId}`);
+        // Находим индекс файла в массиве files и удаляем его
+        const fileIndex = files.findIndex(file => file.id === parseInt(docId) || file.id === docId);
+        if (fileIndex !== -1) {
+            files.splice(fileIndex, 1);
+            renderFiles();
+        } else {
+            // Если элемент не найден в массиве, попробуем удалить его из DOM
+            const fileItem = document.querySelector(`[onclick*="${docId}"]`).closest('.d-flex');
+            if (fileItem) fileItem.remove();
+        }
+    } catch (error) {
+        console.error('Error deleting document:', error);
+    }
+}
+
+let currentReviewButton = null;
+
+function removeReviewSection(button) {
+    currentReviewButton = button;
+    const deleteModal = new bootstrap.Modal(document.getElementById('deleteReviewConfirmModal'));
+    deleteModal.show();
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('confirm-delete-review-btn').addEventListener('click', function () {
+        if (currentReviewButton) {
+            const section = currentReviewButton.closest('.review-section');
+            const feedbackId = section.querySelector('.feedback-id').value;
+
+            // Можно добавить удаление с сервера по feedbackId
+
+            section.remove();
+
+            const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteReviewConfirmModal'));
+            deleteModal.hide();
+
+            currentReviewButton = null;
+        }
+    });
+});
+
+
+let languageDropdown = document.getElementsByClassName('dropdown-language');
+
+if (languageDropdown.length) {
+    let dropdownItems = languageDropdown[0].querySelectorAll('.dropdown-item');
+
+    for (let i = 0; i < dropdownItems.length; i++) {
+        dropdownItems[i].addEventListener('click', function () {
+            let currentLanguage = this.getAttribute('data-language'),
+                selectedLangFlag = this.querySelector('.fi').getAttribute('class');
+
+            for (let sibling of this.parentNode.children) {
+                sibling.classList.remove('selected');
+            }
+            this.classList.add('selected');
+
+            languageDropdown[0].querySelector('.dropdown-toggle .fi').className = selectedLangFlag;
+
+
+            localStorage.setItem('userLanguage', currentLanguage);
+
+            i18next.changeLanguage(currentLanguage, (err, t) => {
+                if (err) return console.log('something went wrong loading', err);
+                localize();
+            });
+        });
+    }
+}
+
+function localize() {
+    let i18nList = document.querySelectorAll('[data-i18n]');
+
+    let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+    if (currentLanguageEle) {
+        currentLanguageEle.click();
+    }
+
+    i18nList.forEach(function (item) {
+        item.innerHTML = i18next.t(item.dataset.i18n);
+    });
+}
+
+
+function collectFormData() {
+    // Создаем новый объект FormData
+    const formData = new FormData();
+
+    // Основные данные пользователя
+    const userId = document.getElementById('userId').value;
+    if (userId) formData.append('id', userId);
+
+    formData.append('surname', document.getElementById('surname').value);
+    formData.append('name', document.getElementById('name').value);
+    formData.append('lastName', document.getElementById('lastName').value);
+    formData.append('phoneNumber', document.getElementById('phoneNumber').value);
+    formData.append('email', document.getElementById('email').value);
+    formData.append('role', document.getElementById('rolePersonal').value);
+
+    // Пароль (только если заполнен)
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    if (password) {
+        formData.append('password', password);
+        formData.append('confirmPassword', confirmPassword);
+    }
+
+    // Выбранные филиалы (множественный выбор)
+    const selectedBranches = $('#branchesSelect').val();
+    if (selectedBranches && selectedBranches.length > 0) {
+        selectedBranches.forEach((branchId, index) => {
+            formData.append(`branchIds[${index}]`, branchId);
+        });
+    }
+
+    // Загруженный аватар
+    const avatarInput = document.getElementById('upload');
+    if (avatarInput.files.length > 0) {
+        formData.append('avatar', avatarInput.files[0]);
+    }
+
+    // Документы
+    if (files && files.length > 0) {
+        files.forEach((fileObj, index) => {
+            if (fileObj.id) {
+                // Существующий документ
+                formData.append(`documents[${index}].id`, fileObj.id);
+                formData.append(`documents[${index}].name`, fileObj.name);
+            } else if (fileObj.file) {
+                // Новый документ
+                formData.append(`documents[${index}].name`, fileObj.name);
+                formData.append(`documents[${index}].file`, fileObj.file);
+            }
+        });
+    }
+
+    // Отзывы
+    const reviewSections = document.querySelectorAll('.review-section');
+    reviewSections.forEach((section, index) => {
+        const feedbackId = section.querySelector('.feedback-id').value;
+        if (feedbackId) {
+            formData.append(`feedBacks[${index}].id`, feedbackId);
+        }
+
+        const nameInput = section.querySelector('input[id^="reviewerName"]');
+        const contactInput = section.querySelector('input[id^="reviewerContact"]');
+        const textArea = section.querySelector('textarea[id^="reviewText"]');
+
+        if (nameInput && contactInput && textArea) {
+            formData.append(`feedBacks[${index}].name`, nameInput.value);
+            formData.append(`feedBacks[${index}].phoneNumber`, contactInput.value);
+            formData.append(`feedBacks[${index}].description`, textArea.value);
+        }
+    });
+
+    return formData;
+}
+
+// Очистка всех ошибок валидации перед проверкой/отправкой формы
+function clearValidationErrors() {
+    // Удаляем все сообщения об ошибках
+    document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+    // Удаляем класс is-invalid со всех полей
+    document.querySelectorAll('.is-invalid').forEach(el => {
+        el.classList.remove('is-invalid');
+    });
+}
+
+// Функция для отображения ошибок валидации
+function displayValidationErrors(errors) {
+    clearValidationErrors();
+
+    // Флаг для переключения на таб с отзывами, если есть ошибки
+    let hasFeedbackErrors = false;
+
+    // Обрабатываем каждое поле с ошибкой
+    for (const fieldPath in errors) {
+        if (errors.hasOwnProperty(fieldPath)) {
+            const errorMessage = errors[fieldPath];
+
+            // Обработка ошибок в отзывах (feedBacks[index].fieldName)
+            if (fieldPath.startsWith('feedBacks[')) {
+                hasFeedbackErrors = true;
+
+                // Извлекаем индекс и имя поля из пути
+                const match = fieldPath.match(/feedBacks\[(\d+)\]\.(\w+)/);
+                if (match) {
+                    const index = parseInt(match[1]);
+                    const fieldName = match[2];
+
+                    // Находим секцию с отзывом по индексу
+                    const sections = document.querySelectorAll('.review-section');
+                    if (index < sections.length) {
+                        const section = sections[index];
+
+                        let fieldElement;
+                        // Определяем поле в зависимости от названия
+                        if (fieldName === 'name') {
+                            fieldElement = section.querySelector('input[id^="reviewerName"]');
+                        } else if (fieldName === 'phoneNumber') {
+                            fieldElement = section.querySelector('input[id^="reviewerContact"]');
+                        } else if (fieldName === 'description') {
+                            fieldElement = section.querySelector('textarea[id^="reviewText"]');
+                        }
+
+                        if (fieldElement) {
+                            // Добавляем класс ошибки и сообщение
+                            fieldElement.classList.add('is-invalid');
+                            const errorSpan = document.createElement('div');
+                            errorSpan.className = 'error-message text-danger mt-1';
+                            errorSpan.textContent = errorMessage;
+                            fieldElement.parentNode.appendChild(errorSpan);
+                        }
+                    }
+                }
+            }
+            // Обработка ошибок основных полей
+            else {
+                // Ищем поле по имени (surname, name, lastName и т.д.)
+                const fieldElement = document.getElementById(fieldPath);
+                if (fieldElement) {
+                    fieldElement.classList.add('is-invalid');
+                    const errorSpan = document.createElement('div');
+                    errorSpan.className = 'error-message text-danger mt-1';
+                    errorSpan.textContent = errorMessage;
+                    fieldElement.parentNode.appendChild(errorSpan);
+                }
+                // Особая обработка для select2 (branchIds)
+                else if (fieldPath === 'branchIds') {
+                    const select2Container = document.querySelector('.select2-container');
+                    if (select2Container) {
+                        const errorSpan = document.createElement('div');
+                        errorSpan.className = 'error-message text-danger mt-1';
+                        errorSpan.textContent = errorMessage;
+                        select2Container.parentNode.appendChild(errorSpan);
+                    }
+                }
+                // Для случаев когда имя поля не соответствует id элемента
+                else {
+                    console.warn('Не удалось найти поле для ошибки:', fieldPath);
+                }
+            }
+        }
+    }
+
+    // Переключаемся на таб с ошибками
+    if (hasFeedbackErrors) {
+        // Переключаемся на таб с отзывами
+        const testimonialsTab = document.querySelector('[data-bs-target="#testimonialsPersonal"]');
+        if (testimonialsTab) {
+            const tab = new bootstrap.Tab(testimonialsTab);
+            tab.show();
+        }
+    }
+}
+
+function submitForm() {
+    clearValidationErrors();
+
+    const formData = collectFormData();
+    const userId = document.getElementById('userId').value;
+    const url = `${contextPath}personal${userId ? `/${userId}` : '/create'}`;
+    const method = userId ? 'put' : 'post';
+
+    axios({
+        method: method,
+        url: url,
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    })
+        .then(response => {
+            console.log('Данные успешно отправлены', response);
+            showSuccessMessage('Данные успешно сохранены');
+            setTimeout(() => {
+                window.location.href = `${contextPath}personal`;
+            }, 1500);
+        })
+        .catch(error => {
+            console.error('Ошибка при отправке данных:', error);
+
+            if (error.response && error.response.data) {
+                console.error('Детали ошибки:', error.response.data);
+
+                // Проверяем тип ответа и обрабатываем ошибки соответственно
+                if (typeof error.response.data === 'object' && !Array.isArray(error.response.data)) {
+                    // Объект с ошибками валидации
+                    displayValidationErrors(error.response.data);
+                } else if (Array.isArray(error.response.data)) {
+                    // Массив ошибок
+                    const errorMessages = error.response.data.map(err => err.defaultMessage || err.message).join('\n');
+                    showErrorMessage('Ошибка при сохранении: ' + errorMessages);
+                } else if (typeof error.response.data === 'string') {
+                    // Строка с ошибкой
+                    showErrorMessage('Ошибка: ' + error.response.data);
+                } else {
+                    // Неизвестный формат ошибки
+                    showErrorMessage('Произошла ошибка при сохранении данных');
+                }
+            } else {
+                showErrorMessage('Произошла ошибка при сохранении данных');
+            }
+        });
+}
+
+// Функция для отображения сообщения об успехе
+function showSuccessMessage(message) {
+    // Проверяем, есть ли уже контейнер для сообщений
+    let alertContainer = document.getElementById('alert-container');
+
+    if (!alertContainer) {
+        // Создаем контейнер, если его нет
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'alert-container';
+        alertContainer.style.position = 'fixed';
+        alertContainer.style.top = '20px';
+        alertContainer.style.right = '20px';
+        alertContainer.style.zIndex = '9999';
+        document.body.appendChild(alertContainer);
+    }
+
+    // Создаем сообщение
+    const alertElement = document.createElement('div');
+    alertElement.className = 'alert alert-success alert-dismissible fade show';
+    alertElement.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    // Добавляем сообщение в контейнер
+    alertContainer.appendChild(alertElement);
+
+    // Удаляем сообщение через 5 секунд
+    setTimeout(() => {
+        alertElement.remove();
+    }, 5000);
+}
+
+// Функция для отображения сообщения об ошибке
+function showErrorMessage(message) {
+    // Проверяем, есть ли уже контейнер для сообщений
+    let alertContainer = document.getElementById('alert-container');
+
+    if (!alertContainer) {
+        // Создаем контейнер, если его нет
+        alertContainer = document.createElement('div');
+        alertContainer.id = 'alert-container';
+        alertContainer.style.position = 'fixed';
+        alertContainer.style.top = '20px';
+        alertContainer.style.right = '20px';
+        alertContainer.style.zIndex = '9999';
+        document.body.appendChild(alertContainer);
+    }
+
+    // Создаем сообщение
+    const alertElement = document.createElement('div');
+    alertElement.className = 'alert alert-danger alert-dismissible fade show';
+    alertElement.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+    // Добавляем сообщение в контейнер
+    alertContainer.appendChild(alertElement);
+
+    // Удаляем сообщение через 5 секунд
+    setTimeout(() => {
+        alertElement.remove();
+    }, 5000);
+}
+
+// Добавляем обработчики для очистки ошибок при вводе
+document.addEventListener('DOMContentLoaded', function () {
+    // Очистка ошибок при изменении полей ввода
+    document.querySelectorAll('input, select, textarea').forEach(input => {
+        input.addEventListener('input', function () {
+            // Удаляем класс ошибки с поля
+            this.classList.remove('is-invalid');
+
+            // Находим и удаляем сообщение об ошибке
+            const errorMessage = this.parentNode.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.remove();
+            }
+        });
+    });
+
+    // Очистка ошибок при изменении select2
+    $('#branchesSelect').on('change', function () {
+        const container = document.querySelector('.select2-container');
+        if (container) {
+            const errorMessage = container.parentNode.querySelector('.error-message');
+            if (errorMessage) {
+                errorMessage.remove();
+            }
+        }
+    });
+});
+
+
+// Привязка функции отправки к кнопке "Сохранить изменения"
+document.addEventListener('DOMContentLoaded', function () {
+    const submitButton = document.querySelector('button[type="submit"]');
+    if (submitButton) {
+        submitButton.addEventListener('click', function (e) {
+            e.preventDefault();
+            submitForm();
+        });
+    }
+});
