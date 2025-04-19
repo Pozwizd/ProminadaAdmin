@@ -1,3 +1,7 @@
+upload:
+  folder:
+    path: "/home/slj/projects/Cleonora-R.Miahkykh/uploads"
+
 server:
   servlet:
     context-path: /admin

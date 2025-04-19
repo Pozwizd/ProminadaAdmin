@@ -1,10 +1,13 @@
 package com.pozwizd.prominadaadmin.service;
 
 import com.pozwizd.prominadaadmin.entity.Personal;
+import com.pozwizd.prominadaadmin.mapper.FeedbackMapper;
 import com.pozwizd.prominadaadmin.mapper.PersonalMapper;
+import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
 import com.pozwizd.prominadaadmin.repository.PersonalRepository;
 import com.pozwizd.prominadaadmin.specification.PersonalSpecification;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +31,11 @@ public class PersonalService {
     private final PersonalRepository personalRepository;
     private final PersonalMapper personalMapper;
     private final PasswordEncoder passwordEncoder;
+    private final BranchService branchService;
+    private final DocumentFeedbackService documentFeedbackService;
+    private final FileService fileService;
+    private final FeedbackService feedbackService;
+    private final FeedbackMapper feedbackMapper;
 
     /**
      * Получает список всех пользователей.
@@ -130,5 +138,29 @@ public class PersonalService {
      */
     public Personal getPersonalById(Long id) {
         return personalRepository.findById(id).orElseThrow();
+    }
+
+    /**
+     * Сохраняет информацию о пользователе из PersonalRequest.
+     * Обрабатывает вложенные отзывы и файлы.
+     *
+     * @param request PersonalRequest с данными пользователя
+     */
+    @Transactional
+    public void saveFromRequest(PersonalRequest request) {
+        Personal personal = personalMapper.toEntityFromPersonalRequest(request, documentFeedbackService, branchService, fileService, feedbackService);
+
+        personalRepository.save(personal);
+    }
+
+    public void updatePersonal(@Valid PersonalRequest personalRequest) {
+        Personal oldPersonal = personalRepository.findById(personalRequest.getId()).orElseThrow();
+        Personal personal = personalMapper.toEntityFromPersonalRequest(oldPersonal,
+                personalRequest,
+                documentFeedbackService,
+                branchService,
+                fileService,
+                feedbackService);
+        personalRepository.save(personal);
     }
 }

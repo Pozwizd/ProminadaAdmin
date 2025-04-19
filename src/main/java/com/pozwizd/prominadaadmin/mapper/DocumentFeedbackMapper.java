@@ -17,4 +17,5 @@ public interface DocumentFeedbackMapper {
     default Page<DocumentFeedbackResponse> toDocumentFeedbackResponse(Page<DocumentFeedback> documentFeedbackPage) {
         return documentFeedbackPage.map(this::toDocumentFeedbackResponse);
     }
+
 }

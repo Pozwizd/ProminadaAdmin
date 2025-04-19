@@ -48,7 +48,7 @@ public class I18nConfig implements WebMvcConfigurer {
                 new Locale("en")
         );
         resolver.setSupportedLocales(supportedLocales);
-        resolver.setDefaultLocale(new Locale("uk")); // Устанавливаем украинский как язык по умолчанию
+        resolver.setDefaultLocale(new Locale("uk"));
         return resolver;
     }
 

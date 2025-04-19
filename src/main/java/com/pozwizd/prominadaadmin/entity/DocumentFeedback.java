@@ -14,7 +14,7 @@ public class DocumentFeedback {
     private Long id;
 
     private String name;
-    private String pathImage;
+    private String path;
 
     @ManyToOne
     @JoinColumn(name = "personal_id")

@@ -1,18 +1,15 @@
 package com.pozwizd.prominadaadmin.config;
 
-import com.pozwizd.prominadaadmin.entity.Branch;
-import com.pozwizd.prominadaadmin.entity.Feedback;
-import com.pozwizd.prominadaadmin.entity.Personal;
-import com.pozwizd.prominadaadmin.entity.Role; // Assuming Role enum exists here
-import com.pozwizd.prominadaadmin.service.BranchService;
-import com.pozwizd.prominadaadmin.service.FeedbackService;
-import com.pozwizd.prominadaadmin.service.PersonalService;
+import com.pozwizd.prominadaadmin.entity.*;
+import com.pozwizd.prominadaadmin.service.*;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.util.List;
 import java.util.Locale;
 
 @Component
@@ -21,14 +18,16 @@ public class DataLoader {
     private final PersonalService personalService;
     private final FeedbackService feedbackService;
     private final BranchService branchService;
+    private final FileService fileService;
+    private final DocumentFeedbackService documentFeedbackService;
     private final Faker faker;
-
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadEntity() {
         loadBranch();
         loadAdmin();
         loadPersonal();
+        loadDocumentFeedback();
     }
 
     private void loadBranch() {
@@ -52,7 +51,17 @@ public class DataLoader {
         personal.setPassword("admin");
         personal.setRole(Role.ADMIN);
 
+        File avatarFile = new File("uploads/avatar.jpg");
+        if (avatarFile.exists() && avatarFile.isFile()) {
+            personal.setPathAvatar("uploads/avatar.jpg");
+        }
+
+        Branch branch = branchService.getBranchById(1L);
+        personal.setBranches(List.of(branch));
+
         Personal savedPersonal = personalService.save(personal);
+        branch.setPersonals(List.of(savedPersonal));
+        branchService.save(branch);
         for (int j = 0; j < 5; j++) {
             Feedback feedback1 = new Feedback();
             feedback1.setName(faker.name().firstName());
@@ -61,7 +70,33 @@ public class DataLoader {
             feedback1.setPersonal(savedPersonal);
             feedbackService.save(feedback1);
         }
+    }
 
+    public void loadDocumentFeedback() {
+        List<DocumentFeedback> documentFeedbacks = new java.util.ArrayList<>();
+        File dir = new File("uploads/");
+        if (dir.exists() && dir.isDirectory()) {
+            File[] files = dir.listFiles();
+            if (files != null) {
+                Personal personal = personalService.getPersonalById(1L);
+                for (File file : files) {
+                    if (file.getName().endsWith(".pdf")) {
+                        DocumentFeedback feedback = new DocumentFeedback();
+                        feedback.setName(file.getName());
+                        feedback.setPath("uploads/"+file.getName());
+                        feedback.setPersonal(personal);
+
+                        documentFeedbacks.add(feedback);
+                    }
+                }
+
+                documentFeedbacks.forEach(feedback -> feedback.setPersonal(personal));
+                documentFeedbackService.saveAllDocumentFeedback(documentFeedbacks);
+                personal.setDocumentFeedbacks(documentFeedbacks);
+                personalService.save(personal);
+
+            }
+        }
     }
 
     public void loadPersonal() {
@@ -84,8 +119,8 @@ public class DataLoader {
                 feedback.setPersonal(savedPersonal);
                 feedbackService.save(feedback);
             }
-            
         }
     }
+
 
 }
