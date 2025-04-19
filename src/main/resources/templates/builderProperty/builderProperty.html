@@ -12,8 +12,11 @@
     <div class="main-card mb-3 card" id="card-block">
         <div class="card-header py-2">
             <div class="row w-100 align-items-center justify-content-end">
-
-
+                <div class="col-lg-2 col-md-4 col-sm-4">
+                    <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100">
+                        <span data-i18n="print">Роспечатать</span>
+                    </a>
+                </div>
                 <div class="col-lg-2 col-md-4 col-sm-4">
                     <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
                         <span data-i18n="personal.addUser">Добавить пользователя</span>
@@ -114,34 +117,37 @@
     </div>
     <script>
         let personalAppInstance = null;
+        let isTableInitialized = false;
 
         function initializePersonalTable() {
+            if (isTableInitialized) return;
+            // If an existing app instance exists and has a destroy method, destroy it
             if (personalAppInstance && typeof personalAppInstance.destroy === 'function') {
                 personalAppInstance.destroy();
             }
-
+            // Optionally clear the table body to avoid duplicates
             const tbody = document.getElementById('personalTableBody');
             if (tbody) {
                 tbody.innerHTML = '';
             }
-
+            // Rebuild the config with updated translations
             const appConfig = {
                 api: {
                     baseURL: '[[@{/}]]'.replaceAll("\"", ""),
                     endpoints: {
-                        getAll: 'personal/getAllBuilders',
-                        delete: 'personal/{id}',
+                        getAll: 'builder/getAllBuilders',
+                        delete: 'builder/{id}',
                     }
                 },
                 entityName: i18next.t('personal.personal'),
                 tableBodyId: 'personalTableBody',
                 columns: [
-                    {key: 'role', render: (item) => item.role || 'N/A'},
-                    {key: 'surname'},
+                    {key: 'id'},
                     {key: 'name'},
-                    {key: 'lastName'},
-                    {key: 'phoneNumber'},
-                    {key: 'email'}
+                    {key: 'nameDistinct'},
+                    {key: 'nameTopozone'},
+                    {key: 'street'},
+                    {key: 'totalFloor'},
                 ],
                 paginationId: 'pagination',
                 paginationEdgePages: 3,
@@ -151,12 +157,12 @@
                 createButtonId: 'createEntity',
                 filterInputSelector: '.filter-input',
                 clearFiltersBtnId: 'clearFiltersBtn',
-                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/create',
-                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/edit/',
+                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'builder/create',
+                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'builder/edit/',
                 notificationKeyword: 'message'
             };
-
             personalAppInstance = new GenericCRUDApp(appConfig);
+            isTableInitialized = true;
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -164,6 +170,33 @@
         });
     </script>
     <script>
+        if (typeof i18next !== 'undefined' && typeof i18NextHttpBackend !== 'undefined') {
+
+            const storedLang = localStorage.getItem('userLanguage');
+            const defaultLang = 'en';
+            let initialLang = storedLang || defaultLang;
+
+            if (!storedLang) {
+                localStorage.setItem('userLanguage', defaultLang);
+            }
+
+
+            i18next
+                .use(i18NextHttpBackend)
+                .init({
+                    lng: initialLang,
+                    debug: false,
+                    fallbackLng: 'en',
+                    backend: {
+                        loadPath: assetsPath + 'json/locales/{{lng}}.json'
+                    },
+                    returnObjects: true
+                })
+                .then(function (t) {
+                    localize();
+                    initializePersonalTable();
+                });
+        }
 
         let languageDropdown = document.getElementsByClassName('dropdown-language');
 
@@ -207,6 +240,19 @@
                 item.innerHTML = i18next.t(item.dataset.i18n);
             });
         }
+    </script>
+    <script>
+        let i18nList = document.querySelectorAll('[data-i18n]');
+
+        let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+        if (currentLanguageEle) {
+            currentLanguageEle.click();
+        }
+
+        i18nList.forEach(function (item) {
+            item.innerHTML = i18next.t(item.dataset.i18n);
+        });
     </script>
 
 </div>
