@@ -1,20 +1,26 @@
 package com.pozwizd.prominadaadmin.controller;
 
-import com.pozwizd.prominadaadmin.models.personal.PersonalProfileResponse;
+import com.pozwizd.prominadaadmin.entity.Role;
+import com.pozwizd.prominadaadmin.models.personal.PersonalResponse;
+import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
 import com.pozwizd.prominadaadmin.service.PersonalService;
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.mapper.PersonalMapper;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,16 +39,16 @@ public class PersonalController {
         return new ModelAndView("personal/personal");
     }
 
-    @ResponseBody
+
     @GetMapping("/getAllPersonal")
-    public Page<PersonalTableResponse> getPageablePersonal(@RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(required = false, name = "roleName") String role, // Changed name to roleName
-                                                           @RequestParam(required = false, name = "filter_surname") String surname,
-                                                           @RequestParam(required = false, name = "filter_name") String name,
-                                                           @RequestParam(required = false, name = "filter_lastName") String lastName,
-                                                           @RequestParam(required = false, name = "filter_phoneNumber") String phoneNumber,
-                                                           @RequestParam(required = false, name = "filter_email") String email,
-                                                           @RequestParam(defaultValue = "10") Integer size) {
+    public @ResponseBody Page<PersonalTableResponse> getPageablePersonal(@RequestParam(defaultValue = "0") int page,
+                                                                         @RequestParam(required = false, name = "roleName") String role, // Changed name to roleName
+                                                                         @RequestParam(required = false, name = "filter_surname") String surname,
+                                                                         @RequestParam(required = false, name = "filter_name") String name,
+                                                                         @RequestParam(required = false, name = "filter_lastName") String lastName,
+                                                                         @RequestParam(required = false, name = "filter_phoneNumber") String phoneNumber,
+                                                                         @RequestParam(required = false, name = "filter_email") String email,
+                                                                         @RequestParam(defaultValue = "10") Integer size) {
         return personalService.getPageablePersonal(page, size, surname, name, lastName, phoneNumber, email, role);
     }
 
@@ -58,7 +64,6 @@ public class PersonalController {
     }
 
 
-
     @GetMapping("/edit/{id}")
     public ModelAndView showEditForm(@PathVariable Long id, Model model) {
         model.addAttribute("pageTitle", "Edit Personal");
@@ -69,9 +74,33 @@ public class PersonalController {
 
     @GetMapping("/{id}")
     @ResponseBody
-    public PersonalProfileResponse getPersonalProfile(@PathVariable Long id) {
+    public PersonalResponse getPersonalProfile(@PathVariable Long id) {
         Personal personal = personalService.getPersonalById(id);
         return personalMapper.toPersonalProfileResponse(personal);
     }
 
+    @GetMapping("/getRoles")
+    public @ResponseBody List<Role> getRoles() {
+        return List.of(Role.values());
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updatePersonal(@Valid @ModelAttribute PersonalRequest personalRequest, @PathVariable Long id) {
+
+        if (personalRequest.getId() != null && !personalRequest.getId().equals(id)) {
+            return ResponseEntity.badRequest().body("ID в пути и в теле запроса не совпадают");
+        }
+
+        personalService.updatePersonal(personalRequest);
+
+        return ResponseEntity.ok("Пользователь успешно обновлен");
+    }
+
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/create")
+    public ResponseEntity<?> createPersonal(@ModelAttribute PersonalRequest personalRequest) {
+
+        personalService.saveFromRequest(personalRequest);
+        return ResponseEntity.ok("Пользователь успешно создан");
+    }
 }

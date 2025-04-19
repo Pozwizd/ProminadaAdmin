@@ -27,7 +27,6 @@ import java.util.Optional;
 public class BranchService {
 
     private final BranchRepository branchRepository;
-    private final PersonalRepository personalRepository;
     private final BranchMapper branchMapper;
 
     /**
@@ -39,6 +38,15 @@ public class BranchService {
         return branchRepository.findAll();
     }
 
+        /**
+     * Получает список всех филиалов.
+     *
+     * @return Список всех филиалов в системе
+     */
+    public List<BranchResponse> findAllResponse() {
+        return branchMapper.toBranchResponse(branchRepository.findAll());
+    }
+
     /**
      * Поиск филиала по ID.
      * 
@@ -48,6 +56,8 @@ public class BranchService {
     public Optional<Branch> findById(Long id) {
         return branchRepository.findById(id);
     }
+
+
 
     /**
      * Поиск филиала по коду.
@@ -137,42 +147,4 @@ public class BranchService {
     public Branch getBranchById(Long id) {
         return branchRepository.findById(id).orElseThrow();
     }
-
-    /**
-     * Добавляет сотрудника в филиал.
-     * 
-     * @param branchId ID филиала
-     * @param personalId ID сотрудника
-     * @return Обновленный филиал
-     * @throws NoSuchElementException если филиал или сотрудник не найден
-     */
-//    @Transactional
-//    public Branch addPersonalToBranch(Long branchId, Long personalId) {
-//        Branch branch = branchRepository.findById(branchId).orElseThrow();
-//        Personal personal = personalRepository.findById(personalId).orElseThrow();
-//
-//        if (!branchg.getPersonals().contains(personal)) {
-//            branch.getPersonals().add(personal);
-//        }
-//
-//        return branchRepository.save(branch);
-//    }
-
-    /**
-     * Удаляет сотрудника из филиала.
-     * 
-     * @param branchId ID филиала
-     * @param personalId ID сотрудника
-     * @return Обновленный филиал
-     * @throws NoSuchElementException если филиал или сотрудник не найден
-     */
-//    @Transactional
-//    public Branch removePersonalFromBranch(Long branchId, Long personalId) {
-//        Branch branch = branchRepository.findById(branchId).orElseThrow();
-//        Personal personal = personalRepository.findById(personalId).orElseThrow();
-//
-//        branch.getPersonals().remove(personal);
-//
-//        return branchRepository.save(branch);
-//    }
 }
