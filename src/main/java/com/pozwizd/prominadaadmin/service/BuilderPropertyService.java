@@ -2,12 +2,17 @@ package com.pozwizd.prominadaadmin.service;
 
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
+import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
 import org.springframework.data.domain.Page;
 
 public interface BuilderPropertyService {
-    Page<BuilderPropertyDto> getPageableBuilders(int page, Integer size, BuilderPropertyDto builderPropertyDto);
+    Page<BuilderPropertyDtoForTable> getPageableBuilders(int page, Integer size, BuilderPropertyDtoForTable builderPropertyDto);
 
     void deleteById(Long id);
 
+    BuilderProperty getById(Long id);
+
     BuilderProperty save(BuilderProperty builderProperty);
+
+    BuilderProperty save(BuilderPropertyDto dto);
 }

@@ -78,5 +78,47 @@
     "cancel": "Cancel",
     "delete": "Delete"
   },
+  "builder": {
+    "name": "Name",
+    "namePlaceHolder": "Residential complex Riviera City",
+    "regDistrict": "Regional district",
+    "city": "City",
+    "district": "District",
+    "topozone": "Topozone",
+    "street": "Street",
+    "streetPlaceHolder": "Chekhov",
+    "houseNumber": "House number",
+    "houseSection": "Section/body",
+    "totalFloor": "Number of floors",
+    "buildingCompany": "Construction the company",
+    "deliveryDate": "Deadline",
+    "phone": "Phone",
+    "chessPlan": "Chess",
+    "mortgageConditions": "Conditions installments",
+    "priceFile": "Price file",
+    "description": "Description:",
+    "promotion": "Promotion",
+    "isAction": "Enable promotion",
+    "save": "Save",
+    "cancel": "Cancel",
+    "createTarget": "Create Building",
+    "selectRegDistrict": "Select reg. district",
+    "selectCity": "Select a city",
+    "selectDistrict": "Select a district",
+    "selectTopozone": "Select a topozone",
+    "selectCompany": "Select a company",
+    "gallery": "Gallery",
+    "layouts": "Layouts"
+  },
+  "deliveryType": {
+    "selectDeliveryType": "Select the delivery type",
+    "underConstruction": "Under construction",
+    "processOfHandingOver": "In the process of handing over",
+    "handedOver": "The house is handed over",
+    "readyForOccupancy": "Ready for occupancy"
+  },
+  "file": {
+    "select": "Select file"
+  },
   "print": "Print"
 }

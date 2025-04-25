@@ -40,9 +40,9 @@ public class BuilderProperty {
 
     private String street;
 
-    private String houseNumber;
+    private Integer houseNumber;
 
-    private String houseSection;
+    private Integer houseSection;
 
     private Integer totalFloor;
 
@@ -56,13 +56,13 @@ public class BuilderProperty {
     private String phoneNumber;
 
     // Файл шахматного плана
-    private String floorPlanFile;
+    private String pathToChessPlanFile;
 
     // Файл с условия рассрочки
-    private String mortgageConditions;
+    private String pathToMortgageConditionsFile;
 
     // Файл с ценами
-    private String priceFile;
+    private String pathToPriceFile;
 
     @Lob
     private String description;

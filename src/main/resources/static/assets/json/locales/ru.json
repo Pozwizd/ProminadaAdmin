@@ -78,5 +78,46 @@
     "cancel": "Отменить",
     "delete": "Удалить"
   },
+  "builder": {
+    "name": "Название",
+    "namePlaceHolder": "Жилой комплекс Ривьера Сити",
+    "regDistrict": "Область",
+    "district": "Район",
+    "topozone": "Топозона",
+    "street": "Улица",
+    "streetPlaceHolder": "Чехова",
+    "houseNumber": "Номер дома",
+    "houseSection": "Секция/корпус",
+    "totalFloor": "Количество этажей",
+    "buildingCompany": "Строительная компания",
+    "selectCompany": "Выберите компанию",
+    "deliveryDate": "Срок сдачи",
+    "phone": "Телефон",
+    "chessPlan": "Шахматка",
+    "mortgageConditions": "Условия рассрочки",
+    "priceFile": "Файл с ценами",
+    "description": "Описание:",
+    "promotion": "Акция",
+    "isAction": "Включить акцию",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "createTarget": "Создать объект",
+    "selectRegDistrict": "Выберите область",
+    "selectCity": "Выберите город",
+    "selectDistrict": "Выберите район",
+    "selectTopozone": "Выберите топозону",
+    "gallery": "Галерея",
+    "layouts": "Планировки"
+  },
+  "deliveryType": {
+    "selectDeliveryType": "Выберите тип доставки",
+    "underConstruction": "Находится в процессе строительства",
+    "processOfHandingOver": "В процессе передачи",
+    "readyForOccupancy": "Готово к заселению",
+    "handedOver": "Дом сдан"
+  },
+  "file": {
+    "select": "Выберите файл"
+  },
   "print": "Роспечатать"
 }

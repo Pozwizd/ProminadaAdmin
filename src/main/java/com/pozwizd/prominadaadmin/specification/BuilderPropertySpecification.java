@@ -3,6 +3,7 @@ package com.pozwizd.prominadaadmin.specification;
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
+import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -11,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface BuilderPropertySpecification {
-    static Specification<BuilderProperty> search(BuilderPropertyDto dto) {
+    static Specification<BuilderProperty> search(BuilderPropertyDtoForTable dto) {
 
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();

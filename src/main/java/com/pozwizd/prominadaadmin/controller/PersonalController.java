@@ -27,10 +27,8 @@ public class PersonalController {
 
     @GetMapping
     public ModelAndView showUsersPage(Model model) {
-
         model.addAttribute("pageTitle", "Personal");
         model.addAttribute("pageActive", "personal");
-
         return new ModelAndView("personal/personal");
     }
 

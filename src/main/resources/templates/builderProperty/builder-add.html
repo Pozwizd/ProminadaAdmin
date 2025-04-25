@@ -1,10 +1,39 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{template/layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .was-validated .form-check-input:valid, .form-check-input.is-valid {
+            background-color: #6600ffe3 !important;
+        }
+
+        .file-hidden {
+            display: none !important;
+        }
+
+        .uploadButton {
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .uploadButton:hover {
+            background-color: #0056b3;
+        }
+    </style>
+
+    <link rel="stylesheet" th:href="@{/assets/vendor/libs/dropzone/dropzone.css}"/>
+</head>
 <body>
 <div layout:fragment="content">
     <div class="d-flex justify-content-between align-items-center py-3 mb-4">
-        <h4 class="fw-bold m-0" data-i18n="personal.createUser">Создать пользователя</h4>
+        <h4 class="fw-bold m-0" data-i18n="builder.createTarget">Создать Здание</h4>
     </div>
 
     <div class="card mb-4">
@@ -51,90 +80,111 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
                         <form id="personalForm" class="row g-3 needs-validation" novalidate>
-                            <input type="hidden" id="userId">
+                            <input type="hidden" id="builderId">
                             <div class="col-md-3">
-                                <label for="name" class="form-label" data-i18n="">Название</label>
-                                <input type="text" class="form-control" id="name" placeholder="ЖК 'Ривьера Сити'"
-                                       required>
+                                <label for="name" class="form-label" data-i18n="builder.name">Название</label>
+                                <input type="text" class="form-control" id="name"
+                                       data-i18n="[placeholder]builder.namePlaceHolder"
+                                       placeholder="ЖК 'Ривьера Сити'" data-error="name">
+                                <!--                                <div class="invalid-feedback" data-i18n="builder.surnameRequired">Пожалуйста, введите-->
+                                <!--                                    фамилию-->
+                                <!--                                </div>-->
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="regDistrictId" class="form-label" data-i18n="builder.regDistrict">Обл.
+                                    район</label>
+                                <select class="form-select" id="regDistrictId" required>
+                                    <option value="" data-i18n="builder.selectRegDistrict"></option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="cityId" class="form-label" data-i18n="builder.city">Нас. пункт</label>
+                                <select class="form-select" id="cityId" required disabled>
+                                    <option value="" data-i18n="builder.selectCity">Выберите нас. пункт</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="districtId" class="form-label"
+                                       data-i18n="builder.selectDistrict">Район</label>
+                                <select class="form-select" id="districtId" required disabled>
+                                    <option value="" data-i18n="builder.selectDistrict">Выберите район</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="topozoneId" class="form-label" data-i18n="builder.topozone">Топозона</label>
+                                <select class="form-select" id="topozoneId" required disabled>
+                                    <option value="" data-i18n="builder.selectTopozone">Выберите топзону</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="street" class="form-label" data-i18n="builder.street">Улица</label>
+                                <input type="text" class="form-control" id="street"
+                                       placeholder="Чехова" required
+                                       data-error="street"
+                                       data-i18n="[placeholder]builder.streetPlaceHolder">
                                 <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста, введите
-                                    фамилию
+                                    улицу
                                 </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="regDistrict" class="form-label" data-i18n="">Обл. район</label>
-                                <select class="form-select" id="regDistrict" required>
-                                    <option value="" data-i18n="">Выберите обл. район</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="city" class="form-label" data-i18n="">Нас. пункт</label>
-                                <select class="form-select" id="city" required disabled>
-                                    <option value="" data-i18n="">Выберите нас. пункт</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="district" class="form-label" data-i18n="">Район</label>
-                                <select class="form-select" id="district" required disabled>
-                                    <option value="" data-i18n="">Выберите район</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="topozone" class="form-label" data-i18n="">Топозона</label>
-                                <select class="form-select" id="topozone" required disabled>
-                                    <option value="" data-i18n="">Выберите топзону</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="street" class="form-label" data-i18n="">Улица</label>
-                                <input type="text" class="form-control" id="street" placeholder="Чехова">
                             </div>
 
                             <div class="col-md-6"></div>
 
                             <div class="col-md-2">
-                                <label for="houseNumber" class="form-label" data-i18n="">Номер дома</label>
-                                <input type="text" class="form-control" id="houseNumber" placeholder="7">
+                                <label for="houseNumber" class="form-label" data-i18n="builder.houseNumber">Номер
+                                    дома</label>
+                                <input type="text" class="form-control" id="houseNumber" placeholder="7" required
+                                       data-error="houseNumber">
+                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста,
+                                    введите номер дома
+                                </div>
                             </div>
 
                             <div class="col-md-2">
-                                <label for="houseSection" class="form-label" data-i18n="">Секция/корпус</label>
-                                <input type="text" class="form-control" id="houseSection" placeholder="7">
+                                <label for="houseSection" class="form-label" data-i18n="builder.houseSection">Секция/корпус</label>
+                                <input type="text" class="form-control" id="houseSection" placeholder="7" required>
+                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста,
+                                    введите раздел дома
+                                </div>
                             </div>
 
                             <div class="col-md-2">
-                                <label for="totalFloor" class="form-label" data-i18n="">Єтажность</label>
-                                <input type="text" class="form-control" id="totalFloor" placeholder="9">
+                                <label for="totalFloor" class="form-label"
+                                       data-i18n="builder.totalFloor">Єтажность</label>
+                                <input type="text" class="form-control" id="totalFloor" placeholder="9" required>
+                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста,
+                                    введите этажность
+                                </div>
                             </div>
 
                             <div class="col-md-3">
-                                <label for="buildingCompany" class="form-label" data-i18n="">Строительная
-                                    компания</label>
-                                <select class="form-select" id="buildingCompany" required>
-                                    <option value="" data-i18n="">Выберите компанию</option>
+                                <label for="buildingCompanyId" class="form-label" data-i18n="builder.buildingCompany">
+                                    Строительная компания</label>
+                                <select class="form-select" id="buildingCompanyId" required>
+                                    <option value="" data-i18n="builder.selectCompany">Выберите компанию</option>
                                 </select>
                             </div>
 
                             <div class="col-md-3">
-                                <label for="deliveryDate" class="form-label" data-i18n="">Срок сдачи</label>
-                                <select class="form-select" id="deliveryDate" required>
-                                    <option value="" data-i18n="">Выберите тип сдачи</option>
-                                    <option value="UNDER_CONSTRUCTION" data-i18n="">Строится</option>
-                                    <option value="PARTIALLY_DELIVERED" data-i18n="">В процессе сдачи</option>
-                                    <option value="READY_FOR_OCCUPANCY" data-i18n="">Готово к заселению</option>
-                                    <option value="COMPLETED" data-i18n="">Дом сдан</option>
+                                <label for="deliveryDateId" class="form-label" data-i18n="deliveryType.selectDeliveryType">Срок сдачи</label>
+                                <select class="form-select" id="deliveryDateId" required>
+                                    <option value="" data-i18n="deliveryType.selectDeliveryType">Выберите тип сдачи</option>
+                                    <option value="UNDER_CONSTRUCTION" data-i18n="deliveryType.underConstruction">Строится</option>
+                                    <option value="PARTIALLY_DELIVERED" data-i18n="deliveryType.processOfHandingOver">В процессе сдачи</option>
+                                    <option value="READY_FOR_OCCUPANCY" data-i18n="deliveryType.readyForOccupancy">Готово к заселению</option>
+                                    <option value="COMPLETED" data-i18n="deliveryType.handedOver">Дом сдан</option>
                                 </select>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="phoneNumber" class="form-label"
-                                       data-i18n="personal.phoneNumber">Телефон</label>
+                                       data-i18n="builder.phone">Телефон</label>
                                 <input type="tel" class="form-control" id="phoneNumber" placeholder="+380991112233"
-                                       required>
+                                       required data-error="phoneNumber">
                                 <div class="invalid-feedback" data-i18n="personal.phoneRequired">Пожалуйста, введите
                                     телефон
                                 </div>
@@ -142,64 +192,90 @@
 
                             <div class="col-md-8"></div>
                             <div class="col-md-4">
-                                <label for="chess" class="form-label" data-i18n="">Шахматка</label>
-                                <input type="file" class="form-control" id="chess" required>
+                                <label for="chessPlanFile" class="form-label"
+                                       data-i18n="builder.chessPlan">Шахматка</label>
+                                <input type="file" class="form-control file-hidden" id="chessPlanFile" data-error="chessPlanFile">
+<!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
                             <div class="col-md-4">
-                                <label for="installment" class="form-label" data-i18n="">Условия рассрочки</label>
-                                <input type="file" class="form-control" id="installment" required>
+                                <label for="mortgageConditionsFile" class="form-label"
+                                       data-i18n="builder.mortgageConditions">Условия
+                                    рассрочки</label>
+                                <input type="file" class="form-control file-hidden" id="mortgageConditionsFile"
+                                       data-error="mortgageConditionsFile">
+<!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
 
                             <div class="col-md-4">
-                                <label for="filePrices" class="form-label" data-i18n="">Файл с ценами</label>
-                                <input type="file" class="form-control" id="filePrices" required>
+                                <label for="priceFile" class="form-label" data-i18n="builder.priceFile">Файл с
+                                    ценами</label>
+                                <input type="file" class="form-control file-hidden" id="priceFile" data-error="priceFile">
+<!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
 
-                            <div class="input-group input-group-merge">
-                                <span for="description" class="input-group-text">Описание</span>
-                                <textarea class="form-control" id="description" rows="3"></textarea>
+
+                            <div class="col-md-4">
+                                <label for="description" class="form-label" data-i18n="builder.description"
+                                       data-error="description">Описание:</label>
+                                <textarea class="form-control" id="description" rows="3" required></textarea>
                             </div>
 
-                            <h4>Акция</h4>
+                            <h4 data-i18n="builder.promotion">Акция</h4>
                             <div class="col-md-4">
-                                <label for="actionTitle" class="form-label" data-i18n="">Название</label>
-                                <input type="text" class="form-control" id="actionTitle" required>
+                                <label for="actionTitle" class="form-label" data-i18n="builder.name"
+                                       data-error="actionTitle">Название</label>
+                                <input type="text" class="form-control" id="actionTitle" disabled>
                             </div>
                             <div class="col-md-8"></div>
                             <div class="col-md-4">
-                                <label for="actionDescription" class="form-label" data-i18n="">Описание:</label>
-                                <textarea class="form-control" id="actionDescription" rows="3"></textarea>
+                                <label for="actionDescription" class="form-label" data-i18n="builder.description"
+                                       data-error="ActionDescription">Описание:</label>
+                                <textarea class="form-control" id="actionDescription" rows="3" disabled></textarea>
                                 <div class="form-check mt-4">
                                     <input class="form-check-input" type="checkbox" value="" id="isAction"/>
-                                    <label class="form-check-label" for="isAction">
+                                    <label class="form-check-label" for="isAction" data-i18n="builder.isAction">
                                         Включить акцию
                                     </label>
                                 </div>
                             </div>
                             <div class="col-md-8"></div>
                             <div class="col-12 mt-4 text-end">
-                                <button type="submit" class="btn btn-primary me-2" data-i18n="personal.save">Сохранить
+                                <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
                                 </button>
-                                <a href="/builder" class="btn btn-label-secondary"
+                                <a th:href="@{/builder}" class="btn btn-label-secondary"
                                    data-i18n="personal.cancel">Отмена</a>
                             </div>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-                        <p>
-                            Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
-                            cream.
-                            Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
-                            cheesecake fruitcake.
-                        </p>
-                        <p class="mb-0">
-                            Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
-                            cotton
-                            candy liquorice caramels.
-                        </p>
+                        <form action="/upload" class="dropzone needsclick" id="dropzone-basic">
+                            <div class="dz-message needsclick">
+                                Drop files here or click to upload
+                                <span class="note needsclick">(This is just a demo dropzone. Selected files are
+                                    <span class="fw-medium">not</span> actually uploaded.)
+                                </span>
+                            </div>
+                            <div class="fallback">
+                                <input name="file" type="file" />
+                            </div>
+                        </form>
+
+                        <template id="preview-template">
+                            <div class="dz-preview dz-file-preview">
+                                <div class="dz-image"><img data-dz-thumbnail /></div>
+                                <div class="dz-details">
+                                    <div class="dz-size"><span data-dz-size></span></div>
+                                    <div class="dz-filename"><span data-dz-name></span></div>
+                                </div>
+                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+                                <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                                <div class="dz-success-mark">✔️</div>
+                                <div class="dz-error-mark">❌</div>
+                            </div>
+                        </template>
                     </div>
                     <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
                         <p>
@@ -218,12 +294,117 @@
             </div>
         </div>
     </div>
+    <script th:src="@{/customAssets/js/pravnyk/validator.js}"></script>
+    <script th:src="@{/assets/vendor/libs/dropzone/dropzone.js}"></script>
+    <script src="https://unpkg.com/i18next@21.6.16/i18next.min.js"></script>
+    <script src="https://unpkg.com/i18next-http-backend@1.4.2/i18nextHttpBackend.min.js"></script>
+    <script src="https://unpkg.com/jquery-i18next@1.2.1/dist/umd/jquery-i18next.min.js"></script>
+
     <script>
-        const containerCitySelector = $('#city');
-        const containerBuildingCompanySelector = $('#buildingCompany');
-        const containerTopozoneSelector = $('#topozone');
-        let containerRegDistrictSelector = $('#regDistrict');
-        let containerDistrictSelector = $('#district');
+        const myDropzone = new Dropzone('#dropzone-basic', {
+            previewTemplate: document.querySelector('#preview-template').innerHTML,
+            parallelUploads: 1,
+            maxFilesize: 5,
+            addRemoveLinks: true,
+            maxFiles: 1
+        });
+    </script>
+    <script>
+        i18next
+            .use(i18nextHttpBackend)
+            .init({
+                lng: 'en',
+                fallbackLng: 'en',
+                backend: {
+                    loadPath: '/admin/assets/json/locales/{{lng}}.json'
+                }
+            }, function () {
+                jqueryI18next.init(i18next, $, {
+                    useOptionsAttr: true
+                });
+                $('body').localize();
+            });
+
+        function changeLangMy(lang) {
+            i18next.changeLanguage(lang, function () {
+                $('body').localize();
+            });
+        }
+    </script>
+    <script>
+        function includeAd() {
+            $("#isAction").on('click', function () {
+                const title = $('#actionTitle');
+                const description = $('#actionDescription');
+                console.log($(this).prop('checked'));
+                if ($(this).prop('checked')) {
+                    title.prop('required', true).prop('disabled', false);
+                    description.prop('required', true).prop('disabled', false);
+                } else {
+                    title.prop('required', false).prop('disabled', true);
+                    description.prop('required', false).prop('disabled', true);
+                }
+            });
+        }
+
+        function saveRequest(url, method, formData) {
+            $.ajax({
+                type: method,
+                url: url,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function () {
+                    window.location.replace(`/admin/builder`);
+                },
+                error: function (error) {
+                    clearValid();
+                    let data = JSON.parse(error.responseText);
+                    console.log(data);
+                    validate(data);
+                    console.log("Error submitting form:", error);
+                }
+            });
+        }
+
+        function getFormData() {
+            const resForm = new FormData();
+            resForm.append("name", $('#name').val());
+            resForm.append("nameDistinct", $('#regDistrictId').val());
+            resForm.append("cityId", $('#cityId').val());
+            resForm.append("districtId", $('#districtId').val());
+            resForm.append("topozoneId", $('#topozoneId').val());
+            resForm.append("deliveryDateId", $('#deliveryDateId').val());
+            resForm.append("street", $('#street').val());
+            resForm.append("houseNumber", $('#houseNumber').val());
+            resForm.append("houseSection", $('#houseSection').val());
+            resForm.append("totalFloor", $('#totalFloor').val());
+            resForm.append("buildingCompany", $('#buildingCompanyId').val());
+            resForm.append("phoneNumber", $('#phoneNumber').val());
+            resForm.append("description", $('#description').val());
+            resForm.append("isAction", $('#isAction').val());
+
+            let files = [
+                {id: "#chessPlanFile", fieldName: "chessPlanFile"},
+                {id: "#mortgageConditionsFile", fieldName: "mortgageConditionsFile"},
+                {id: "#priceFile", fieldName: "priceFile"},
+            ];
+
+            files.forEach(function (fileObj) {
+                let file = $(fileObj.id)[0].files[0];
+                if (file) {
+                    resForm.append(fileObj.fieldName, file);
+                }
+            });
+            return resForm;
+        }
+    </script>
+    <script>
+        const containerCitySelector = $('#cityId');
+        const containerBuildingCompanySelector = $('#buildingCompanyId');
+        const containerTopozoneSelector = $('#topozoneId');
+        let containerRegDistrictSelector = $('#regDistrictId');
+        let containerDistrictSelector = $('#districtId');
 
         function loadCitiesByRegDistrictId(regDistrictId) {
             fetch(`/admin/city/get?regDistrictId=` + encodeURIComponent(regDistrictId))
@@ -233,14 +414,13 @@
                         containerCitySelector.prop('disabled', false);
                         containerDistrictSelector.prop('disabled', true);
                         containerTopozoneSelector.prop('disabled', true);
-                        containerBuildingCompanySelector.prop('disabled', true);
+                        let optionFirst = containerCitySelector.find('option').first();
                         containerCitySelector.empty();
-                        containerCitySelector.append(`<option value="">Выберите нас. пункт</option>`);
+                        containerCitySelector.append(optionFirst);
                         data.forEach(el => {
                             containerCitySelector.append(`<option value="${el.id}">${el.name}</option>`);
                         });
                     }
-                    console.log(data);
                 })
                 .catch(error => {
                     console.error('Error loading user data:', error);
@@ -253,8 +433,9 @@
                 .then(response => response.json())
                 .then(data => {
                     if (containerBuildingCompanySelector) {
+                        let optionFirst = containerBuildingCompanySelector.find('option').first();
                         containerBuildingCompanySelector.empty();
-                        containerBuildingCompanySelector.append(`<option value="">Выберите компанию</option>`);
+                        containerBuildingCompanySelector.append(optionFirst);
                         data.forEach(el => {
                             containerBuildingCompanySelector.append(`<option value="${el.id}">${el.name}</option>`);
                         });
@@ -267,13 +448,14 @@
         }
 
         function loadTopZonesByDistrict(districtId) {
-            fetch(`/admin/topozone/get?districtId=`+encodeURIComponent(districtId))
+            fetch(`/admin/topozone/get?districtId=` + encodeURIComponent(districtId))
                 .then(response => response.json())
                 .then(data => {
                     if (containerTopozoneSelector) {
-                        containerTopozoneSelector.prop('disabled',false);
+                        containerTopozoneSelector.prop('disabled', false);
+                        let optionFirst = containerCitySelector.find('option').first();
                         containerTopozoneSelector.empty();
-                        containerTopozoneSelector.append(`<option value="">Выберите топзону</option>`);
+                        containerTopozoneSelector.append(optionFirst);
                         data.forEach(el => {
                             containerTopozoneSelector.append(`<option value="${el.id}">${el.name}</option>`);
                         });
@@ -285,7 +467,11 @@
                 });
         }
 
-        function loadRegDistinct() {
+        const translate = (key) => {
+            return i18next.isInitialized ? i18next.t(key) : key;
+        };
+
+        function loadRegDistrict() {
             fetch(`/admin/regDistrict/getAll`)
                 .then(response => response.json())
                 .then(data => {
@@ -293,9 +479,9 @@
                         containerCitySelector.prop('disabled', true);
                         containerDistrictSelector.prop('disabled', true);
                         containerTopozoneSelector.prop('disabled', true);
-                        containerBuildingCompanySelector.prop('disabled', true);
+                        let firstOption = containerRegDistrictSelector.find('option').first();
                         containerRegDistrictSelector.empty();
-                        containerRegDistrictSelector.append(`<option value="">Выберите обл. район</option>`);
+                        containerRegDistrictSelector.append(firstOption);
                         data.forEach(el => {
                             containerRegDistrictSelector.append(`<option value="${el.id}">${el.name}</option>`);
                         });
@@ -314,9 +500,9 @@
                     if (containerDistrictSelector) {
                         containerDistrictSelector.prop('disabled', false);
                         containerTopozoneSelector.prop('disabled', true);
-                        containerBuildingCompanySelector.prop('disabled', true);
+                        let optionFirst = containerTopozoneSelector.find('option').first();
                         containerDistrictSelector.empty();
-                        containerDistrictSelector.append(`<option value="">Выберите район</option>`);
+                        containerDistrictSelector.append(optionFirst);
                         data.forEach(el => {
                             containerDistrictSelector.append(`<option value="${el.id}">${el.name}</option>`);
                         });
@@ -344,31 +530,32 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            loadRegDistinct();
+            loadRegDistrict();
             loadBuildCompanies();
-            handleSelectChange('#regDistrict', [containerCitySelector, containerDistrictSelector, containerTopozoneSelector], loadCitiesByRegDistrictId);
-            handleSelectChange('#city', [containerDistrictSelector, containerTopozoneSelector], loadDistrictByCity);
-            handleSelectChange('#district', [containerTopozoneSelector], loadTopZonesByDistrict);
+            includeAd();
+            handleSelectChange('#regDistrictId', [containerCitySelector, containerDistrictSelector, containerTopozoneSelector], loadCitiesByRegDistrictId);
+            handleSelectChange('#cityId', [containerDistrictSelector, containerTopozoneSelector], loadDistrictByCity);
+            handleSelectChange('#districtId', [containerTopozoneSelector], loadTopZonesByDistrict);
 
             const form = document.getElementById('personalForm');
-            const userIdInput = document.getElementById('userId');
-            const titleElement = document.querySelector('[data-i18n="personal.createUser"]');
+            const builderIdInput = document.getElementById('builderId');
+            const titleElement = document.querySelector('[data-i18n="builder.createTarget"]');
             const passwordField = document.querySelector('.col-md-6:has(#password)');
 
             // Определяем режим редактирования из URL
             const urlParams = new URLSearchParams(window.location.search);
-            const userId = urlParams.get('id');
-            const isEdit = !!userId;
+            const builderId = urlParams.get('id');
+            const isEdit = !!builderId;
 
             if (isEdit) {
-                userIdInput.value = userId;
-                titleElement.textContent = 'Редактировать пользователя';
+                builderIdInput.value = builderId;
+                titleElement.textContent = 'Редактировать здание';
                 if (passwordField) {
                     passwordField.style.display = 'none';
                 }
 
                 // Загружаем данные пользователя
-                fetch(`/admin/personal/${userId}`)
+                fetch(`/admin/builder/${builderId}`)
                     .then(response => response.json())
                     .then(data => {
                         document.getElementById('role').value = data.role;
@@ -385,55 +572,111 @@
             }
 
             // Обработка отправки формы
-            form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                event.stopPropagation();
-                form.classList.add('was-validated');
+            // form.addEventListener('submit', function (event) {
 
-                if (form.checkValidity()) {
-                    const formData = {
-                        role: document.getElementById('role').value,
-                        surname: document.getElementById('surname').value,
-                        name: document.getElementById('name').value,
-                        lastName: document.getElementById('lastName').value,
-                        phoneNumber: document.getElementById('phoneNumber').value,
-                        email: document.getElementById('email').value
-                    };
+            // event.preventDefault();
+            // event.stopPropagation();
+            // form.classList.add('was-validated');
 
-                    if (!isEdit) {
-                        formData.password = document.getElementById('password').value;
+            // if (form.checkValidity()) {
+            // const formData = new FormData();
+            // formData.append("name",$('#name').val());
+            // formData.append("street",$('#street').val());
+            // formData.append("totalFloor",$('#totalFloor').val());
+            // formData.append("cityId",$('#cityId').val());
+            // formData.append("districtId",$('#districtId').val());
+            // formData.append("topozoneId",$('#topozoneId').val());
+            // formData.append("buildingCompanyId",$('#buildingCompanyId').val());
+            // formData.append("deliveryDateId",$('#deliveryDateId').val());
+            // formData.append("houseNumber",$('#houseNumber').val());
+            // formData.append("houseSection",$('#houseSection').val());
+            // formData.append("phoneNumber",$('#phoneNumber').val());
+            // formData.append("description",$('#description').val());
+            // formData.append("actionTitle",$('#actionTitle').val());
+            // formData.append("actionDescription",$('#actionDescription').val());
+            // formData.append("isAction",$('#isAction').prop('checked'));
+
+            // let filePricesEl = $('#priceFile');
+            // if (filePricesEl[0].files.length > 0) formData.append('priceFile', filePricesEl[0].files[0]);
+            // let filesInstallmentEl = $('#mortgageConditionsFile');
+            // if (filesInstallmentEl[0].files.length > 0) formData.append('mortgageConditionsFile', filesInstallmentEl[0].files[0]);
+            // let fileChessEl = $('#chessPlanFile');
+            // if (fileChessEl[0].files.length > 0) formData.append('chessPlanFile', fileChessEl[0].files[0]);
+            // const formData = {
+            //     name: document.getElementById('name').value,
+            //     street: document.getElementById('street').value,
+            //     totalFloor: document.getElementById('totalFloor').value,
+            //     cityId: document.getElementById('cityId').value,
+            //     districtId: document.getElementById('districtId').value,
+            //     topozoneId: document.getElementById('topozoneId').value,
+            //     buildingCompanyId: document.getElementById('buildingCompanyId').value,
+            //     deliveryDateId: document.getElementById('deliveryDateId').value,
+            //     houseNumber: document.getElementById('houseNumber').value,
+            //     houseSection: document.getElementById('houseSection').value,
+            //     phoneNumber: document.getElementById('phoneNumber').value,
+            //     description: document.getElementById('description').value,
+            //     actionDescription: document.getElementById('actionDescription').value,
+            //     isAction: document.getElementById('isAction').value,
+            // };
+
+            const url = isEdit ? `/admin/builder/${builderId}/save` : '/admin/builder/save';
+            const method = isEdit ? 'PUT' : 'POST';
+            $('[data-i18n="builder.save"]').on('click', function () {
+                saveRequest(url, method, collectFormData())
+            });
+
+            // saveRequest(url,method,collectFormData());
+            // fetch(url, {
+            //     method: method,
+            //     body: formData,
+            //     processData: false,
+            //     contentType: false,
+            // })
+            //     .then(response => {
+            //         if (!response.ok) {
+            //             throw new Error('Network response was not ok');
+            //         }
+            //         return response.json();
+            //     })
+            //     .then(data => {
+            //         console.log(data);
+            //         if (data.success) {
+            //             window.location.href = '/admin/builder';
+            //         } else {
+            //             showErrorMessage(data.message || 'Произошла ошибка при сохранении');
+            //         }
+            //     })
+            //     .catch(error => {
+            //         console.error('Error:', error);
+            //         showErrorMessage('Произошла ошибка при сохранении');
+            //     });
+            // }
+            // });
+        });
+
+        function collectFormData(selector = 'form') {
+            const formData = new FormData();
+            const $elements = $(`${selector} input, ${selector} select, ${selector} textarea`);
+            $elements.each(function () {
+                const $el = $(this);
+                const name = $el.attr('id');
+                console.log(name);
+                console.log($el.val());
+                if (!name) return;
+                if ($el.attr('type') === 'checkbox') {
+                    formData.append(name, $el.prop('checked'));
+                } else if ($el.attr('type') === 'file') {
+                    const files = $el[0].files;
+                    if (files.length > 0) {
+                        formData.append(name, files[0]);
                     }
-
-                    const url = isEdit ? `/api/personal/${userId}` : '/api/personal';
-                    const method = isEdit ? 'PUT' : 'POST';
-
-                    fetch(url, {
-                        method: method,
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(formData)
-                    })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                window.location.href = '/personal';
-                            } else {
-                                showErrorMessage(data.message || 'Произошла ошибка при сохранении');
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Error:', error);
-                            showErrorMessage('Произошла ошибка при сохранении');
-                        });
+                } else {
+                    formData.append(name, $el.val());
                 }
             });
-        });
+
+            return formData;
+        }
 
         function showErrorMessage(message) {
             // Здесь можно добавить логику отображения ошибок пользователю

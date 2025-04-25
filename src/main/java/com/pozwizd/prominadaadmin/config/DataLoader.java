@@ -139,16 +139,16 @@ public class DataLoader {
             builder.setBuildingCompany(getRandomEntity(buildingCompanyService.getAll()));
 
             builder.setStreet(faker.address().streetName());
-            builder.setHouseNumber(faker.address().buildingNumber());
-            builder.setHouseSection(String.valueOf(faker.number().numberBetween(1, 5)));
+            builder.setHouseNumber(Integer.valueOf(faker.address().buildingNumber()));
+            builder.setHouseSection(Integer.valueOf(String.valueOf(faker.number().numberBetween(1, 5))));
             builder.setTotalFloor(faker.number().numberBetween(5, 25));
 
             builder.setDeliveryDate(DeliveryDate.values()[random.nextInt(DeliveryDate.values().length)]);
             builder.setPhoneNumber(faker.phoneNumber().phoneNumber());
 
-            builder.setFloorPlanFile("floor_plan_" + faker.file().fileName());
-            builder.setMortgageConditions("mortgage_" + faker.file().fileName());
-            builder.setPriceFile("prices_" + faker.file().fileName());
+            builder.setPathToChessPlanFile("floor_plan_" + faker.file().fileName());
+            builder.setPathToMortgageConditionsFile("mortgage_" + faker.file().fileName());
+            builder.setPathToPriceFile("prices_" + faker.file().fileName());
 
             builder.setDescription(faker.lorem().paragraph());
             builder.setActionTitle(faker.lorem().sentence());

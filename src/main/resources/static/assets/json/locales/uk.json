@@ -78,5 +78,46 @@
     "cancel": "Скасувати",
     "delete": "Видалити"
   },
+  "builder": {
+    "name": "Назва",
+    "namePlaceHolder": "Житловий комплекс Рів'єра Сіті",
+    "regDistrict": "Область",
+    "district": "Район",
+    "topozone": "Топозона",
+    "street": "Вулиця",
+    "streetPlaceHolder": "Чехова",
+    "houseNumber": "Номер будинку",
+    "houseSection": "Секція/корпус",
+    "totalFloor": "Кількість поверхів",
+    "buildingCompany": "Будівельна компанія",
+    "selectCompany": "Оберіть компанію",
+    "deliveryDate": "Термін здачі",
+    "phone": "Телефон",
+    "chessPlan": "Шахматка",
+    "mortgageConditions": "Умови розтермінування",
+    "priceFile": "Файл з цінами",
+    "description": "Опис:",
+    "promotion": "Акція",
+    "isAction": "Увімкнути акцію",
+    "save": "Зберегти",
+    "cancel": "Скасувати",
+    "createTarget": "Створити об'єкт",
+    "selectRegDistrict": "Оберіть область",
+    "selectCity": "Оберіть місто",
+    "selectDistrict": "Оберіть район",
+    "selectTopozone": "Оберіть топозону",
+    "gallery": "Галерея",
+    "layouts": "Планування"
+  },
+  "deliveryType": {
+    "selectDeliveryType": "Оберіть тип доставки",
+    "underConstruction": "Будується",
+    "processOfHandingOver": "У процесі здачі",
+    "handedOver": "Будинок зданий",
+    "readyForOccupancy": "Готове до заселення"
+  },
+  "file": {
+    "select": "Виберіть файл"
+  },
   "print": "Роздрукувати"
 }

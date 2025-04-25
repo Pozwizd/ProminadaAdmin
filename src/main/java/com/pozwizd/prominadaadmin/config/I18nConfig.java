@@ -29,7 +29,8 @@ public class I18nConfig implements WebMvcConfigurer {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:i18n/messages");
-        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
+        messageSource.setDefaultEncoding("UTF-8");
+//        messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         messageSource.setUseCodeAsDefaultMessage(true);
         return messageSource;
     }
@@ -44,11 +45,12 @@ public class I18nConfig implements WebMvcConfigurer {
         // Original logic from search result
         AcceptHeaderLocaleResolver resolver = new AcceptHeaderLocaleResolver();
         List<Locale> supportedLocales = List.of(
-                new Locale("uk"),
-                new Locale("en")
+                new Locale("uk","UA"),
+                new Locale("en","US"),
+                new Locale("ru","RU")
         );
         resolver.setSupportedLocales(supportedLocales);
-        resolver.setDefaultLocale(new Locale("uk")); // Устанавливаем украинский как язык по умолчанию
+        resolver.setDefaultLocale(new Locale("uk","UA")); // Устанавливаем украинский как язык по умолчанию
         return resolver;
     }
 
