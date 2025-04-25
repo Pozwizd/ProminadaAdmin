@@ -12,7 +12,7 @@ import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
 import com.pozwizd.prominadaadmin.repository.PersonalRepository;
-import com.pozwizd.prominadaadmin.service.*;
+import com.pozwizd.prominadaadmin.service.serviceImp.*;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 import java.io.File;
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -38,16 +37,15 @@ public class DataLoader {
     private final TopozoneService topozoneService;
     private final BuildingCompanyService buildingCompanyService;
     private final FeedbackService feedbackService;
-    private final BranchService branchService;
+    private final BranchServiceImp branchServiceImp;
     private final FileService fileService;
-    private final DocumentFeedbackService documentFeedbackService;
+    private final DocumentFeedbackServiceImp documentFeedbackServiceImp;
     private final Faker faker;
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadEntity() {
         loadBranch();
         loadAdmin();
-        loadFakeUsers();
         loadFakeRegDistrict();
         loadFakeCities();
         loadFakeDistrict();
@@ -65,7 +63,7 @@ public class DataLoader {
             branch.setPhoneNumber(faker.phoneNumber().phoneNumber());
             branch.setEmail(faker.internet().emailAddress());
             branch.setAddress(faker.address().fullAddress());
-            branchService.save(branch);
+            branchServiceImp.save(branch);
         }
     }
 
@@ -84,12 +82,12 @@ public class DataLoader {
             personal.setPathAvatar("uploads/avatar.jpg");
         }
 
-        Branch branch = branchService.getBranchById(1L);
+        Branch branch = branchServiceImp.getBranchById(1L);
         personal.setBranches(List.of(branch));
 
         Personal savedPersonal = personalService.save(personal);
         branch.setPersonals(List.of(savedPersonal));
-        branchService.save(branch);
+        branchServiceImp.save(branch);
         for (int j = 0; j < 5; j++) {
             Feedback feedback1 = new Feedback();
             feedback1.setName(faker.name().firstName());
@@ -119,7 +117,7 @@ public class DataLoader {
                 }
 
                 documentFeedbacks.forEach(feedback -> feedback.setPersonal(personal));
-                documentFeedbackService.saveAllDocumentFeedback(documentFeedbacks);
+                documentFeedbackServiceImp.saveAllDocumentFeedback(documentFeedbacks);
                 personal.setDocumentFeedbacks(documentFeedbacks);
                 personalService.save(personal);
 

@@ -1,4 +1,12 @@
 {
+  "system": {
+    "toast": {
+      "title": {
+        "success": "Успіх",
+        "error": "Помилка"
+      }
+    }
+  },
   "ADMIN": "Адміністратор",
   "USER": "Користувач",
   "Personal": "Персонал",
@@ -72,6 +80,9 @@
   "noFileSelected": "Файл не вибрано",
   "confirmDeleteDocument": "Ви впевнені, що хочете видалити цей документ?",
   "personal": {
+    "createUser": "Створення користувача",
+    "editUser": "Редагування користувача",
+
     "personal": "Користувач",
     "users": "Користувачі",
     "addUser": "Додати користувача",
@@ -105,7 +116,19 @@
     "selectFile": "Вибрати файл",
     "fileUploadInfo": "Якщо завантажено файл, його можна завантажити для перегляду або видалити.",
     "saveChanges": "Зберегти зміни",
-    "confirmDeleteReviewMessage": "Ви впевнені, що хочете видалити цей відгук?"
+    "confirmDeleteReviewMessage": "Ви впевнені, що хочете видалити цей відгук?",
+    "toast": {
+      "delete": {
+        "successful": "Видалено {{entity}}",
+        "errorApi": "Помилка видалення: {{message}}",
+        "errorStatus": "Не вдалося видалити {{entity}} (Помилка {{status}}).",
+        "errorGeneric": "Сталася невідома помилка під час видалення {{entity}}."
+      },
+      "fetch": {
+        "errorApi": "Помилка завантаження даних: {{message}}",
+        "errorGeneric": "Не вдалося завантажити дані. Будь ласка, спробуйте пізніше."
+      }
+    }
   },
   "roles": {
     "MANAGER": "Менеджер"

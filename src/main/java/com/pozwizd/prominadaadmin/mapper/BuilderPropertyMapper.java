@@ -3,7 +3,6 @@ package com.pozwizd.prominadaadmin.mapper;
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
-import com.pozwizd.prominadaadmin.models.personal.PersonalDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;

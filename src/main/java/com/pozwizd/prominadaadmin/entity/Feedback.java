@@ -3,11 +3,17 @@ package com.pozwizd.prominadaadmin.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
+@ToString(exclude = {"personal", "realtor"})
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 public class Feedback {
 

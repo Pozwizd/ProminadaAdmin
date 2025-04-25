@@ -10,8 +10,7 @@ import java.security.Principal;
 @ControllerAdvice
 public class ControllerContext {
 
-//    private final AdminUserRepository userRepository;
-//    private final AdminUserMapper adminUserMapper;
+
 
     @Value("${spring.application.name}")
     private String appName;
@@ -29,12 +28,6 @@ public class ControllerContext {
     public void addCommonAttributes(Model model, Principal principal) {
 
         if (principal != null) {
-//            AdminUserProfileResponse adminUserResponse = adminUserMapper.adminUserToProfileResponse(userRepository
-//                    .findByEmail(principal.getName()).orElse(new AdminUser()));
-//
-//            model.addAttribute("currentUser", adminUserResponse);
-//
-//            String email = principal.getName();
             System.out.println("Principal: " + principal.getName());
 
         } else {
