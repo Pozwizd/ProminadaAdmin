@@ -4,7 +4,7 @@ import com.pozwizd.prominadaadmin.entity.Role;
 import com.pozwizd.prominadaadmin.models.personal.PersonalResponse;
 import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
-import com.pozwizd.prominadaadmin.service.PersonalService;
+import com.pozwizd.prominadaadmin.service.serviceImp.PersonalServiceImp;
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.mapper.PersonalMapper;
 import jakarta.validation.Valid;
@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +28,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class PersonalController {
 
-    private final PersonalService personalService;
+    private final PersonalServiceImp personalServiceImp;
     private final PersonalMapper personalMapper;
 
     @GetMapping
@@ -49,33 +48,41 @@ public class PersonalController {
                                                                          @RequestParam(required = false, name = "filter_phoneNumber") String phoneNumber,
                                                                          @RequestParam(required = false, name = "filter_email") String email,
                                                                          @RequestParam(defaultValue = "10") Integer size) {
-        return personalService.getPageablePersonal(page, size, surname, name, lastName, phoneNumber, email, role);
+        return personalServiceImp.getPageablePersonal(page, size, surname, name, lastName, phoneNumber, email, role);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Map<String, String>> deletePersonal(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        String email = personalService.getPersonalById(id).getEmail();
+        String email = personalServiceImp.getPersonalById(id).getEmail();
         if (userDetails.getUsername().equals(email)) {
             return ResponseEntity.badRequest().build();
         }
 
-        personalService.deletePersonal(id);
+        personalServiceImp.deletePersonal(id);
         return ResponseEntity.ok().build();
     }
 
 
     @GetMapping("/edit/{id}")
     public ModelAndView showEditForm(@PathVariable Long id, Model model) {
-        model.addAttribute("pageTitle", "Edit Personal");
+        model.addAttribute("pageTitle", "personal.editUser");
         model.addAttribute("pageActive", "personal");
         model.addAttribute("isEdit", true);
+        return new ModelAndView("personal/personalForm");
+    }
+
+    @GetMapping("/create")
+    public ModelAndView showCreateForm(Model model) {
+        model.addAttribute("pageTitle", "personal.createUser");
+        model.addAttribute("pageActive", "personal");
+        model.addAttribute("isEdit", false);
         return new ModelAndView("personal/personalForm");
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public PersonalResponse getPersonalProfile(@PathVariable Long id) {
-        Personal personal = personalService.getPersonalById(id);
+        Personal personal = personalServiceImp.getPersonalById(id);
         return personalMapper.toPersonalProfileResponse(personal);
     }
 
@@ -91,7 +98,7 @@ public class PersonalController {
             return ResponseEntity.badRequest().body("ID в пути и в теле запроса не совпадают");
         }
 
-        personalService.updatePersonal(personalRequest);
+        personalServiceImp.updatePersonal(personalRequest);
 
         return ResponseEntity.ok("Пользователь успешно обновлен");
     }
@@ -100,7 +107,7 @@ public class PersonalController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/create")
     public ResponseEntity<?> createPersonal(@ModelAttribute PersonalRequest personalRequest) {
 
-        personalService.saveFromRequest(personalRequest);
+        personalServiceImp.saveFromRequest(personalRequest);
         return ResponseEntity.ok("Пользователь успешно создан");
     }
 }

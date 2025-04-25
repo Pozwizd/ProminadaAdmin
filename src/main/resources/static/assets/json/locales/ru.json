@@ -1,4 +1,6 @@
 {
+  "ADMIN": "Администратор",
+  "USER": "Пользователь",
   "Personal": "Персонал",
   "search": "Поиск",
   "megaMenu": "Мега Меню",
@@ -55,6 +57,20 @@
   "websiteRequests": "Заявки с сайта",
   "questions": "Вопросы",
   "language": "Язык",
+  "selectBranchPlaceholder": "Выберите филиал",
+  "loading": "Загрузка...",
+  "selectRole": "Выберите роль",
+  "errorLoadingRoles": "Ошибка загрузки ролей",
+  "download": "Скачать",
+  "delete": "Удалить",
+  "deleteReviewTitle": "Удалить отзыв",
+  "nameLabel": "Имя",
+  "contactLabel": "Контакт",
+  "reviewLabel": "Отзыв",
+  "documentFallbackName": "Документ",
+  "filesSelected": "Выбрано файлов: ",
+  "noFileSelected": "Файл не выбран",
+  "confirmDeleteDocument": "Вы уверены, что хотите удалить этот документ?",
   "personal": {
     "personal": "Пользователь",
     "users": "Пользователи",
@@ -76,6 +92,23 @@
     "confirmDeletion": "Подтверждение удаления",
     "confirmDeletionMessage": "Вы уверены, что хотите удалить этого пользователя?",
     "cancel": "Отменить",
-    "delete": "Удалить"
-  }
+    "delete": "Удалить",
+    "informationTab": "Информация",
+    "testimonialsTab": "Отзывы",
+    "uploadAvatar": "Загрузить аватар",
+    "reset": "Сбросить",
+    "allowedFormats": "Разрешены JPG, GIF или PNG. Максимальный размер 800K",
+    "branches": "Филиалы",
+    "password": "Пароль",
+    "confirmPassword": "Подтверждение пароля",
+    "attachPdfFiles": "Прикрепить PDF файлы",
+    "selectFile": "Выбрать файл",
+    "fileUploadInfo": "Если загружен файл, его можно скачать для просмотра или удалить.",
+    "saveChanges": "Сохранить изменения",
+    "confirmDeleteReviewMessage": "Вы уверены, что хотите удалить этот отзыв?"
+  },
+  "roles": {
+    "MANAGER": "Менеджер"
+  },
+  "print": "Роспечатать"
 }

@@ -6,11 +6,17 @@ import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialPropertie
 import com.pozwizd.prominadaadmin.entity.property.investorProperty.InvestorProperty;
 import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryProperty;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"phoneNumbers", "feedBacks", "customer", "investorProperties", "secondaryProperties", "residentialLands"})
+@EqualsAndHashCode(of = "id")
 @Entity
 public class Realtor {
     @Id

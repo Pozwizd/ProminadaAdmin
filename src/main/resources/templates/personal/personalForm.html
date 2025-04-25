@@ -5,7 +5,8 @@
 <body>
 <div layout:fragment="content">
     <div class="d-flex justify-content-between align-items-center py-3 mb-4">
-        <h4 class="fw-bold m-0" data-i18n="personal.createUser">Создать пользователя</h4>
+        <h4 class="fw-bold m-0"
+            th:data-i18n="${pageTitle}">Создать пользователя</h4>
     </div>
 
     <div class="row">
@@ -142,62 +143,6 @@
 
                             <!-- Repeatable Form Section Wrapper (for potential JS additions) -->
                             <div id="reviewSectionsContainer">
-                                <!-- Repeatable Form Section 1 -->
-                                <div class="review-section mb-4 border p-3 rounded position-relative">
-                                    <input type="hidden" class="feedback-id" value="">
-                                    <button type="button"
-                                            class="btn btn-icon btn-sm btn-outline-danger position-absolute top-0 end-0 mt-2 me-2"
-                                            title="Удалить отзыв" onclick="removeReviewSection(this)">
-                                        <i class="ti ti-trash"></i>
-                                    </button>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="reviewerName1" class="form-label"
-                                                   data-i18n="personal.nameLabel">Имя</label>
-                                            <input type="text" class="form-control" id="reviewerName1"
-                                                   value="Алексей">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="reviewerContact1" class="form-label"
-                                                   data-i18n="personal.contactLabel">Контакт</label>
-                                            <input type="text" class="form-control" id="reviewerContact1"
-                                                   value="+380991112233">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="reviewText1" class="form-label" data-i18n="personal.reviewLabel">Отзыв</label>
-                                        <textarea class="form-control" id="reviewText1" rows="3"></textarea>
-                                    </div>
-                                </div>
-                                <!-- End Repeatable Section 1 -->
-
-                                <!-- Repeatable Form Section 2 -->
-                                <div class="review-section mb-4 border p-3 rounded position-relative">
-                                    <input type="hidden" class="feedback-id" value="">
-                                    <button type="button"
-                                            class="btn btn-icon btn-sm btn-outline-danger position-absolute top-0 end-0 mt-2 me-2"
-                                            title="Удалить отзыв" onclick="removeReviewSection(this)">
-                                        <i class="ti ti-trash"></i>
-                                    </button>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-3">
-                                            <label for="reviewerName2" class="form-label"
-                                                   data-i18n="personal.nameLabel">Имя</label>
-                                            <input type="text" class="form-control" id="reviewerName2"
-                                                   value="Алексей">
-                                        </div>
-                                        <div class="col-md-6 mb-3">
-                                            <label for="reviewerContact2" class="form-label"
-                                                   data-i18n="personal.contactLabel">Контакт</label>
-                                            <input type="text" class="form-control" id="reviewerContact2"
-                                                   value="+380991112233">
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="reviewText2" class="form-label" data-i18n="personal.reviewLabel">Отзыв</label>
-                                        <textarea class="form-control" id="reviewText2" rows="3"></textarea>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -249,7 +194,6 @@
         window.defaultAvatarPath = '[[@{/assets/img/avatars/14.png}]]';
     </script>
     <script th:src="@{/customAssets/js/personal/formPersonal.js}"></script>
-
 
 
 </div>

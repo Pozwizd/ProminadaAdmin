@@ -1,6 +1,7 @@
-loadBranchesSelect();
+const fileInput = document.getElementById('fileUpload');
+const fileListDiv = document.getElementById('uploadedFilesList');
+let files = [];
 
-// Загрузка списка филиалов
 function loadBranchesSelect(selectedBranchIds = []) {
     axios.get(contextPath + 'branch/list')
         .then(response => {
@@ -18,7 +19,6 @@ function loadBranchesSelect(selectedBranchIds = []) {
                 select.appendChild(option);
             });
 
-            // Инициализируем или обновляем select2
             if ($(select).hasClass('select2-hidden-accessible')) {
                 $(select).trigger('change');
             } else {
@@ -39,12 +39,13 @@ function loadRolesSelect() {
 
     axios.get(`${contextPath}personal/getRoles`)
         .then(function (response) {
-            selectElement.innerHTML = '<option value="" disabled selected>' + i18next.t('selectRole') + '</option>';
+            selectElement.innerHTML = '<option value="" data-i18n="selectRole" disabled selected>' + i18next.t('selectRole') + '</option>';
 
             if (response.data && Array.isArray(response.data)) {
                 response.data.forEach(function (role) {
                     const option = document.createElement('option');
                     // Сохраняем оригинальное значение enum в value
+                    option.setAttribute("data-i18n", role);
                     option.value = role;
                     // Используем i18n для перевода
                     option.textContent = i18next.t(role);
@@ -62,16 +63,13 @@ function loadRolesSelect() {
 }
 
 
-// Вызов функции при загрузке страницы
+loadBranchesSelect();
+
 document.addEventListener('DOMContentLoaded', function () {
     loadRolesSelect();
 });
 
 
-// Погрузка файлов
-const fileInput = document.getElementById('fileUpload');
-const fileListDiv = document.getElementById('uploadedFilesList');
-let files = [];
 
 fileInput.addEventListener('change', (e) => {
     const invalidFiles = [];
@@ -90,7 +88,6 @@ fileInput.addEventListener('change', (e) => {
         }
     }
 
-    // Показать сообщение об ошибке, если есть недопустимые файлы
     if (invalidFiles.length > 0) {
         alert(`Следующие файлы не были загружены, так как они не в формате PDF: ${invalidFiles.join(', ')}`);
     }
@@ -101,7 +98,7 @@ fileInput.addEventListener('change', (e) => {
 
 
 function getFileIcon(file) {
-    // Пример простого определения по типу
+
     if (file.file && file.file.type) {
         if (file.file.type.startsWith('image/')) return '<i class="ti ti-photo me-2"></i>';
         if (file.file.type === 'application/pdf') return '<i class="ti ti-file-text me-2"></i>';
@@ -117,9 +114,9 @@ function renderFiles() {
         let fileIcon = '<i class="ti ti-file me-2"></i>';
         let fileName = file.name;
 
-        // Определяем тип файла по наличию свойств id и file
+
         if (file.file) {
-            // Это локально загруженный файл
+
             downloadUrl = URL.createObjectURL(file.file);
             fileIcon = getFileIcon(file);
         } else if (file.id) {
@@ -132,7 +129,7 @@ function renderFiles() {
                 fileIcon = '<i class="ti ti-photo me-2"></i>';
             }
         } else {
-            // Неизвестный тип файла, считаем локальным
+
             downloadUrl = '#';
         }
 
@@ -157,27 +154,12 @@ function renderFiles() {
 
 window.deleteFile = function (idx) {
     const file = files[idx];
-    if (file.id) {
-        // Если у файла есть id, это файл с сервера - нужно удалить его там
-        if (confirm('Вы уверены, что хотите удалить этот документ?')) {
-            axios.delete(`${contextPath}personal/documents/${file.id}`)
-                .then(() => {
-                    files.splice(idx, 1);
-                    renderFiles();
-                })
-                .catch(error => {
-                    console.error('Ошибка при удалении документа:', error);
-                });
-        }
-    } else {
-        // Если у файла нет id, это локальный файл - просто удаляем из массива
-        files.splice(idx, 1);
-        renderFiles();
-    }
+    files.splice(idx, 1);
+    renderFiles();
 };
 
 
-// Загрузка данных
+
 function fillFormData(data) {
     document.getElementById('userId').value = data.id || '';
     document.getElementById('surname').value = data.surname || '';
@@ -185,7 +167,7 @@ function fillFormData(data) {
     document.getElementById('lastName').value = data.lastName || '';
     document.getElementById('phoneNumber').value = data.phoneNumber || '';
     document.getElementById('email').value = data.email || '';
-    // Role initialization
+
     const roleElement = document.getElementById('rolePersonal');
     if (data.role) {
         roleElement.value = data.role;
@@ -226,7 +208,7 @@ function fillFormData(data) {
                 file: null
             });
         });
-        renderFiles(); // Обновляем интерфейс
+        renderFiles();
     }
 }
 
@@ -474,10 +456,9 @@ function localize() {
 
 
 function collectFormData() {
-    // Создаем новый объект FormData
+
     const formData = new FormData();
 
-    // Основные данные пользователя
     const userId = document.getElementById('userId').value;
     if (userId) formData.append('id', userId);
 
@@ -488,7 +469,6 @@ function collectFormData() {
     formData.append('email', document.getElementById('email').value);
     formData.append('role', document.getElementById('rolePersonal').value);
 
-    // Пароль (только если заполнен)
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
     if (password) {
@@ -496,7 +476,6 @@ function collectFormData() {
         formData.append('confirmPassword', confirmPassword);
     }
 
-    // Выбранные филиалы (множественный выбор)
     const selectedBranches = $('#branchesSelect').val();
     if (selectedBranches && selectedBranches.length > 0) {
         selectedBranches.forEach((branchId, index) => {
@@ -504,13 +483,11 @@ function collectFormData() {
         });
     }
 
-    // Загруженный аватар
     const avatarInput = document.getElementById('upload');
     if (avatarInput.files.length > 0) {
         formData.append('avatar', avatarInput.files[0]);
     }
 
-    // Документы
     if (files && files.length > 0) {
         files.forEach((fileObj, index) => {
             if (fileObj.id) {
@@ -525,7 +502,6 @@ function collectFormData() {
         });
     }
 
-    // Отзывы
     const reviewSections = document.querySelectorAll('.review-section');
     reviewSections.forEach((section, index) => {
         const feedbackId = section.querySelector('.feedback-id').value;
@@ -550,7 +526,6 @@ function collectFormData() {
 function clearValidationErrors() {
     document.querySelectorAll('.error-message').forEach(el => el.remove());
 
-    // Удаляем класс is-invalid со всех полей
     document.querySelectorAll('.is-invalid').forEach(el => {
         el.classList.remove('is-invalid');
     });
@@ -587,7 +562,6 @@ function displayValidationErrors(errors) {
                         }
 
                         if (fieldElement) {
-                            // Добавляем класс ошибки и сообщение
                             fieldElement.classList.add('is-invalid');
                             const errorSpan = document.createElement('div');
                             errorSpan.className = 'error-message text-danger mt-1';
@@ -596,8 +570,7 @@ function displayValidationErrors(errors) {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 const fieldElement = document.getElementById(fieldPath);
                 if (fieldElement) {
                     fieldElement.classList.add('is-invalid');
@@ -605,9 +578,7 @@ function displayValidationErrors(errors) {
                     errorSpan.className = 'error-message text-danger mt-1';
                     errorSpan.textContent = errorMessage;
                     fieldElement.parentNode.appendChild(errorSpan);
-                }
-
-                else if (fieldPath === 'branchIds') {
+                } else if (fieldPath === 'branchIds') {
                     const select2Container = document.querySelector('.select2-container');
                     if (select2Container) {
                         const errorSpan = document.createElement('div');
@@ -615,17 +586,14 @@ function displayValidationErrors(errors) {
                         errorSpan.textContent = errorMessage;
                         select2Container.parentNode.appendChild(errorSpan);
                     }
-                }
-                else {
+                } else {
                     console.warn('Не удалось найти поле для ошибки:', fieldPath);
                 }
             }
         }
     }
 
-    // Переключаемся на таб с ошибками
     if (hasFeedbackErrors) {
-        // Переключаемся на таб с отзывами
         const testimonialsTab = document.querySelector('[data-bs-target="#testimonialsPersonal"]');
         if (testimonialsTab) {
             const tab = new bootstrap.Tab(testimonialsTab);
@@ -651,8 +619,9 @@ function submitForm() {
         }
     })
         .then(response => {
-            console.log('Данные успешно отправлены', response);
-            showSuccessMessage('Данные успешно сохранены');
+            showI18nToast('success',
+                'system.toast.title.success',
+                'personal.toast.update.successful');
             setTimeout(() => {
                 window.location.href = `${contextPath}personal`;
             }, 1500);
@@ -667,87 +636,27 @@ function submitForm() {
                     displayValidationErrors(error.response.data);
                 } else if (Array.isArray(error.response.data)) {
                     const errorMessages = error.response.data.map(err => err.defaultMessage || err.message).join('\n');
-                    showErrorMessage('Ошибка при сохранении: ' + errorMessages);
+                    showI18nToast('error', 'system.toast.title.error', 'personal.toast.update.error');
+                    console.log('Ошибка при сохранении: ' + errorMessages);
                 } else if (typeof error.response.data === 'string') {
-                    showErrorMessage('Ошибка: ' + error.response.data);
+                    showI18nToast('error', 'system.toast.title.error', 'personal.toast.update.error');
+                    console.log('Ошибка: ' + error.response.data);
                 } else {
-                    showErrorMessage('Произошла ошибка при сохранении данных');
+                    showI18nToast('error', 'system.toast.title.error', 'personal.toast.update.error');
+                    console.log('Произошла ошибка при сохранении данных');
                 }
             } else {
-                showErrorMessage('Произошла ошибка при сохранении данных');
+                console.log('Произошла ошибка при сохранении данных');
             }
         });
 }
 
-// Функция для отображения сообщения об успехе
-function showSuccessMessage(message) {
-    // Проверяем, есть ли уже контейнер для сообщений
-    let alertContainer = document.getElementById('alert-container');
-
-    if (!alertContainer) {
-        alertContainer = document.createElement('div');
-        alertContainer.id = 'alert-container';
-        alertContainer.style.position = 'fixed';
-        alertContainer.style.top = '20px';
-        alertContainer.style.right = '20px';
-        alertContainer.style.zIndex = '9999';
-        document.body.appendChild(alertContainer);
-    }
-
-    const alertElement = document.createElement('div');
-    alertElement.className = 'alert alert-success alert-dismissible fade show';
-    alertElement.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-
-    alertContainer.appendChild(alertElement);
-
-    // Удаляем сообщение через 5 секунд
-    setTimeout(() => {
-        alertElement.remove();
-    }, 5000);
-}
-
-function showErrorMessage(message) {
-    let alertContainer = document.getElementById('alert-container');
-
-    if (!alertContainer) {
-        // Создаем контейнер, если его нет
-        alertContainer = document.createElement('div');
-        alertContainer.id = 'alert-container';
-        alertContainer.style.position = 'fixed';
-        alertContainer.style.top = '20px';
-        alertContainer.style.right = '20px';
-        alertContainer.style.zIndex = '9999';
-        document.body.appendChild(alertContainer);
-    }
-
-    // Создаем сообщение
-    const alertElement = document.createElement('div');
-    alertElement.className = 'alert alert-danger alert-dismissible fade show';
-    alertElement.innerHTML = `
-        ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    `;
-
-    // Добавляем сообщение в контейнер
-    alertContainer.appendChild(alertElement);
-
-    // Удаляем сообщение через 5 секунд
-    setTimeout(() => {
-        alertElement.remove();
-    }, 5000);
-}
 
 document.addEventListener('DOMContentLoaded', function () {
-    // Очистка ошибок при изменении полей ввода
     document.querySelectorAll('input, select, textarea').forEach(input => {
         input.addEventListener('input', function () {
-            // Удаляем класс ошибки с поля
             this.classList.remove('is-invalid');
 
-            // Находим и удаляем сообщение об ошибке
             const errorMessage = this.parentNode.querySelector('.error-message');
             if (errorMessage) {
                 errorMessage.remove();

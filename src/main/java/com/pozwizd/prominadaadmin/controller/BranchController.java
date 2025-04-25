@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.controller;
 
 import com.pozwizd.prominadaadmin.models.branch.BranchResponse;
-import com.pozwizd.prominadaadmin.service.BranchService;
+import com.pozwizd.prominadaadmin.service.serviceImp.BranchServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,12 +15,12 @@ import java.util.List;
 @AllArgsConstructor
 public class BranchController {
 
-    private final BranchService branchService;
+    private final BranchServiceImp branchServiceImp;
 
 
     @GetMapping("/list")
     public @ResponseBody List<BranchResponse> getBranches() {
-        return branchService.findAllResponse();
+        return branchServiceImp.findAllResponse();
     }
 
 }

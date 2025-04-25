@@ -3,9 +3,13 @@ package com.pozwizd.prominadaadmin.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Getter
 @Setter
+@ToString(exclude = {"personal"})
+@EqualsAndHashCode(of = "id")
 @Entity
 public class DocumentFeedback {
     @Id

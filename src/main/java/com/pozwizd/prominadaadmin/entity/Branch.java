@@ -1,12 +1,18 @@
 package com.pozwizd.prominadaadmin.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"personals"})
+@EqualsAndHashCode(of = "id")
 public class Branch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,4 +38,8 @@ public class Branch {
     )
     private List<Personal> personals;
 
+    public void addPersonal(Personal personal) {
+        personals.add(personal);
+        personal.getBranches().add(this);
+    }
 }

@@ -1,4 +1,6 @@
 {
+  "ADMIN": "Admin",
+  "USER": "User",
   "Personal": "Personal",
   "search": "Search",
   "megaMenu": "Mega Menu",
@@ -55,6 +57,20 @@
   "websiteRequests": "Website Requests",
   "questions": "Questions",
   "language": "Language",
+  "selectBranchPlaceholder": "Select branch",
+  "loading": "Loading...",
+  "selectRole": "Select role",
+  "errorLoadingRoles": "Error loading roles",
+  "download": "Download",
+  "delete": "Delete",
+  "deleteReviewTitle": "Delete review",
+  "nameLabel": "Name",
+  "contactLabel": "Contact",
+  "reviewLabel": "Review",
+  "documentFallbackName": "Document",
+  "filesSelected": "Files selected: ",
+  "noFileSelected": "No file selected",
+  "confirmDeleteDocument": "Are you sure you want to delete this document?",
   "personal": {
     "personal": "User",
     "users": "Users",
@@ -76,6 +92,23 @@
     "confirmDeletion": "Confirm deletion",
     "confirmDeletionMessage": "Are you sure you want to delete this user?",
     "cancel": "Cancel",
-    "delete": "Delete"
-  }
+    "delete": "Delete",
+    "informationTab": "Information",
+    "testimonialsTab": "Testimonials",
+    "uploadAvatar": "Upload avatar",
+    "reset": "Reset",
+    "allowedFormats": "Allowed JPG, GIF or PNG. Max size of 800K",
+    "branches": "Branches",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "attachPdfFiles": "Attach PDF files",
+    "selectFile": "Select file",
+    "fileUploadInfo": "If a file is uploaded, it can be downloaded for viewing or deleted.",
+    "saveChanges": "Save changes",
+    "confirmDeleteReviewMessage": "Are you sure you want to delete this review?"
+  },
+  "roles": {
+    "MANAGER": "Manager"
+  },
+  "print": "Print"
 }

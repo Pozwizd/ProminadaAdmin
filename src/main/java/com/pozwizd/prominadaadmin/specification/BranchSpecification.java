@@ -7,19 +7,19 @@ import org.springframework.data.jpa.domain.Specification;
  * Спецификация для фильтрации филиалов (Branch).
  * Предоставляет методы для создания спецификаций для поиска филиалов по различным критериям.
  */
-public class BranchSpecification {
+public interface BranchSpecification {
 
     /**
      * Создает спецификацию для поиска филиалов по различным критериям.
-     * 
-     * @param code Код филиала для фильтрации
-     * @param name Название филиала для фильтрации
-     * @param address Адрес филиала для фильтрации
+     *
+     * @param code        Код филиала для фильтрации
+     * @param name        Название филиала для фильтрации
+     * @param address     Адрес филиала для фильтрации
      * @param phoneNumber Телефон филиала для фильтрации
-     * @param email Email филиала для фильтрации
+     * @param email       Email филиала для фильтрации
      * @return Спецификация для поиска филиалов
      */
-    public static Specification<Branch> search(String code, String name, String address, String phoneNumber, String email) {
+    static Specification<Branch> search(String code, String name, String address, String phoneNumber, String email) {
         return Specification.where(codeContains(code))
                 .and(nameContains(name))
                 .and(addressContains(address))
@@ -29,7 +29,7 @@ public class BranchSpecification {
 
     /**
      * Создает спецификацию для поиска филиалов по коду.
-     * 
+     *
      * @param code Код филиала
      * @return Спецификация для поиска филиалов по коду
      */
@@ -44,7 +44,7 @@ public class BranchSpecification {
 
     /**
      * Создает спецификацию для поиска филиалов по названию.
-     * 
+     *
      * @param name Название филиала
      * @return Спецификация для поиска филиалов по названию
      */
@@ -59,7 +59,7 @@ public class BranchSpecification {
 
     /**
      * Создает спецификацию для поиска филиалов по адресу.
-     * 
+     *
      * @param address Адрес филиала
      * @return Спецификация для поиска филиалов по адресу
      */
@@ -74,7 +74,7 @@ public class BranchSpecification {
 
     /**
      * Создает спецификацию для поиска филиалов по телефону.
-     * 
+     *
      * @param phoneNumber Телефон филиала
      * @return Спецификация для поиска филиалов по телефону
      */
@@ -89,7 +89,7 @@ public class BranchSpecification {
 
     /**
      * Создает спецификацию для поиска филиалов по email.
-     * 
+     *
      * @param email Email филиала
      * @return Спецификация для поиска филиалов по email
      */
