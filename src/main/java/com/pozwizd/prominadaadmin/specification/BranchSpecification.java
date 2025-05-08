@@ -15,16 +15,14 @@ public interface BranchSpecification {
      * @param code        Код филиала для фильтрации
      * @param name        Название филиала для фильтрации
      * @param address     Адрес филиала для фильтрации
-     * @param phoneNumber Телефон филиала для фильтрации
-     * @param email       Email филиала для фильтрации
      * @return Спецификация для поиска филиалов
      */
-    static Specification<Branch> search(String code, String name, String address, String phoneNumber, String email) {
+    static Specification<Branch> search(String code,
+                                        String name,
+                                        String address) {
         return Specification.where(codeContains(code))
                 .and(nameContains(name))
-                .and(addressContains(address))
-                .and(phoneNumberContains(phoneNumber))
-                .and(emailContains(email));
+                .and(addressContains(address));
     }
 
     /**

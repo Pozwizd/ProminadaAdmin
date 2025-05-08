@@ -11,6 +11,7 @@ import com.pozwizd.prominadaadmin.models.feedback.FeedbackRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
 import com.pozwizd.prominadaadmin.repository.PersonalRepository;
+import com.pozwizd.prominadaadmin.service.FileService;
 import com.pozwizd.prominadaadmin.service.PersonalService;
 import com.pozwizd.prominadaadmin.specification.PersonalSpecification;
 import jakarta.validation.Valid;
@@ -39,7 +40,7 @@ public class PersonalServiceImp implements PersonalService {
     private final PasswordEncoder passwordEncoder;
     private final BranchServiceImp branchServiceImp;
     private final DocumentFeedbackServiceImp documentFeedbackServiceImp;
-    private final FileServiceImp fileServiceImp;
+    private final FileService fileService;
     private final FeedbackServiceImp feedbackServiceImp;
     private final FeedbackMapper feedbackMapper;
 
@@ -173,7 +174,7 @@ public class PersonalServiceImp implements PersonalService {
 
         if (personalRequest.getAvatar() != null) {
             try {
-                personal.setPathAvatar(fileServiceImp.uploadFile(personalRequest.getAvatar()));
+                personal.setPathAvatar(fileService.uploadFile(personalRequest.getAvatar()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -188,7 +189,7 @@ public class PersonalServiceImp implements PersonalService {
 
                 if (documentRequest.getFile() != null) {
                     try {
-                        document.setPath(fileServiceImp.uploadFile(documentRequest.getFile()));
+                        document.setPath(fileService.uploadFile(documentRequest.getFile()));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -249,7 +250,7 @@ public class PersonalServiceImp implements PersonalService {
 
         if (personalRequest.getAvatar() != null) {
             try {
-                personal.setPathAvatar(fileServiceImp.uploadFile(personalRequest.getAvatar()));
+                personal.setPathAvatar(fileService.uploadFile(personalRequest.getAvatar()));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -274,7 +275,7 @@ public class PersonalServiceImp implements PersonalService {
 
                         if (req.getFile() != null) {
                             try {
-                                oldDoc.setPath(fileServiceImp.uploadFile(req.getFile()));
+                                oldDoc.setPath(fileService.uploadFile(req.getFile()));
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
                             }
@@ -284,7 +285,7 @@ public class PersonalServiceImp implements PersonalService {
                         updatedDocuments.add(oldDoc);
                     } else {
                         try {
-                            fileServiceImp.deleteFile(oldDoc.getPath());
+                            fileService.deleteFile(oldDoc.getPath());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -301,7 +302,7 @@ public class PersonalServiceImp implements PersonalService {
 
                     if (documentRequest.getFile() != null) {
                         try {
-                            newDocument.setPath(fileServiceImp.uploadFile(documentRequest.getFile()));
+                            newDocument.setPath(fileService.uploadFile(documentRequest.getFile()));
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }

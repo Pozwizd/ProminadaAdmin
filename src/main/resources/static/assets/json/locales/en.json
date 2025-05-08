@@ -7,9 +7,9 @@
       }
     }
   },
-  "ADMIN": "Admin",
+  "ADMIN": "Administrator",
   "USER": "User",
-  "Personal": "Personal",
+  "Personal": "Staff",
   "search": "Search",
   "megaMenu": "Mega Menu",
   "overview": "Overview",
@@ -18,7 +18,7 @@
   "companies": "Companies",
   "dashboards": "Dashboards",
   "favourites": "Favourites",
-  "reportsConversions": "Reports Conversions",
+  "reportsConversions": "Conversion Reports",
   "quickStart": "Quick Start",
   "new": "New",
   "usersAndGroups": "Users & Groups",
@@ -35,15 +35,19 @@
   "products": "Products",
   "rollupQueries": "Rollup Queries",
   "cancel": "Cancel",
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel"
+  },
   "projects": "Projects",
-  "unlimitedOptions": "Unlimited options",
+  "unlimitedOptions": "Unlimited Options",
   "graphicDesign": "Graphic Design",
   "appDevelopment": "App Development",
   "iconDesign": "Icon Design",
   "miscellaneous": "Miscellaneous",
-  "frontendDev": "Frontend Dev",
+  "frontendDev": "Frontend Development",
   "gridDashboard": "Grid Dashboard",
-  "gridNavigation": "Easy grid navigation inside dropdowns",
+  "gridNavigation": "Easy grid navigation in dropdown menus",
   "automation": "Automation",
   "notifications": "Notifications",
   "newMessages": "You have <b>21</b> unread messages",
@@ -79,65 +83,162 @@
   "filesSelected": "Files selected: ",
   "noFileSelected": "No file selected",
   "confirmDeleteDocument": "Are you sure you want to delete this document?",
+  "feedback": {
+    "validation": {
+      "name": {
+        "required": "Name is required"
+      },
+      "phone": {
+        "required": "Phone is required"
+      },
+      "description": {
+        "required": "Description is required"
+      }
+    }
+  },
   "personal": {
-    "createUser": "Create user",
-    "editUser": "Edit user",
+    "validation": {
+      "password": {
+        "match": "Passwords do not match"
+      },
+      "surname": {
+        "required": "Surname is required"
+      },
+      "name": {
+        "required": "Name is required"
+      },
+      "lastname": {
+        "required": "Last name is required"
+      },
+      "phone": {
+        "pattern": "Invalid phone number format"
+      },
+      "email": {
+        "required": "Email is required",
+        "format": "Invalid email format"
+      },
+      "role": {
+        "required": "Role is required"
+      },
+      "branches": {
+        "required": "At least one branch must be selected"
+      }
+    },
+    "createUser": "Create User",
+    "editUser": "Edit User",
     "personal": "User",
     "users": "Users",
-    "addUser": "Add user",
+    "addUser": "Add User",
     "role": "Role",
     "surname": "Surname",
     "name": "Name",
-    "lastName": "Last name",
-    "phoneNumber": "Phone number",
+    "lastName": "Last Name",
+    "phoneNumber": "Phone Number",
     "email": "Email",
     "actions": "Actions",
     "rolePlaceholder": "Role...",
     "surnamePlaceholder": "Surname...",
     "namePlaceholder": "Name...",
-    "lastNamePlaceholder": "Last name...",
-    "phoneNumberPlaceholder": "Phone number...",
+    "lastNamePlaceholder": "Last Name...",
+    "phoneNumberPlaceholder": "Phone Number...",
     "emailPlaceholder": "Email...",
-    "clearFilters": "Clear filters",
-    "confirmDeletion": "Confirm deletion",
+    "clearFilters": "Clear Filters",
+    "confirmDeletion": "Confirm Deletion",
     "confirmDeletionMessage": "Are you sure you want to delete this user?",
     "cancel": "Cancel",
     "delete": "Delete",
     "informationTab": "Information",
     "testimonialsTab": "Testimonials",
-    "uploadAvatar": "Upload avatar",
+    "uploadAvatar": "Upload Avatar",
     "reset": "Reset",
     "allowedFormats": "Allowed JPG, GIF or PNG. Max size of 800K",
     "branches": "Branches",
     "password": "Password",
-    "confirmPassword": "Confirm password",
+    "confirmPassword": "Confirm Password",
     "attachPdfFiles": "Attach PDF files",
     "selectFile": "Select file",
     "fileUploadInfo": "If a file is uploaded, it can be downloaded for viewing or deleted.",
-    "saveChanges": "Save changes",
+    "saveChanges": "Save Changes",
     "confirmDeleteReviewMessage": "Are you sure you want to delete this review?",
     "toast": {
       "delete": {
-        "successful": "Deleted {{entity}} ",
+        "successful": "Deleted {{entity}}",
         "errorApi": "Deletion error: {{message}}",
         "errorStatus": "Failed to delete {{entity}} (Error {{status}}).",
-        "errorGeneric": "An unknown error occurred during deletion {{entity}}."
+        "errorGeneric": "An unknown error occurred while deleting {{entity}}."
       },
       "fetch": {
         "errorApi": "Data loading error: {{message}}",
         "errorGeneric": "Failed to load data. Please try again later."
-      },
-      "update": {
-        "successful": "Updated personal",
-        "error": "Error updating personal"
-      },
-      "create": {
-        "successful": "Created personal"
       }
-    }
+    },
+    "createBranch": "Create Branch",
+    "editBranch": "Edit Branch"
   },
   "roles": {
     "MANAGER": "Manager"
   },
-  "print": "Print"
+  "print": "Print",
+  "branch": {
+    "validation": {
+      "code": {
+        "size": "Branch code must not exceed 50 characters"
+      },
+      "phone": {
+        "pattern": "Phone number must be in the format +380XX1234567 with a valid Ukrainian operator code"
+      },
+      "name": {
+        "required": "Branch name is required",
+        "size": "Branch name must be between 2 and 100 characters"
+      },
+      "email": {
+        "format": "Please provide a valid email address",
+        "size": "Email must not exceed 100 characters"
+      },
+      "address": {
+        "size": "Address must not exceed 255 characters"
+      }
+    },
+    "branches": "Branches",
+    "addBranch": "Add Branch",
+    "branch": "Branch",
+    "code": "Code",
+    "name": "Name",
+    "address": "Address",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "photo": "Attach Photo",
+    "actions": "Actions",
+    "clearFilters": "Clear Filters",
+    "confirmDeletion": "Confirm Deletion",
+    "confirmDeletionMessage": "Are you sure you want to delete this branch?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "createBranch": "Create Branch",
+    "editBranch": "Edit Branch",
+    "information": "Information",
+    "imageUploaded": "Image uploaded",
+    "imageNotUploaded": "Image not uploaded",
+    "imageNotSelected": "Image not selected",
+    "fileNotSelected": "No file selected",
+    "saving": "Saving...",
+    "loadError": "Failed to load branch data",
+    "loadErrorEmpty": "Failed to load branch data: empty response",
+    "loadErrorUnknown": "Failed to load branch data: unknown error",
+    "saveError": "Error saving branch",
+    "saveErrorUnknown": "An error occurred while saving the branch",
+    "fillRequiredFields": "Please fill in the \"Name\" field",
+    "toast": {
+      "delete": {
+        "successful": "Deleted branch",
+        "errorApi": "Deletion error: {{message}}",
+        "errorStatus": "Failed to delete branch (Error {{status}}).",
+        "errorGeneric": "An unknown error occurred during deletion of branch."
+      },
+      "fetch": {
+        "errorApi": "Data loading error: {{message}}",
+        "errorGeneric": "Failed to load data. Please try again later."
+      }
+    }
+  }
 }

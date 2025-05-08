@@ -6,17 +6,15 @@
 <div layout:fragment="content">
 
     <div class="d-flex justify-content-between align-items-center py-3 mb-4">
-        <h4 class="fw-bold m-0" data-i18n="personal.users">Пользователи</h4>
+        <h4 class="fw-bold m-0" data-i18n="branch.branches">Филиалы</h4>
     </div>
 
     <div class="main-card mb-3 card" id="card-block">
         <div class="card-header py-2">
             <div class="row w-100 align-items-center justify-content-end">
-
-
                 <div class="col-lg-2 col-md-4 col-sm-4">
-                    <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
-                        <span data-i18n="personal.addUser">Добавить пользователя</span>
+                    <a th:href="@{/branch/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
+                        <span data-i18n="branch.addBranch">Добавить филиал</span>
                         <i class="ti ti-plus"></i>
                     </a>
                 </div>
@@ -27,37 +25,27 @@
                 <table style="width: 100%;" class="table table-hover table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th data-i18n="personal.role"></th>
-                        <th data-i18n="personal.surname"></th>
-                        <th data-i18n="personal.name"></th>
-                        <th data-i18n="personal.lastName"></th>
-                        <th data-i18n="personal.phoneNumber"></th>
-                        <th data-i18n="personal.email"></th>
-                        <th class="text-center" data-i18n="personal.actions"></th>
+                        <th data-i18n="branch.code">Код</th>
+                        <th data-i18n="branch.name">Название</th>
+                        <th data-i18n="branch.address">Адрес</th>
+                        <th class="text-center" data-i18n="branch.actions">Действия</th>
                     </tr>
-                    <!-- Filter Row -->
+
                     <tr>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="roleName"></th>
-                        <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_surname"></th>
+                                   data-filter-key="filter_code"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
                                    data-filter-key="filter_name"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_lastName"></th>
-                        <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_phoneNumber"></th>
-                        <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_email">
-                        </th>
+                                   data-filter-key="filter_address"></th>
                         <th class="text-center">
                             <button type="button" id="clearFiltersBtn" class="btn btn-light btn-sm"
-                                    data-i18n="personal.clearFilters">Очистить
+                                    data-i18n="branch.clearFilters">Очистить
                             </button>
                         </th>
                     </tr>
                     </thead>
-                    <tbody id="personalTableBody">
+                    <tbody id="branchTableBody">
                     </tbody>
                 </table>
             </div>
@@ -79,24 +67,25 @@
             </nav>
         </div>
 
+        <!-- Модальное окно подтверждения удаления -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="deleteConfirmModalLabel" data-i18n="personal.confirmDeletion">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel" data-i18n="branch.confirmDeletion">
                             Подтверждение удаления</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                 aria-label="Закрыть"></button>
                     </div>
                     <div class="modal-body">
-                        <span data-i18n="personal.confirmDeletionMessage">Вы уверены, что хотите удалить этого пользователя?</span>
+                        <span data-i18n="branch.confirmDeletionMessage">Вы уверены, что хотите удалить этот филиал?</span>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-label-secondary"
-                                data-bs-dismiss="modal" data-i18n="personal.cancel">Отменить
+                                data-bs-dismiss="modal" data-i18n="branch.cancel">Отменить
                         </button>
                         <button type="button" class="btn btn-danger" id="confirm-delete-btn"
-                                data-i18n="personal.delete">Удалить
+                                data-i18n="branch.delete">Удалить
                         </button>
                     </div>
                 </div>
@@ -104,14 +93,14 @@
         </div>
     </div>
     <script>
-        let personalAppInstance = null;
+        let branchAppInstance = null;
 
-        function initializePersonalTable() {
-            if (personalAppInstance && typeof personalAppInstance.destroy === 'function') {
-                personalAppInstance.destroy();
+        function initializeBranchTable() {
+            if (branchAppInstance && typeof branchAppInstance.destroy === 'function') {
+                branchAppInstance.destroy();
             }
 
-            const tbody = document.getElementById('personalTableBody');
+            const tbody = document.getElementById('branchTableBody');
             if (tbody) {
                 tbody.innerHTML = '';
             }
@@ -120,22 +109,16 @@
                 api: {
                     baseURL: '[[@{/}]]'.replaceAll("\"", ""),
                     endpoints: {
-                        getAll: 'personal/getAllPersonal',
-                        delete: 'personal/{id}',
+                        getAll: 'branch/getAllBranches',
+                        delete: 'branch/{id}',
                     }
                 },
-                entityName: i18next.t('personal.personal'),
-                tableBodyId: 'personalTableBody',
+                entityName: i18next.t('branch.branch'),
+                tableBodyId: 'branchTableBody',
                 columns: [
-                    {
-                        key: 'role',
-                        render: (item) => i18next.t(`roles.${item.role}`, {defaultValue: item.role || 'N/A'}) // Переводим роль
-                    },
-                    {key: 'surname'},
+                    {key: 'code'},
                     {key: 'name'},
-                    {key: 'lastName'},
-                    {key: 'phoneNumber'},
-                    {key: 'email'}
+                    {key: 'address'}
                 ],
                 paginationId: 'pagination',
                 deleteModalId: 'deleteConfirmModal',
@@ -144,31 +127,29 @@
                 createButtonId: 'createEntity',
                 filterInputSelector: '.filter-input',
                 clearFiltersBtnId: 'clearFiltersBtn',
-                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/create',
-                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/edit/',
+                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'branch/create',
+                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'branch/edit/',
                 notificationKeyword: 'message',
 
-                // Новая секция для ключей i18n
+
                 i18nKeys: {
                     successTitle: 'toast.title.success',
                     errorTitle: 'toast.title.error',
-
-                    // Сообщения для toast уведомлений
-                    deleteSuccess: 'personal.toast.delete.successful',
-                    deleteErrorApi: 'personal.toast.delete.errorApi',
-                    deleteErrorStatus: 'personal.toast.delete.errorStatus',
-                    deleteErrorGeneric: 'personal.toast.delete.errorGeneric',
-                    fetchErrorApi: 'personal.toast.fetch.errorApi',
-                    fetchErrorGeneric: 'personal.toast.fetch.errorGeneric',
+                    deleteSuccess: 'branch.toast.delete.successful',
+                    deleteErrorApi: 'branch.toast.delete.errorApi',
+                    deleteErrorStatus: 'branch.toast.delete.errorStatus',
+                    deleteErrorGeneric: 'branch.toast.delete.errorGeneric',
+                    fetchErrorApi: 'branch.toast.fetch.errorApi',
+                    fetchErrorGeneric: 'branch.toast.fetch.errorGeneric',
                     loadingMessage: 'app.loading'
                 }
             };
 
-            personalAppInstance = new GenericCRUDApp(appConfig);
+            branchAppInstance = new GenericCRUDApp(appConfig);
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            initializePersonalTable();
+            initializeBranchTable();
         });
     </script>
 

@@ -8,13 +8,13 @@ import lombok.Data;
 public class FeedbackRequest {
     private Long id;
 
-    @NotBlank(message = "Имя обязательно")
+    @NotBlank(message = "feedback.validation.name.required")
     private String name;
 
-    @NotBlank(message = "Телефон обязателен")
+    @NotBlank(message = "feedback.validation.phone.required")
     private String phoneNumber;
 
-    @NotBlank(message = "Описание обязательно")
+    @NotBlank(message = "feedback.validation.description.required")
     private String description;
 
 }

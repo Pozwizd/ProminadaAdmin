@@ -1,6 +1,7 @@
 package com.pozwizd.prominadaadmin.config;
 
 import com.pozwizd.prominadaadmin.entity.*;
+import com.pozwizd.prominadaadmin.models.RegDistrictResponse;
 import com.pozwizd.prominadaadmin.service.*;
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.entity.Role; // Assuming Role enum exists here
@@ -41,6 +42,7 @@ public class DataLoader {
     private final FileService fileService;
     private final DocumentFeedbackServiceImp documentFeedbackServiceImp;
     private final Faker faker;
+    private final RegionService regionService;
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadEntity() {
@@ -54,11 +56,21 @@ public class DataLoader {
         loadFakeBuilderProperties();
         loadPersonal();
         loadDocumentFeedback();
+
+//        loadRegion();
     }
 
+//    private void loadRegion(){
+//        List<RegDistrict> regDistrictResponses = regionService.getRegions();
+//        for (RegDistrict regDistrictResponse : regDistrictResponses){
+//            System.out.println(regDistrictResponse.getNameRu());
+//        }
+//    }
+
     private void loadBranch() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             Branch branch = new Branch();
+            branch.setCode(faker.code().asin());
             branch.setName(faker.company().name());
             branch.setPhoneNumber(faker.phoneNumber().phoneNumber());
             branch.setEmail(faker.internet().emailAddress());

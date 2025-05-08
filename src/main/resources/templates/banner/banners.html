@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/layout.html}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout ">
+<body>
+<div layout:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <h4 class="fw-bold m-0" data-i18n="banners">Баннеры</h4>
+    </div>
+
+    <div class="main-card mb-3 card" id="card-block">
+        <div class="card-header py-2">
+            <div class="row w-100 align-items-center justify-content-end">
+
+
+                <div class="col-lg-2 col-md-4 col-sm-4">
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table style="width: 100%;" class="table table-hover table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th data-i18n="banner.name"></th>
+                        <th data-i18n="banner.status"></th>
+
+                        <th class="text-center" data-i18n="banner.actions"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="bannerTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center py-3">
+            <label class="d-flex align-items-center gap-1 mb-0">
+                <select id="pageSize" class="custom-select custom-select-sm form-control form-control-sm mx-2"
+                        style="width: auto;">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </label>
+            <nav aria-label="Навигация по страницам">
+                <ul class="pagination mb-0" id="pagination">
+                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
+                                                      aria-disabled="true">«</a></li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">»</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+    <script>
+
+    </script>
+
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <script>
+        function localize() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+
+            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+            if (currentLanguageEle) {
+                currentLanguageEle.click();
+            }
+
+            i18nList.forEach(function (item) {
+                item.innerHTML = i18next.t(item.dataset.i18n);
+            });
+        }
+
+        localize();
+    </script>
+
+</div>
+</body>
+</html>

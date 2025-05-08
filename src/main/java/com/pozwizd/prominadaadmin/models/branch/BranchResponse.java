@@ -5,8 +5,10 @@ import lombok.Data;
 @Data
 public class BranchResponse {
     private Long id;
-    private String name;
-    private String address;
+    private String code;
     private String phoneNumber;
+    private String name;
     private String email;
+    private String address;
+    private String imagePath;
 }

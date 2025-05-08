@@ -34,7 +34,7 @@ public class PersonalController {
     @GetMapping
     public ModelAndView showUsersPage(Model model) {
 
-        model.addAttribute("pageTitle", "Personal");
+        model.addAttribute("pageTitle", "personal.users");
         model.addAttribute("pageActive", "personal");
 
         return new ModelAndView("personal/personal");
@@ -43,7 +43,7 @@ public class PersonalController {
 
     @GetMapping("/getAllPersonal")
     public @ResponseBody Page<PersonalTableResponse> getPageablePersonal(@RequestParam(defaultValue = "0") int page,
-                                                                         @RequestParam(required = false, name = "roleName") String role, // Changed name to roleName
+                                                                         @RequestParam(required = false, name = "roleName") String role,
                                                                          @RequestParam(required = false, name = "filter_surname") String surname,
                                                                          @RequestParam(required = false, name = "filter_name") String name,
                                                                          @RequestParam(required = false, name = "filter_lastName") String lastName,

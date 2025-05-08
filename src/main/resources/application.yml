@@ -46,3 +46,4 @@ file:
   temp:
     dir: "${user.dir}/temp-uploads"
 
+delengine-key: "g4zcrpmdrp0kcpu3suarvbahbnfsrzca"

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template/layout.html}">
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <h4 class="fw-bold m-0"
+            th:data-i18n="${pageTitle}">Новый филиал</h4>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <form id="formBranch">
+                        <input type="hidden" id="branchId" name="branchId"/>
+                        <div class="row">
+                            <h5 class="mb-3" data-i18n="branch.information">Информация</h5>
+                            <div class="mb-3 col-md-6">
+                                <label for="code" class="form-label" data-i18n="branch.code">Код</label>
+                                <input class="form-control" type="text" id="code" name="code"/>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="name" class="form-label" data-i18n="branch.name">Название</label>
+                                <input class="form-control" type="text" id="name" name="name"/>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="address" class="form-label" data-i18n="branch.address">Адрес</label>
+                                <input class="form-control" type="text" id="address" name="address"/>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="phoneNumber" class="form-label"
+                                       data-i18n="branch.phoneNumber">Телефон</label>
+                                <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
+                                       placeholder="+380991112233"/>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="email" class="form-label" data-i18n="branch.email">Email</label>
+                                <input class="form-control" type="email" id="email" name="email"
+                                       pattern="^(.+)@(.+)$" placeholder="email@email.com"/>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label for="photo" class="form-label" data-i18n="branch.photo">Прикрепить фото</label>
+                                <div class="input-group">
+                                    <input type="file" class="form-control" id="photo" name="imagePath"
+                                           accept="image/*">
+                                </div>
+                                <div id="photoStatus" class="form-text mt-1"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-12 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-secondary" id="cancelButton" data-i18n="common.cancel">
+                        Отменить
+                    </button>
+                    <button type="submit" class="btn btn-success" id="saveButton" data-i18n="common.save">Сохранить
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+    <script th:src="@{/assets/js/forms-selects.js}"></script>
+    <script th:src="@{/assets/axios.min.js}"></script>
+
+    <script th:inline="javascript">
+        window.contextPath = '[[@{/}]]'.replaceAll('"', '');
+    </script>
+
+    <script>
+
+        // Получить филиал по id
+        function getBranch(id) {
+            axios.get(window.contextPath + 'branch/' + id)
+                .then(function (response) {
+                    if (response.data) {
+                        document.getElementById('branchId').value = response.data.id;
+                        document.getElementById('code').value = response.data.code || '';
+                        document.getElementById('name').value = response.data.name || '';
+                        document.getElementById('address').value = response.data.address || '';
+                        document.getElementById('phoneNumber').value = response.data.phoneNumber || '';
+                        document.getElementById('email').value = response.data.email || '';
+
+                        const photoStatusElem = document.getElementById('photoStatus');
+                        if (photoStatusElem && response.data.imagePath) {
+                            const fileName = response.data.imagePath.split('/').pop();
+                            photoStatusElem.textContent = fileName || i18next.t('branch.imageUploaded');
+                            photoStatusElem.classList.add('text-success');
+                        } else if (photoStatusElem) {
+                            photoStatusElem.textContent = i18next.t('branch.imageNotUploaded');
+                            photoStatusElem.classList.remove('text-success');
+                        }
+
+                        console.log('Данные филиала успешно загружены:', response.data);
+                    } else {
+                        console.error('Ответ сервера не содержит данных');
+                        alert(i18next.t('branch.loadErrorEmpty'));
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Ошибка при загрузке данных филиала:', error);
+                    alert(i18next.t('branch.loadError') + ': ' + (error.response?.data?.message || error.message || i18next.t('branch.loadErrorUnknown')));
+                })
+        }
+
+        function localize() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+
+            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+            if (currentLanguageEle) {
+                currentLanguageEle.click();
+            }
+
+            i18nList.forEach(function (item) {
+                item.innerHTML = i18next.t(item.dataset.i18n);
+            });
+        }
+
+        function clearValidationErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+            document.querySelectorAll('.is-invalid').forEach(el => {
+                el.classList.remove('is-invalid');
+            });
+        }
+
+        function displayValidationErrors(errors) {
+            clearValidationErrors();
+
+            for (const fieldPath in errors) {
+                if (errors.hasOwnProperty(fieldPath)) {
+                    const errorMessage = errors[fieldPath];
+                    console.log(fieldPath)
+                    console.log(i18next.t(errorMessage))
+
+                    const fieldElement = document.getElementById(fieldPath);
+                    if (fieldElement) {
+                        fieldElement.classList.add('is-invalid');
+                        const errorDiv = document.createElement('div');
+                        errorDiv.className = 'error-message invalid-feedback';
+                        const errorKey = `branch.validation.${errorMessage}`;
+                        errorDiv.setAttribute('data-i18n', errorKey);
+                        errorDiv.textContent = i18next.t(errorKey);
+                        fieldElement.parentNode.appendChild(errorDiv);
+                    } else {
+                        console.warn('Не удалось найти поле для ошибки:', fieldPath);
+                    }
+                }
+            }
+        }
+
+        document.getElementById('photo').addEventListener('change', function (e) {
+            const fileName = e.target.files[0] ? e.target.files[0].name : i18next.t('branch.fileNotSelected');
+            document.getElementById('photoStatus').textContent = fileName;
+        });
+
+        document.getElementById('cancelButton').addEventListener('click', function () {
+            window.location.href = window.contextPath + 'branch';
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentUrl = window.location.href;
+            const lastSegment = currentUrl.split('/').pop();
+            const branchId = !isNaN(lastSegment) && lastSegment.trim() !== "" ? Number(lastSegment) : null;
+            if (branchId) {
+                getBranch(branchId);
+            } else {
+                const photoStatusElem = document.getElementById('photoStatus');
+                if (photoStatusElem) {
+                    photoStatusElem.textContent = i18next.t('branch.imageNotSelected');
+                }
+            }
+        });
+
+
+        // Обработка отправки формы
+        document.getElementById('saveButton').addEventListener('click', function () {
+
+            const nameInput = document.getElementById('name');
+            if (!nameInput.value.trim()) {
+                alert(i18next.t('branch.fillRequiredFields'));
+                nameInput.focus();
+                return;
+            }
+
+            const formData = new FormData();
+            const branchId = document.getElementById('branchId').value;
+
+            if (branchId) {
+                formData.append('id', branchId);
+            }
+
+            // Добавляем остальные поля
+            formData.append('code', document.getElementById('code').value);
+            formData.append('name', document.getElementById('name').value);
+            formData.append('address', document.getElementById('address').value);
+            formData.append('phoneNumber', document.getElementById('phoneNumber').value);
+            formData.append('email', document.getElementById('email').value);
+
+            // Добавляем файл если выбран
+            const photoInput = document.getElementById('photo');
+            if (photoInput.files.length > 0) {
+                formData.append('imagePath', photoInput.files[0]);
+            }
+
+            // Отключаем кнопку на время отправки
+            const saveButton = document.getElementById('saveButton');
+            const cancelButton = document.getElementById('cancelButton');
+            saveButton.disabled = true;
+            saveButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> ' + i18next.t('branch.saving');
+            cancelButton.disabled = true;
+
+            axios.post(window.contextPath + 'branch/save', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+                .then(function (response) {
+                    if (response.data.success) {
+                        window.location.href = window.contextPath + 'branch';
+                    } else {
+                        saveButton.disabled = false;
+                        saveButton.innerHTML = i18next.t('common.save');
+                        cancelButton.disabled = false;
+
+                        alert(i18next.t('branch.saveError') + ': ' + response.data.message);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Ошибка:', error.response.data);
+
+                    displayValidationErrors(error.response.data)
+                    saveButton.disabled = false;
+                    saveButton.innerHTML = i18next.t('common.save');
+                    cancelButton.disabled = false;
+
+
+                });
+
+        });
+
+
+        localize();
+    </script>
+
+</div>
+
+
+</body>
+
+</html>
