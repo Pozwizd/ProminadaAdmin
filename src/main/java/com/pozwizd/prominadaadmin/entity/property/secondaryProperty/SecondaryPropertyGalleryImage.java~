@@ -1,0 +1,20 @@
+package com.pozwizd.prominadaadmin.entity.property.secondaryProperty;
+
+import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
+import jakarta.persistence.*;
+
+public class SecondaryPropertyGalleryImage {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
+    private Long id;
+
+    private String name;
+
+    private String pathImage;
+
+    @ManyToOne
+    @JoinColumn(name = "secondary_property_id")
+    private SecondaryProperty secondaryProperty;
+}

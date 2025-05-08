@@ -1,77 +1,38 @@
 package com.pozwizd.prominadaadmin.service;
 
 import com.pozwizd.prominadaadmin.entity.Personal;
-import com.pozwizd.prominadaadmin.entity.Role;
-import com.pozwizd.prominadaadmin.mapper.PersonalMapper;
-import com.pozwizd.prominadaadmin.models.personal.PersonalDto;
-import com.pozwizd.prominadaadmin.repository.PersonalRepository;
-import com.pozwizd.prominadaadmin.specification.PersonalSpecification;
-import lombok.RequiredArgsConstructor;
+import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
+import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@RequiredArgsConstructor
-@Transactional(readOnly = true)
-public class PersonalService {
+public interface PersonalService {
+    List<Personal> findAll();
 
-    private final PersonalRepository personalRepository;
-    private final PersonalMapper personalMapper;
-    private final PasswordEncoder passwordEncoder;
+    Optional<Personal> findById(Long id);
 
-    public List<Personal> findAll() {
-        return personalRepository.findAll();
-    }
+    Optional<Personal> findByEmail(String email);
 
-    public Optional<Personal> findById(Long id) {
-        return personalRepository.findById(id);
-    }
+    Personal save(Personal personal);
 
-    public Optional<Personal> findByEmail(String email) {
-        return personalRepository.findByEmail(email);
-    }
+    void deleteById(Long id);
 
-    @Transactional
-    public Personal save(Personal personal) {
-        personal.setPassword(passwordEncoder.encode(personal.getPassword()));
-        return personalRepository.save(personal);
-    }
+    Page<PersonalTableResponse> getPageablePersonal(int page, Integer size,
+                                                    String surname,
+                                                    String name,
+                                                    String lastName,
+                                                    String phoneNumber,
+                                                    String email,
+                                                    String role);
 
-    @Transactional
-    public void deleteById(Long id) {
-        personalRepository.deleteById(id);
-    }
+    void deletePersonal(Long id);
 
-    public Page<PersonalDto> getPageablePersonal(int page, Integer size,
-                                                 String surname,
-                                                 String name,
-                                                 String lastName,
-                                                 String phoneNumber,
-                                                 String email,
-                                                 String role) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return personalMapper.toDto(personalRepository.findAll(PersonalSpecification.search(surname,
-                name,
-                lastName,
-                phoneNumber,
-                email,
-                role),
-                pageRequest));
+    Personal getPersonalById(Long id);
 
-    }
+    void saveFromRequest(PersonalRequest request);
 
-    public void deletePersonal(Long id) {
-        personalRepository.deleteById(id);
-    }
-
-    public Personal getPersonalById(Long id) {
-        return personalRepository.findById(id).orElseThrow();
-    }
+    void updatePersonal(@Valid PersonalRequest personalRequest);
 }

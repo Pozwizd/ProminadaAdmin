@@ -1,19 +1,45 @@
 package com.pozwizd.prominadaadmin.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"personals"})
+@EqualsAndHashCode(of = "id")
 public class Branch {
     @Id
-    @Column(nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "personal_id")
-    private Personal personal;
+    private String code;
 
+    private String phoneNumber;
+
+    private String name;
+
+    private String email;
+
+    private String address;
+
+    private String imagePath;
+
+    @ManyToMany
+    @JoinTable(
+            name = "branch_personal",
+            joinColumns = @JoinColumn(name = "branch_id"),
+            inverseJoinColumns = @JoinColumn(name = "personal_id")
+    )
+    private List<Personal> personals;
+
+    public void addPersonal(Personal personal) {
+        personals.add(personal);
+        personal.getBranches().add(this);
+    }
 }

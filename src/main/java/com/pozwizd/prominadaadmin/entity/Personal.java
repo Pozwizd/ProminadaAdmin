@@ -1,14 +1,18 @@
 package com.pozwizd.prominadaadmin.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"feedBacks", "documentFeedbacks", "branches"})
+@EqualsAndHashCode(of = "id")
 public class Personal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +39,11 @@ public class Personal {
     @OneToMany(mappedBy = "personal", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Feedback> feedBacks;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "personal_id")
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<DocumentFeedback> documentFeedbacks;
 
-    @OneToMany(mappedBy = "personal", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @ManyToMany(mappedBy = "personals", cascade = CascadeType.REFRESH)
     private List<Branch> branches;
 
 }

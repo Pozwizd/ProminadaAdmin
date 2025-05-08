@@ -12,11 +12,21 @@ var getMessage = function () {
     return msgs[i];
 };
 
-function showToast(shortCutFunction, title, msg) {
+function showToast(shortCutFunction, title, msg, isI18n) {
     var isRtl = $('html').attr('dir') === 'rtl',
 
         toastIndex = toastCount++,
         prePositionClass = 'toast-top-right';
+        
+    // Если передан флаг isI18n и он равен true, используем i18next для перевода
+    if (isI18n && typeof i18next !== 'undefined') {
+        if (title && title.trim() !== '') {
+            title = i18next.t(title);
+        }
+        if (msg && msg.trim() !== '') {
+            msg = i18next.t(msg);
+        }
+    }
 
     prePositionClass =
         typeof toastr.options.positionClass === 'undefined' ? 'toast-top-right' : toastr.options.positionClass;
@@ -84,4 +94,14 @@ function showToast(shortCutFunction, title, msg) {
             });
         });
     }
+}
+
+/**
+ * Показывает toast-уведомление с использованием i18next для перевода ключей
+ * @param {string} shortCutFunction - Тип уведомления (success, error, warning, info)
+ * @param {string} titleKey - Ключ i18next для заголовка уведомления
+ * @param {string} msgKey - Ключ i18next для сообщения уведомления
+ */
+function showI18nToast(shortCutFunction, titleKey, msgKey) {
+    showToast(shortCutFunction, titleKey, msgKey, true);
 }

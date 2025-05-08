@@ -27,31 +27,28 @@
                 <table style="width: 100%;" class="table table-hover table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th data-i18n="personal.role">Роль</th>
-                        <th data-i18n="personal.surname">Фамилия</th>
-                        <th data-i18n="personal.name">Имя</th>
-                        <th data-i18n="personal.lastName">Отчество</th>
-                        <th data-i18n="personal.phoneNumber">Телефон</th>
-                        <th data-i18n="personal.email">Email</th>
-                        <th class="text-center" data-i18n="personal.actions">Действия</th>
+                        <th data-i18n="personal.role"></th>
+                        <th data-i18n="personal.surname"></th>
+                        <th data-i18n="personal.name"></th>
+                        <th data-i18n="personal.lastName"></th>
+                        <th data-i18n="personal.phoneNumber"></th>
+                        <th data-i18n="personal.email"></th>
+                        <th class="text-center" data-i18n="personal.actions"></th>
                     </tr>
                     <!-- Filter Row -->
                     <tr>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="roleName" data-i18n="[placeholder]personal.rolePlaceholder"></th>
+                                   data-filter-key="roleName"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_surname"
-                                   data-i18n="[placeholder]personal.surnamePlaceholder"></th>
+                                   data-filter-key="filter_surname"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_name" data-i18n="[placeholder]personal.namePlaceholder"></th>
+                                   data-filter-key="filter_name"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_lastName"
-                                   data-i18n="[placeholder]personal.lastNamePlaceholder"></th>
+                                   data-filter-key="filter_lastName"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_phoneNumber"
-                                   data-i18n="[placeholder]personal.phoneNumberPlaceholder"></th>
+                                   data-filter-key="filter_phoneNumber"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_email" data-i18n="[placeholder]personal.emailPlaceholder">
+                                   data-filter-key="filter_email">
                         </th>
                         <th class="text-center">
                             <button type="button" id="clearFiltersBtn" class="btn btn-light btn-sm"
@@ -116,30 +113,30 @@
         let personalAppInstance = null;
 
         function initializePersonalTable() {
-            // If an existing app instance exists and has a destroy method, destroy it
             if (personalAppInstance && typeof personalAppInstance.destroy === 'function') {
                 personalAppInstance.destroy();
             }
 
-            // Optionally clear the table body to avoid duplicates
             const tbody = document.getElementById('personalTableBody');
             if (tbody) {
                 tbody.innerHTML = '';
             }
 
-            // Rebuild the config with updated translations
             const appConfig = {
                 api: {
                     baseURL: '[[@{/}]]'.replaceAll("\"", ""),
                     endpoints: {
-                        getAll: 'personal/getAllBuilders',
+                        getAll: 'personal/getAllPersonal',
                         delete: 'personal/{id}',
                     }
                 },
                 entityName: i18next.t('personal.personal'),
                 tableBodyId: 'personalTableBody',
                 columns: [
-                    {key: 'role', render: (item) => item.role || 'N/A'},
+                    {
+                        key: 'role',
+                        render: (item) => i18next.t(`roles.${item.role}`, {defaultValue: item.role || 'N/A'}) // Переводим роль
+                    },
                     {key: 'surname'},
                     {key: 'name'},
                     {key: 'lastName'},
@@ -147,7 +144,6 @@
                     {key: 'email'}
                 ],
                 paginationId: 'pagination',
-                paginationEdgePages: 3,
                 deleteModalId: 'deleteConfirmModal',
                 confirmDeleteBtnId: 'confirm-delete-btn',
                 pageSizeSelectId: 'pageSize',
@@ -156,7 +152,22 @@
                 clearFiltersBtnId: 'clearFiltersBtn',
                 createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/create',
                 editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/edit/',
-                notificationKeyword: 'message'
+                notificationKeyword: 'message',
+
+                // Новая секция для ключей i18n
+                i18nKeys: {
+                    successTitle: 'toast.title.success',
+                    errorTitle: 'toast.title.error',
+
+                    // Сообщения для toast уведомлений
+                    deleteSuccess: 'personal.toast.delete.successful',
+                    deleteErrorApi: 'personal.toast.delete.errorApi',
+                    deleteErrorStatus: 'personal.toast.delete.errorStatus',
+                    deleteErrorGeneric: 'personal.toast.delete.errorGeneric',
+                    fetchErrorApi: 'personal.toast.fetch.errorApi',
+                    fetchErrorGeneric: 'personal.toast.fetch.errorGeneric',
+                    loadingMessage: 'app.loading'
+                }
             };
 
             personalAppInstance = new GenericCRUDApp(appConfig);
@@ -166,64 +177,10 @@
             initializePersonalTable();
         });
     </script>
+
+    <script th:src="@{/assets/js/main.js}"></script>
+
     <script>
-        if (typeof i18next !== 'undefined' && typeof i18NextHttpBackend !== 'undefined') {
-
-            const storedLang = localStorage.getItem('userLanguage');
-            const defaultLang = 'en';
-            let initialLang = storedLang || defaultLang;
-
-            if (!storedLang) {
-                localStorage.setItem('userLanguage', defaultLang);
-            }
-
-
-            i18next
-                .use(i18NextHttpBackend)
-                .init({
-                    lng: initialLang,
-                    debug: false,
-                    fallbackLng: 'en',
-                    backend: {
-                        loadPath: assetsPath + 'json/locales/{{lng}}.json'
-                    },
-                    returnObjects: true
-                })
-                .then(function (t) {
-                    localize();
-                    initializePersonalTable();
-                });
-        }
-
-        let languageDropdown = document.getElementsByClassName('dropdown-language');
-
-        if (languageDropdown.length) {
-            let dropdownItems = languageDropdown[0].querySelectorAll('.dropdown-item');
-
-            for (let i = 0; i < dropdownItems.length; i++) {
-                dropdownItems[i].addEventListener('click', function () {
-                    let currentLanguage = this.getAttribute('data-language'),
-                        selectedLangFlag = this.querySelector('.fi').getAttribute('class');
-
-                    for (let sibling of this.parentNode.children) {
-                        sibling.classList.remove('selected');
-                    }
-                    this.classList.add('selected');
-
-                    languageDropdown[0].querySelector('.dropdown-toggle .fi').className = selectedLangFlag;
-
-
-                    localStorage.setItem('userLanguage', currentLanguage);
-
-                    i18next.changeLanguage(currentLanguage, (err, t) => {
-                        if (err) return console.log('something went wrong loading', err);
-                        localize();
-                        initializePersonalTable();
-                    });
-                });
-            }
-        }
-
         function localize() {
             let i18nList = document.querySelectorAll('[data-i18n]');
 
@@ -237,19 +194,8 @@
                 item.innerHTML = i18next.t(item.dataset.i18n);
             });
         }
-    </script>
-    <script>
-        let i18nList = document.querySelectorAll('[data-i18n]');
 
-        let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
-
-        if (currentLanguageEle) {
-            currentLanguageEle.click();
-        }
-
-        i18nList.forEach(function (item) {
-            item.innerHTML = i18next.t(item.dataset.i18n);
-        });
+        localize();
     </script>
 
 </div>

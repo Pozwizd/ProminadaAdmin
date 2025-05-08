@@ -3,11 +3,14 @@ package com.pozwizd.prominadaadmin.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.EqualsAndHashCode;
 
 @Getter
 @Setter
+@ToString(exclude = {"personal"})
+@EqualsAndHashCode(of = "id")
 @Entity
-@Table(name = "document_feedback")
 public class DocumentFeedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +18,11 @@ public class DocumentFeedback {
     private Long id;
 
     private String name;
-    private String pathImage;
+    private String path;
+
+    @ManyToOne
+    @JoinColumn(name = "personal_id")
+    private Personal personal;
+
 
 }
