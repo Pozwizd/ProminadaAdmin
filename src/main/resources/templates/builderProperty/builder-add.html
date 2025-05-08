@@ -3,14 +3,13 @@
       layout:decorate="~{template/layout.html}">
 <head>
     <meta charset="UTF-8">
-    <title></title>
     <style>
         .was-validated .form-check-input:valid, .form-check-input.is-valid {
             background-color: #6600ffe3 !important;
         }
 
-        .file-hidden {
-            display: none !important;
+        .layout-file {
+            display: none;
         }
 
         .uploadButton {
@@ -26,8 +25,14 @@
         .uploadButton:hover {
             background-color: #0056b3;
         }
+
+        .dz-preview {
+            display: inline-block;
+            vertical-align: top;
+        }
     </style>
 
+    <link rel="stylesheet" th:href="@{/customAssets/css/image.css}"/>
     <link rel="stylesheet" th:href="@{/assets/vendor/libs/dropzone/dropzone.css}"/>
 </head>
 <body>
@@ -48,7 +53,8 @@
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-pills-top-home"
                                 aria-controls="navs-pills-top-home"
-                                aria-selected="true">
+                                aria-selected="true"
+                                data-i18n="main">
                             Основное
                         </button>
                     </li>
@@ -60,7 +66,8 @@
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-pills-top-profile"
                                 aria-controls="navs-pills-top-profile"
-                                aria-selected="false">
+                                aria-selected="false"
+                                data-i18n="gallery">
                             Галерея
                         </button>
                     </li>
@@ -72,7 +79,8 @@
                                 data-bs-toggle="tab"
                                 data-bs-target="#navs-pills-top-messages"
                                 aria-controls="navs-pills-top-messages"
-                                aria-selected="false">
+                                aria-selected="false"
+                                data-i18n="planning">
                             Планировки
                         </button>
                     </li>
@@ -86,23 +94,20 @@
                                 <input type="text" class="form-control" id="name"
                                        data-i18n="[placeholder]builder.namePlaceHolder"
                                        placeholder="ЖК 'Ривьера Сити'" data-error="name">
-                                <!--                                <div class="invalid-feedback" data-i18n="builder.surnameRequired">Пожалуйста, введите-->
-                                <!--                                    фамилию-->
-                                <!--                                </div>-->
                             </div>
 
                             <div class="col-md-3">
                                 <label for="regDistrictId" class="form-label" data-i18n="builder.regDistrict">Обл.
                                     район</label>
                                 <select class="form-select" id="regDistrictId" required>
-                                    <option value="" data-i18n="builder.selectRegDistrict"></option>
+                                    <option value="" data-i18n="builder.selectRegDistrict" selected></option>
                                 </select>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="cityId" class="form-label" data-i18n="builder.city">Нас. пункт</label>
                                 <select class="form-select" id="cityId" required disabled>
-                                    <option value="" data-i18n="builder.selectCity">Выберите нас. пункт</option>
+                                    <option value="" data-i18n="builder.selectCity" selected>Выберите нас. пункт</option>
                                 </select>
                             </div>
 
@@ -110,14 +115,14 @@
                                 <label for="districtId" class="form-label"
                                        data-i18n="builder.selectDistrict">Район</label>
                                 <select class="form-select" id="districtId" required disabled>
-                                    <option value="" data-i18n="builder.selectDistrict">Выберите район</option>
+                                    <option value="" data-i18n="builder.selectDistrict" selected>Выберите район</option>
                                 </select>
                             </div>
 
                             <div class="col-md-3">
                                 <label for="topozoneId" class="form-label" data-i18n="builder.topozone">Топозона</label>
                                 <select class="form-select" id="topozoneId" required disabled>
-                                    <option value="" data-i18n="builder.selectTopozone">Выберите топзону</option>
+                                    <option value="" data-i18n="builder.selectTopozone" selected>Выберите топзону</option>
                                 </select>
                             </div>
 
@@ -170,12 +175,20 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label for="deliveryDateId" class="form-label" data-i18n="deliveryType.selectDeliveryType">Срок сдачи</label>
+                                <label for="deliveryDateId" class="form-label"
+                                       data-i18n="deliveryType.selectDeliveryType">Срок сдачи</label>
                                 <select class="form-select" id="deliveryDateId" required>
-                                    <option value="" data-i18n="deliveryType.selectDeliveryType">Выберите тип сдачи</option>
-                                    <option value="UNDER_CONSTRUCTION" data-i18n="deliveryType.underConstruction">Строится</option>
-                                    <option value="PARTIALLY_DELIVERED" data-i18n="deliveryType.processOfHandingOver">В процессе сдачи</option>
-                                    <option value="READY_FOR_OCCUPANCY" data-i18n="deliveryType.readyForOccupancy">Готово к заселению</option>
+                                    <option value="" data-i18n="deliveryType.selectDeliveryType">Выберите тип сдачи
+                                    </option>
+                                    <option value="UNDER_CONSTRUCTION" data-i18n="deliveryType.underConstruction">
+                                        Строится
+                                    </option>
+                                    <option value="PARTIALLY_DELIVERED" data-i18n="deliveryType.processOfHandingOver">В
+                                        процессе сдачи
+                                    </option>
+                                    <option value="READY_FOR_OCCUPANCY" data-i18n="deliveryType.readyForOccupancy">
+                                        Готово к заселению
+                                    </option>
                                     <option value="COMPLETED" data-i18n="deliveryType.handedOver">Дом сдан</option>
                                 </select>
                             </div>
@@ -194,8 +207,11 @@
                             <div class="col-md-4">
                                 <label for="chessPlanFile" class="form-label"
                                        data-i18n="builder.chessPlan">Шахматка</label>
-                                <input type="file" class="form-control file-hidden" id="chessPlanFile" data-error="chessPlanFile">
-<!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
+                                <input type="file" class="form-control file-hidden" id="chessPlanFile"
+                                       data-error="chessPlanFile">
+                                <!--                                <button type="button" data-type="fileImage" class="btn btn-success btn-image btn-select"-->
+                                <!--                                        style="left: 13%;"></button>-->
+                                <!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
                             <div class="col-md-4">
@@ -204,15 +220,16 @@
                                     рассрочки</label>
                                 <input type="file" class="form-control file-hidden" id="mortgageConditionsFile"
                                        data-error="mortgageConditionsFile">
-<!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
+                                <!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
 
                             <div class="col-md-4">
                                 <label for="priceFile" class="form-label" data-i18n="builder.priceFile">Файл с
                                     ценами</label>
-                                <input type="file" class="form-control file-hidden" id="priceFile" data-error="priceFile">
-<!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
+                                <input type="file" class="form-control file-hidden" id="priceFile"
+                                       data-error="priceFile">
+                                <!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
 
@@ -224,11 +241,13 @@
                             </div>
 
                             <h4 data-i18n="builder.promotion">Акция</h4>
+
                             <div class="col-md-4">
                                 <label for="actionTitle" class="form-label" data-i18n="builder.name"
                                        data-error="actionTitle">Название</label>
                                 <input type="text" class="form-control" id="actionTitle" disabled>
                             </div>
+
                             <div class="col-md-8"></div>
                             <div class="col-md-4">
                                 <label for="actionDescription" class="form-label" data-i18n="builder.description"
@@ -241,6 +260,7 @@
                                     </label>
                                 </div>
                             </div>
+
                             <div class="col-md-8"></div>
                             <div class="col-12 mt-4 text-end">
                                 <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
@@ -259,41 +279,56 @@
                                 </span>
                             </div>
                             <div class="fallback">
-                                <input name="file" type="file" />
+                                <input name="file" type="file"/>
                             </div>
                         </form>
 
                         <template id="preview-template">
-                            <div class="dz-preview dz-file-preview">
-                                <div class="dz-image"><img data-dz-thumbnail /></div>
-                                <div class="dz-details">
+                            <div class="dz-preview dz-file-preview"
+                                 style="display: inline-block; margin: 10px; position: relative;">
+                                <div class="dz-image" style="width: 120px; height: 120px; overflow: hidden;">
+                                    <img data-dz-thumbnail style="width: 100%; height: 100%; object-fit: cover;"/>
+                                </div>
+                                <div class="dz-details" style="text-align: center;">
                                     <div class="dz-size"><span data-dz-size></span></div>
                                     <div class="dz-filename"><span data-dz-name></span></div>
                                 </div>
                                 <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
                                 <div class="dz-error-message"><span data-dz-errormessage></span></div>
-                                <div class="dz-success-mark">✔️</div>
-                                <div class="dz-error-mark">❌</div>
+
+                                <!-- Хрестик для видалення -->
+                                <a class="dz-remove" href="javascript:undefined;" data-dz-remove
+                                   style="position: absolute; top: 2px; right: 2px; background: white; color: red; border-radius: 50%; padding: 2px 6px; font-weight: bold; text-decoration: none;">
+                                    ✖
+                                </a>
                             </div>
                         </template>
+
+                        <div class="col-12 mt-4 text-end">
+                            <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
+                            </button>
+                            <a th:href="@{/builder}" class="btn btn-label-secondary"
+                               data-i18n="personal.cancel">Отмена</a>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
-                        <p>
-                            Oat cake chupa chups dragée donut toffee. Sweet cotton candy jelly beans macaroon gummies
-                            cupcake gummi bears cake chocolate.
-                        </p>
-                        <p class="mb-0">
-                            Cake chocolate bar cotton candy apple pie tootsie roll ice cream apple pie brownie cake.
-                            Sweet
-                            roll icing sesame snaps caramels danish toffee. Brownie biscuit dessert dessert. Pudding
-                            jelly
-                            jelly-o tart brownie jelly.
-                        </p>
+                        <div id="layoutsContainer" class="row"></div>
+                        <div class="col-12 mt-4 text-end">
+                            <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="">Добавить планировку
+                            </button>
+                        </div>
+                        <div class="col-12 mt-4 text-end">
+                            <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
+                            </button>
+                            <a th:href="@{/builder}" class="btn btn-label-secondary"
+                               data-i18n="personal.cancel">Отмена</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script th:src="@{/customAssets/js/pravnyk/image.js}"></script>
     <script th:src="@{/customAssets/js/pravnyk/validator.js}"></script>
     <script th:src="@{/assets/vendor/libs/dropzone/dropzone.js}"></script>
     <script src="https://unpkg.com/i18next@21.6.16/i18next.min.js"></script>
@@ -301,12 +336,14 @@
     <script src="https://unpkg.com/jquery-i18next@1.2.1/dist/umd/jquery-i18next.min.js"></script>
 
     <script>
-        const myDropzone = new Dropzone('#dropzone-basic', {
-            previewTemplate: document.querySelector('#preview-template').innerHTML,
-            parallelUploads: 1,
-            maxFilesize: 5,
-            addRemoveLinks: true,
-            maxFiles: 1
+        const myDropzone = new Dropzone("#dropzone-basic", {
+            url: "/upload",
+            autoProcessQueue: false,
+            uploadMultiple: true,
+            parallelUploads: 5,
+            maxFiles: 5,
+            paramName: "filesDto",
+            previewTemplate: document.querySelector("#preview-template").innerHTML
         });
     </script>
     <script>
@@ -414,7 +451,7 @@
                         containerCitySelector.prop('disabled', false);
                         containerDistrictSelector.prop('disabled', true);
                         containerTopozoneSelector.prop('disabled', true);
-                        let optionFirst = containerCitySelector.find('option').first();
+                        let optionFirst = containerCitySelector.find('option').first().prop('outerHTML');
                         containerCitySelector.empty();
                         containerCitySelector.append(optionFirst);
                         data.forEach(el => {
@@ -429,11 +466,11 @@
         }
 
         function loadBuildCompanies() {
-            fetch(`/admin/builderCompany/getAll`)
+            return fetch(`/admin/builderCompany/getAll`)
                 .then(response => response.json())
                 .then(data => {
                     if (containerBuildingCompanySelector) {
-                        let optionFirst = containerBuildingCompanySelector.find('option').first();
+                        let optionFirst = containerBuildingCompanySelector.find('option').first().prop('outerHTML');
                         containerBuildingCompanySelector.empty();
                         containerBuildingCompanySelector.append(optionFirst);
                         data.forEach(el => {
@@ -448,12 +485,12 @@
         }
 
         function loadTopZonesByDistrict(districtId) {
-            fetch(`/admin/topozone/get?districtId=` + encodeURIComponent(districtId))
+            return fetch(`/admin/topozone/get?districtId=` + encodeURIComponent(districtId))
                 .then(response => response.json())
                 .then(data => {
                     if (containerTopozoneSelector) {
                         containerTopozoneSelector.prop('disabled', false);
-                        let optionFirst = containerCitySelector.find('option').first();
+                        let optionFirst = containerTopozoneSelector.find('option').first().prop('outerHTML');
                         containerTopozoneSelector.empty();
                         containerTopozoneSelector.append(optionFirst);
                         data.forEach(el => {
@@ -472,14 +509,14 @@
         };
 
         function loadRegDistrict() {
-            fetch(`/admin/regDistrict/getAll`)
+            return fetch(`/admin/regDistrict/getAll`)
                 .then(response => response.json())
                 .then(data => {
                     if (containerRegDistrictSelector) {
                         containerCitySelector.prop('disabled', true);
                         containerDistrictSelector.prop('disabled', true);
                         containerTopozoneSelector.prop('disabled', true);
-                        let firstOption = containerRegDistrictSelector.find('option').first();
+                        let firstOption = containerRegDistrictSelector.find('option').first().prop('outerHTML');
                         containerRegDistrictSelector.empty();
                         containerRegDistrictSelector.append(firstOption);
                         data.forEach(el => {
@@ -494,13 +531,13 @@
         }
 
         function loadDistrictByCity(cityId) {
-            fetch(`/admin/district/get?cityId=` + encodeURIComponent(cityId))
+            return fetch(`/admin/district/get?cityId=` + encodeURIComponent(cityId))
                 .then(response => response.json())
                 .then(data => {
                     if (containerDistrictSelector) {
                         containerDistrictSelector.prop('disabled', false);
                         containerTopozoneSelector.prop('disabled', true);
-                        let optionFirst = containerTopozoneSelector.find('option').first();
+                        let optionFirst = containerDistrictSelector.find('option').first().prop('outerHTML');
                         containerDistrictSelector.empty();
                         containerDistrictSelector.append(optionFirst);
                         data.forEach(el => {
@@ -543,13 +580,18 @@
             const passwordField = document.querySelector('.col-md-6:has(#password)');
 
             // Определяем режим редактирования из URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const builderId = urlParams.get('id');
-            const isEdit = !!builderId;
+            const pathname = window.location.pathname;
+            const isEdit = pathname.includes('/edit/');
+            const pathParts = pathname.split('/');
+            const builderId = pathParts[pathParts.length - 1];
 
             if (isEdit) {
                 builderIdInput.value = builderId;
-                titleElement.textContent = 'Редактировать здание';
+                titleElement.textContent = i18next.t('editBuilder');
+                $('[data-i18n="builder.createTarget"]').text(i18next.t('editBuilder'));
+                $('#tab-main').text(i18next.t('main'));
+                $('#tab-gallery').text(i18next.t('gallery'));
+                $('#tab-planning').text(i18next.t('planning'));
                 if (passwordField) {
                     passwordField.style.display = 'none';
                 }
@@ -571,88 +613,112 @@
                     });
             }
 
-            // Обработка отправки формы
-            // form.addEventListener('submit', function (event) {
-
-            // event.preventDefault();
-            // event.stopPropagation();
-            // form.classList.add('was-validated');
-
-            // if (form.checkValidity()) {
-            // const formData = new FormData();
-            // formData.append("name",$('#name').val());
-            // formData.append("street",$('#street').val());
-            // formData.append("totalFloor",$('#totalFloor').val());
-            // formData.append("cityId",$('#cityId').val());
-            // formData.append("districtId",$('#districtId').val());
-            // formData.append("topozoneId",$('#topozoneId').val());
-            // formData.append("buildingCompanyId",$('#buildingCompanyId').val());
-            // formData.append("deliveryDateId",$('#deliveryDateId').val());
-            // formData.append("houseNumber",$('#houseNumber').val());
-            // formData.append("houseSection",$('#houseSection').val());
-            // formData.append("phoneNumber",$('#phoneNumber').val());
-            // formData.append("description",$('#description').val());
-            // formData.append("actionTitle",$('#actionTitle').val());
-            // formData.append("actionDescription",$('#actionDescription').val());
-            // formData.append("isAction",$('#isAction').prop('checked'));
-
-            // let filePricesEl = $('#priceFile');
-            // if (filePricesEl[0].files.length > 0) formData.append('priceFile', filePricesEl[0].files[0]);
-            // let filesInstallmentEl = $('#mortgageConditionsFile');
-            // if (filesInstallmentEl[0].files.length > 0) formData.append('mortgageConditionsFile', filesInstallmentEl[0].files[0]);
-            // let fileChessEl = $('#chessPlanFile');
-            // if (fileChessEl[0].files.length > 0) formData.append('chessPlanFile', fileChessEl[0].files[0]);
-            // const formData = {
-            //     name: document.getElementById('name').value,
-            //     street: document.getElementById('street').value,
-            //     totalFloor: document.getElementById('totalFloor').value,
-            //     cityId: document.getElementById('cityId').value,
-            //     districtId: document.getElementById('districtId').value,
-            //     topozoneId: document.getElementById('topozoneId').value,
-            //     buildingCompanyId: document.getElementById('buildingCompanyId').value,
-            //     deliveryDateId: document.getElementById('deliveryDateId').value,
-            //     houseNumber: document.getElementById('houseNumber').value,
-            //     houseSection: document.getElementById('houseSection').value,
-            //     phoneNumber: document.getElementById('phoneNumber').value,
-            //     description: document.getElementById('description').value,
-            //     actionDescription: document.getElementById('actionDescription').value,
-            //     isAction: document.getElementById('isAction').value,
-            // };
-
             const url = isEdit ? `/admin/builder/${builderId}/save` : '/admin/builder/save';
             const method = isEdit ? 'PUT' : 'POST';
             $('[data-i18n="builder.save"]').on('click', function () {
-                saveRequest(url, method, collectFormData())
+                let formData = collectFormData();
+                appendDropzoneFilesToFormData(myDropzone, formData, "filesDto");
+                saveRequest(url, method, formData)
             });
 
-            // saveRequest(url,method,collectFormData());
-            // fetch(url, {
-            //     method: method,
-            //     body: formData,
-            //     processData: false,
-            //     contentType: false,
-            // })
-            //     .then(response => {
-            //         if (!response.ok) {
-            //             throw new Error('Network response was not ok');
-            //         }
-            //         return response.json();
-            //     })
-            //     .then(data => {
-            //         console.log(data);
-            //         if (data.success) {
-            //             window.location.href = '/admin/builder';
-            //         } else {
-            //             showErrorMessage(data.message || 'Произошла ошибка при сохранении');
-            //         }
-            //     })
-            //     .catch(error => {
-            //         console.error('Error:', error);
-            //         showErrorMessage('Произошла ошибка при сохранении');
-            //     });
-            // }
-            // });
+            let imageId = 0;
+            document.getElementById('addLayoutBtn').addEventListener('click', function () {
+                const container = document.getElementById('layoutsContainer');
+                const layoutHTML = `
+    <div class="layout-block col-12 row border rounded p-3 mb-4">
+        <div class="col-12 text-end mb-2">
+            <a href="javascript:void(0);" class="ti ti-trash text-danger delete-layout" style="cursor: pointer;"></a>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Название</label>
+            <input type="text" class="form-control layout-name" placeholder="Планировка 2к левое крыло">
+        </div>
+        <div class="col">
+            <label class="form-label">Цена от(м.кв)</label>
+            <input type="number" class="form-control layout-price" placeholder="500">
+        </div>
+        <div class="col">
+            <label class="form-label">Комнат</label>
+            <input type="number" class="form-control layout-rooms" placeholder="2">
+        </div>
+        <div class="col">
+            <label class="form-label">S общая(м.кв.)</label>
+            <input type="number" class="form-control layout-total-area" placeholder="36">
+        </div>
+        <div class="col">
+            <label class="form-label">S жилая(м.кв.)</label>
+            <input type="number" class="form-control layout-living-area" placeholder="21">
+        </div>
+        <div class="col">
+            <label class="form-label">S кухни(м.кв.)</label>
+            <input type="number" class="form-control layout-kitchen-area" placeholder="12">
+        </div>
+        <div class="col-12">
+            <div class="form-check mt-4">
+                <input class="form-check-input layout-visible" type="checkbox">
+                <label class="form-check-label">Показать сайт</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Описание:</label>
+            <textarea class="form-control layout-description" rows="3"></textarea>
+        </div>
+        <div class="col-12 mt-3">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card h-100 p-2 text-center">
+                        <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
+                        style="height: 204px; width: 304px;">
+                        <button type="button" id="${imageId + 1}" class="btn btn-label-primary btn-select"
+                                style="left: 13%;">Загрузить</button>
+                        <input type="file" class="form-control files layout-file1" accept="image/*,video/*" style="display: none;">
+                        <input type="text" class="paths layout-path1" style="display: none;">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-2 text-center">
+                        <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
+                        style="height: 204px; width: 304px;">
+                        <button type="button" id="${imageId + 2}" class="btn btn-label-primary btn-select"
+                                style="left: 13%;">Загрузить</button>
+                        <input type="file" class="files layout-file2" accept="image/*,video/*" style="display: none;">
+                        <input type="text" class="paths layout-path2" style="display: none;">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-2 text-center">
+                        <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
+                        style="height: 204px; width: 304px;">
+                        <button type="button" id="${imageId + 3}" class="btn btn-label-primary btn-select"
+                                style="left: 13%;">Загрузить</button>
+                        <input type="file" class="files layout-file3" accept="image/*,video/*" style="display: none;">
+                        <input type="text" class="paths layout-path3" style="display: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `;
+                imageId += 3;
+                container.insertAdjacentHTML('beforeend', layoutHTML);
+            });
+
+            document.getElementById('layoutsContainer').addEventListener('click', function (e) {
+                if (e.target.classList.contains('delete-layout')) {
+                    e.target.closest('.layout-block').remove();
+                }
+            });
         });
+
+        function appendDropzoneFilesToFormData(dropzoneInstance, formData) {
+            dropzoneInstance.files.forEach(function (file, index) {
+                if (file.path !== undefined && file.path !== '') {
+                    formData.append(`filesDto[${index}].path`, file.path);
+                } else {
+                    formData.append(`filesDto[${index}].file`, file);
+                }
+            });
+        }
 
         function collectFormData(selector = 'form') {
             const formData = new FormData();
@@ -660,8 +726,6 @@
             $elements.each(function () {
                 const $el = $(this);
                 const name = $el.attr('id');
-                console.log(name);
-                console.log($el.val());
                 if (!name) return;
                 if ($el.attr('type') === 'checkbox') {
                     formData.append(name, $el.prop('checked'));
@@ -673,6 +737,39 @@
                 } else {
                     formData.append(name, $el.val());
                 }
+            });
+
+            $('#layoutsContainer .layout-block').each(function (i) {
+                const $block = $(this);
+                const prefix = `layoutDto[${i}]`;
+
+                formData.append(`${prefix}.name`, $block.find('.layout-name').val());
+                formData.append(`${prefix}.priceByM2`, $block.find('.layout-price').val());
+                formData.append(`${prefix}.rooms`, $block.find('.layout-rooms').val());
+                formData.append(`${prefix}.totalArea`, $block.find('.layout-total-area').val());
+                formData.append(`${prefix}.livingArea`, $block.find('.layout-living-area').val());
+                formData.append(`${prefix}.kitchenArea`, $block.find('.layout-kitchen-area').val());
+                formData.append(`${prefix}.visibleForSite`, $block.find('.layout-visible').is(':checked'));
+                formData.append(`${prefix}.description`, $block.find('.layout-description').val());
+
+                let file1 = $block.find('.layout-file1')[0].files[0];
+                if (file1) {
+                    formData.append(`${prefix}.file1`, file1);
+                }
+                console.log(file1);
+                let file2 = $block.find('.layout-file2')[0].files[0];
+                if (file2) {
+                    formData.append(`${prefix}.file2`, file2);
+                }
+
+                let file3 = $block.find('.layout-file3')[0].files[0];
+                if (file3) {
+                    formData.append(`${prefix}.file3`, file3);
+                }
+
+                formData.append(`${prefix}.path1`, $block.find('.layout-path1').val());
+                formData.append(`${prefix}.path2`, $block.find('.layout-path2').val());
+                formData.append(`${prefix}.path3`, $block.find('.layout-path2').val());
             });
 
             return formData;

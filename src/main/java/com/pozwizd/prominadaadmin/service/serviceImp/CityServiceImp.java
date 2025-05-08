@@ -16,6 +16,7 @@ import java.util.List;
 public class CityServiceImp implements CityService {
     private final CityRepository cityRepository;
     private final RegDistrictService regDistrictService;
+
     @Override
     public City save(City city) {
         return cityRepository.save(city);
@@ -28,6 +29,7 @@ public class CityServiceImp implements CityService {
 
     @Override
     public List<City> getAllByRegDistrictId(Long regDistrictId) {
+        if (regDistrictId == null) return null;
         return cityRepository.getCitiesByRegDistrict(regDistrictService.getById(regDistrictId));
     }
 

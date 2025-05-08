@@ -28,6 +28,7 @@ public class ControllerTopozone {
 
     @GetMapping("/get")
     public ResponseEntity<List<Topozone>> getByDistrict(@RequestParam Long districtId) {
+        if (districtId == null) return null;
         return new ResponseEntity<>(topozoneService.getAllByDistrictId(districtId), HttpStatus.OK);
     }
 }

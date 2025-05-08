@@ -1,0 +1,10 @@
+.btn-image {
+    position: absolute;
+    top: 19%;
+    width: 30%;
+    height: 45px;
+    background: #337D5A;
+    border: #337D5A;
+    border-radius: 0;
+    box-shadow: none !important;
+}

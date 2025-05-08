@@ -79,6 +79,7 @@
     "delete": "Delete"
   },
   "builder": {
+    "editBuilder": "Edit builder",
     "name": "Name",
     "namePlaceHolder": "Residential complex Riviera City",
     "regDistrict": "Regional district",
@@ -120,5 +121,8 @@
   "file": {
     "select": "Select file"
   },
-  "print": "Print"
+  "print": "Print",
+  "main": "Main",
+  "gallery": "Gallery",
+  "planning": "Planning"
 }

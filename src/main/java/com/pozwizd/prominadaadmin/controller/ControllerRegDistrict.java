@@ -14,7 +14,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/regDistrict")
 @RequiredArgsConstructor
-public class ControllerRegDistinct {
+public class ControllerRegDistrict {
     private final RegDistrictService regDistrictService;
 
     @GetMapping("/getAll")

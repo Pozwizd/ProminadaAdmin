@@ -8,12 +8,14 @@ import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
 import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @Entity
+@ToString(exclude = {"builderPropertyGalleryImages", "builderPropertyLayouts"})
 public class BuilderProperty {
 
     @Id
@@ -74,10 +76,10 @@ public class BuilderProperty {
 
     private Boolean isAction;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BuilderPropertyGalleryImage> builderPropertyGalleryImages;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "builderProperty", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BuilderPropertyLayouts> builderPropertyLayouts;
 
     private LocalDate dateOfCreating;

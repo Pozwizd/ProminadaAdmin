@@ -82,6 +82,30 @@ public class ControllerBuilderProperty {
         ));
     }
 
+    @SneakyThrows
+    @PutMapping("/{id}/save")
+    public ResponseEntity<?> updateProduct(@PathVariable Long id,
+                                           @ModelAttribute @Valid BuilderPropertyDto dto,
+                                           BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            Locale locale = LocaleContextHolder.getLocale();
+            Map<String, String> errors = new HashMap<>();
+            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(),
+                    messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, locale)));
+            return ResponseEntity
+                    .status(HttpStatus.valueOf(400))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(errors);
+        }
+        dto.setId(id);
+        BuilderProperty product = builderPropertyService.save(dto);
+        return ResponseEntity.ok(Map.of(
+                "success", true,
+                "message", "Успішно збережено"
+        ));
+    }
+
 
     @GetMapping("/edit/{id}")
     public ModelAndView showEditForm(@PathVariable Long id, Model model) {
@@ -102,11 +126,11 @@ public class ControllerBuilderProperty {
     }
 
 
-    // @GetMapping("/{id}")
-    // @ResponseBody
-    // public ResponseEntity<PersonalDto> getPersonal(@PathVariable Long id) {
-    //     return ResponseEntity.ok(personalService.getPersonalById(id));
-    // }
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<BuilderPropertyDto> getPersonal(@PathVariable Long id) {
+        return ResponseEntity.ok(builderPropertyService.getByIdInDto(id));
+    }
 
     // @PostMapping
     // @ResponseBody

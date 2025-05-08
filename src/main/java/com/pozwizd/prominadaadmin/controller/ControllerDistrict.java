@@ -26,6 +26,7 @@ public class ControllerDistrict {
 
     @GetMapping("/get")
     public ResponseEntity<List<District>> getByCity(@RequestParam Long cityId) {
+        if (cityId == null) return null;
         return new ResponseEntity<>(districtService.getAllByCityId(cityId), HttpStatus.OK);
     }
 }

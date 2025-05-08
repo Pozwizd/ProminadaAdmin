@@ -128,36 +128,48 @@ public class DataLoader {
     public void loadFakeBuilderProperties() {
         Faker faker = new Faker(new Locale("uk"));
         Random random = new Random();
-        for (int i = 0; i < 25; i++) {
-            BuilderProperty builder = new BuilderProperty();
-            builder.setName(faker.company().name());
+        if(builderPropertyService.getAll().isEmpty()){
+            for (int i = 0; i < 25; i++) {
+                BuilderProperty builder = new BuilderProperty();
+                builder.setName(faker.company().name());
+                RegDistrict regDistrict = getRandomEntity(regDistrictService.getAll());
+                builder.setRegDistrict(regDistrict);
+                City city = getRandomEntity(cityService.getAllByRegDistrictId(regDistrict.getId()));
+                if (city != null) {
+                    builder.setCity(city);
+                    District district = getRandomEntity(districtService.getAllByCityId(city.getId()));
+                    if (district != null) {
+                        builder.setDistinct(district);
+                        Topozone topozone = getRandomEntity(topozoneService.getAllByDistrictId(district.getId()));
+                        if (topozone != null) {
+                            builder.setTopozone(topozone);
+                        }
+                    }
+                }
 
-            builder.setCity(getRandomEntity(cityService.getAll()));
-            builder.setRegDistrict(getRandomEntity(regDistrictService.getAll()));
-            builder.setDistinct(getRandomEntity(districtService.getAll()));
-            builder.setTopozone(getRandomEntity(topozoneService.getAll()));
-            builder.setBuildingCompany(getRandomEntity(buildingCompanyService.getAll()));
+                builder.setBuildingCompany(getRandomEntity(buildingCompanyService.getAll()));
 
-            builder.setStreet(faker.address().streetName());
-            builder.setHouseNumber(Integer.valueOf(faker.address().buildingNumber()));
-            builder.setHouseSection(Integer.valueOf(String.valueOf(faker.number().numberBetween(1, 5))));
-            builder.setTotalFloor(faker.number().numberBetween(5, 25));
+                builder.setStreet(faker.address().streetName());
+                builder.setHouseNumber(Integer.valueOf(faker.address().buildingNumber()));
+                builder.setHouseSection(Integer.valueOf(String.valueOf(faker.number().numberBetween(1, 5))));
+                builder.setTotalFloor(faker.number().numberBetween(5, 25));
 
-            builder.setDeliveryDate(DeliveryDate.values()[random.nextInt(DeliveryDate.values().length)]);
-            builder.setPhoneNumber(faker.phoneNumber().phoneNumber());
+                builder.setDeliveryDate(DeliveryDate.values()[random.nextInt(DeliveryDate.values().length)]);
+                builder.setPhoneNumber(faker.phoneNumber().phoneNumber());
 
-            builder.setPathToChessPlanFile("floor_plan_" + faker.file().fileName());
-            builder.setPathToMortgageConditionsFile("mortgage_" + faker.file().fileName());
-            builder.setPathToPriceFile("prices_" + faker.file().fileName());
+                builder.setPathToChessPlanFile("floor_plan_" + faker.file().fileName());
+                builder.setPathToMortgageConditionsFile("mortgage_" + faker.file().fileName());
+                builder.setPathToPriceFile("prices_" + faker.file().fileName());
 
-            builder.setDescription(faker.lorem().paragraph());
-            builder.setActionTitle(faker.lorem().sentence());
-            builder.setActionDescription(faker.lorem().paragraph());
-            builder.setIsAction(faker.bool().bool());
+                builder.setDescription(faker.lorem().paragraph());
+                builder.setActionTitle(faker.lorem().sentence());
+                builder.setActionDescription(faker.lorem().paragraph());
+                builder.setIsAction(faker.bool().bool());
 
-            builder.setDateOfCreating(LocalDate.now().minusDays(faker.number().numberBetween(0, 365)));
+                builder.setDateOfCreating(LocalDate.now().minusDays(faker.number().numberBetween(0, 365)));
 
-            builderPropertyService.save(builder);
+                builderPropertyService.save(builder);
+            }
         }
     }
 

@@ -16,12 +16,12 @@ import java.util.List;
 public class BuilderPropertyDto {
     private Long id;
     @NotBlank(message = "error.field.empty")
-    @Length(max = 30,message = "error.field.valid.length.title")
+    @Length(max = 30, message = "error.field.valid.length.title")
     private String name;
     @NotBlank(message = "error.field.empty")
-    @Length(max = 50,message = "error.field.valid.length.title")
+    @Length(max = 50, message = "error.field.valid.length.title")
     private String street;
-    @Min(value = 0,message = "error.field.valid.min.value")
+    @Min(value = 0, message = "error.field.valid.min.value")
     private Integer totalFloor;
     private String pathToChessPlanFile;
     private String pathToMortgageConditionsFile;
@@ -34,20 +34,22 @@ public class BuilderPropertyDto {
     private MultipartFile priceFile;
     private String cityId;
     private String districtId;
+    private String regDistrictId;
     private String topozoneId;
     private String buildingCompanyId;
     private String deliveryDateId;
-    @Min(value = 0,message = "error.field.valid.min.value")
+    @Min(value = 0, message = "error.field.valid.min.value")
     private Integer houseNumber;
-    @Min(value = 0,message = "error.field.valid.min.value")
+    @Min(value = 0, message = "error.field.valid.min.value")
     private Integer houseSection;
     private String phoneNumber;
-    @Length(max = 300,message = "error.field.valid.length.title")
+    @Length(max = 300, message = "error.field.valid.length.title")
     private String description;
-    @Length(max = 300,message = "error.field.valid.length.title")
+    @Length(max = 300, message = "error.field.valid.length.title")
     private String actionDescription;
-    @Length(max = 50,message = "error.field.valid.length.title")
+    @Length(max = 50, message = "error.field.valid.length.title")
     private String actionTitle;
     private Boolean isAction;
     private List<MediaDtoDrop> filesDto;
+    private List<BuilderPropertyLayoutDto> layoutDto;
 }
