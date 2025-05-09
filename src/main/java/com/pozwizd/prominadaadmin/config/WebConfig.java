@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
         return HttpClient.newHttpClient();
     }
 
-    @Value("${upload.folder.path}")
+    @Value("${file.upload.dir}")
     private String projectPath;
 
     @Override

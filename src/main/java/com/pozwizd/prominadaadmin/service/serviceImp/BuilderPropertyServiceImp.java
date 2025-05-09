@@ -35,7 +35,7 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
     private final CityServiceImp cityServiceImp;
     private final TopozoneService topozoneService;
 
-    @Value("${upload.folder.path}")
+    @Value("${file.upload.dir}")
     private String contextPath;
 
     @Override
