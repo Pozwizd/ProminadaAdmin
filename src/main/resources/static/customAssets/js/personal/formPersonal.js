@@ -70,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-
 fileInput.addEventListener('change', (e) => {
     const invalidFiles = [];
 
@@ -157,7 +156,6 @@ window.deleteFile = function (idx) {
     files.splice(idx, 1);
     renderFiles();
 };
-
 
 
 function fillFormData(data) {
@@ -249,16 +247,16 @@ function createReviewSection(index, feedback = {}) {
             </button>
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="reviewerName${index}" class="form-label">Имя</label>
+                    <label for="reviewerName${index}" data-i18n="nameLabel" class="form-label">Name</label>
                     <input type="text" class="form-control" id="reviewerName${index}" value="${feedback.name || ''}">
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label for="reviewerContact${index}" class="form-label">Контакт</label>
+                    <label for="reviewerContact${index}" data-i18n="contactLabel" class="form-label">Contact</label>
                     <input type="text" class="form-control" id="reviewerContact${index}" value="${feedback.phoneNumber || ''}">
                 </div>
             </div>
             <div class="mb-3">
-                <label for="reviewText${index}" class="form-label">Отзыв</label>
+                <label for="reviewText${index}" data-i18n="reviewLabel" class="form-label">Feedback</label>
                 <textarea class="form-control" id="reviewText${index}" rows="3">${feedback.text || ''}</textarea>
             </div>
         `;
@@ -553,20 +551,25 @@ function displayValidationErrors(errors) {
                         const section = sections[index];
 
                         let fieldElement;
+                        let errorKey;
                         if (fieldName === 'name') {
                             fieldElement = section.querySelector('input[id^="reviewerName"]');
+                            errorKey = 'validation.feedback.name';
                         } else if (fieldName === 'phoneNumber') {
                             fieldElement = section.querySelector('input[id^="reviewerContact"]');
+                            errorKey = 'validation.feedback.phoneNumber';
                         } else if (fieldName === 'description') {
                             fieldElement = section.querySelector('textarea[id^="reviewText"]');
+                            errorKey = 'validation.feedback.description';
                         }
 
                         if (fieldElement) {
                             fieldElement.classList.add('is-invalid');
-                            const errorSpan = document.createElement('div');
-                            errorSpan.className = 'error-message text-danger mt-1';
-                            errorSpan.textContent = errorMessage;
-                            fieldElement.parentNode.appendChild(errorSpan);
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'error-message invalid-feedback';
+                            errorDiv.setAttribute('data-i18n', errorMessage);
+                            errorDiv.textContent = i18next.t(errorMessage);
+                            fieldElement.parentNode.appendChild(errorDiv);
                         }
                     }
                 }
@@ -574,16 +577,18 @@ function displayValidationErrors(errors) {
                 const fieldElement = document.getElementById(fieldPath);
                 if (fieldElement) {
                     fieldElement.classList.add('is-invalid');
-                    const errorSpan = document.createElement('div');
-                    errorSpan.className = 'error-message text-danger mt-1';
-                    errorSpan.textContent = errorMessage;
-                    fieldElement.parentNode.appendChild(errorSpan);
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message invalid-feedback';
+                    const errorKey = `personal.validation.${errorMessage}`;
+                    errorDiv.setAttribute('data-i18n', errorKey);
+                    errorDiv.textContent = i18next.t(errorKey);
+                    fieldElement.parentNode.appendChild(errorDiv);
                 } else if (fieldPath === 'branchIds') {
                     const select2Container = document.querySelector('.select2-container');
                     if (select2Container) {
                         const errorSpan = document.createElement('div');
                         errorSpan.className = 'error-message text-danger mt-1';
-                        errorSpan.textContent = errorMessage;
+                        errorSpan.textContent = i18next.t(errorMessage);
                         select2Container.parentNode.appendChild(errorSpan);
                     }
                 } else {

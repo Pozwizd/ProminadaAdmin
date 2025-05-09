@@ -2,16 +2,20 @@ package com.pozwizd.prominadaadmin.service.serviceImp;
 
 import com.pozwizd.prominadaadmin.entity.Branch;
 import com.pozwizd.prominadaadmin.mapper.BranchMapper;
+import com.pozwizd.prominadaadmin.models.branch.BranchRequest;
 import com.pozwizd.prominadaadmin.models.branch.BranchResponse;
 import com.pozwizd.prominadaadmin.repository.BranchRepository;
 import com.pozwizd.prominadaadmin.service.BranchService;
+import com.pozwizd.prominadaadmin.service.FileService;
 import com.pozwizd.prominadaadmin.specification.BranchSpecification;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -27,6 +31,7 @@ public class BranchServiceImp implements BranchService {
 
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
+    private final FileService fileService;
 
     /**
      * Получает список всех филиалов.
@@ -119,28 +124,24 @@ public class BranchServiceImp implements BranchService {
     /**
      * Получает постраничный список филиалов с возможностью фильтрации.
      *
-     * @param page        Номер страницы
-     * @param size        Размер страницы
-     * @param code        Код филиала для фильтрации
-     * @param name        Название филиала для фильтрации
-     * @param address     Адрес филиала для фильтрации
-     * @param phoneNumber Телефон филиала для фильтрации
-     * @param email       Email филиала для фильтрации
+     * @param page    Номер страницы
+     * @param size    Размер страницы
+     * @param code    Код филиала для фильтрации
+     * @param name    Название филиала для фильтрации
+     * @param address Адрес филиала для фильтрации
      * @return Страница с данными филиалов, соответствующих критериям фильтрации
      */
     @Override
-    public Page<BranchResponse> getPageableBranch(int page, Integer size,
+    public Page<BranchResponse> getPageableBranch(int page,
+                                                  Integer size,
                                                   String code,
                                                   String name,
-                                                  String address,
-                                                  String phoneNumber,
-                                                  String email) {
+                                                  String address) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        return branchMapper.toBranchResponse(branchRepository.findAll(BranchSpecification.search(code,
+        return branchMapper.toBranchResponse(branchRepository.findAll(
+                BranchSpecification.search(code,
                         name,
-                        address,
-                        phoneNumber,
-                        email),
+                        address),
                 pageRequest));
     }
 
@@ -153,6 +154,75 @@ public class BranchServiceImp implements BranchService {
      */
     @Override
     public Branch getBranchById(Long id) {
-        return branchRepository.findById(id).orElseThrow();
+        return branchRepository.findById(id).orElseThrow(() -> 
+            new NoSuchElementException("Филиал с ID " + id + " не найден"));
+    }
+    
+    /**
+     * Создает новый филиал.
+     *
+     * @param branchRequest Данные нового филиала
+     * @throws IOException если возникла ошибка при обработке файла изображения
+     */
+    @Transactional
+    @Override
+    public void createBranch(@Valid BranchRequest branchRequest) throws IOException {
+        String pathImage = "";
+        
+        if (branchRequest.getImagePath() != null && !branchRequest.getImagePath().isEmpty()) {
+            pathImage = fileService.uploadFile(branchRequest.getImagePath());
+        }
+        
+        Branch newBranch = branchMapper.toEntity(branchRequest, pathImage);
+        branchRepository.save(newBranch);
+    }
+
+    /**
+     * Обновляет информацию о филиале.
+     *
+     * @param branchRequest Данные филиала для обновления
+     * @throws IOException если возникла ошибка при обработке файла изображения
+     */
+    @Override
+    @Transactional
+    public void updateBranch(BranchRequest branchRequest) throws IOException {
+        Branch existingBranch = getBranchById(branchRequest.getId());
+        String pathImage = existingBranch.getImagePath();
+        
+        if (branchRequest.getImagePath() != null) {
+            if (pathImage != null && !pathImage.isEmpty()) {
+                fileService.deleteFile(pathImage);
+            }
+            pathImage = fileService.uploadFile(branchRequest.getImagePath());
+        }
+        
+        Branch updatedBranch = branchMapper.toEntity(branchRequest, pathImage);
+        updatedBranch.setId(existingBranch.getId()); // Сохраняем ID существующего филиала
+        branchRepository.save(updatedBranch);
+    }
+
+    /**
+     * Обновляет информацию о филиале по ID.
+     *
+     * @param id ID филиала для обновления
+     * @param branchRequest Данные филиала для обновления
+     * @throws IOException если возникла ошибка при обработке файла изображения
+     */
+    @Override
+    @Transactional
+    public void updateBranch(Long id, @Valid BranchRequest branchRequest) throws IOException {
+        Branch existingBranch = getBranchById(id);
+        String pathImage = existingBranch.getImagePath();
+
+        if (branchRequest.getImagePath() != null) {
+            if (pathImage != null && !pathImage.isEmpty()) {
+                fileService.deleteFile(pathImage);
+            }
+            pathImage = fileService.uploadFile(branchRequest.getImagePath());
+        }
+        
+        Branch updatedBranch = branchMapper.toEntity(branchRequest, pathImage);
+        updatedBranch.setId(id); // Устанавливаем ID из параметра
+        branchRepository.save(updatedBranch);
     }
 }
