@@ -1,4 +1,0 @@
-package com.pozwizd.prominadaadmin.entity;
-
-public interface DocumentFeedbackRepository extends org.springframework.data.jpa.repository.JpaRepository<com.pozwizd.prominadaadmin.entity.DocumentFeedback, java.lang.Long> {
-  }

@@ -1,0 +1,208 @@
+{
+  "system": {
+    "toast": {
+      "title": {
+        "success": "Успіх",
+        "error": "Помилка"
+      }
+    }
+  },
+  "ADMIN": "Адміністратор",
+  "USER": "Користувач",
+  "Personal": "Персонал",
+  "search": "Пошук",
+  "megaMenu": "Мега Меню",
+  "overview": "Огляд",
+  "contacts": "Контакти",
+  "incidents": "Інциденти",
+  "companies": "Компанії",
+  "dashboards": "Панелі керування",
+  "favourites": "Обране",
+  "reportsConversions": "Звіти по конверсіям",
+  "quickStart": "Швидкий старт",
+  "new": "Нове",
+  "usersAndGroups": "Користувачі та групи",
+  "properties": "Властивості",
+  "salesAndMarketing": "Продажі та маркетинг",
+  "queues": "Черги",
+  "resourceGroups": "Групи ресурсів",
+  "goalMetrics": "Цільові метрики",
+  "campaigns": "Кампанії",
+  "settings": "Налаштування",
+  "serviceCalendar": "Календар обслуговування",
+  "knowledgeBase": "База знань",
+  "accounts": "Акаунти",
+  "products": "Продукти",
+  "rollupQueries": "Зведені запити",
+  "cancel": "Скасувати",
+  "common": {
+    "save": "Зберегти",
+    "cancel": "Скасувати"
+  },
+  "projects": "Проекти",
+  "unlimitedOptions": "Необмежені можливості",
+  "graphicDesign": "Графічний дизайн",
+  "appDevelopment": "Розробка додатків",
+  "iconDesign": "Дизайн іконок",
+  "miscellaneous": "Різне",
+  "frontendDev": "Frontend розробка",
+  "gridDashboard": "Сітка панелі керування",
+  "gridNavigation": "Зручна навігація по сітці у випадаючих меню",
+  "automation": "Автоматизація",
+  "notifications": "Сповіщення",
+  "newMessages": "У вас є <b>21</b> непрочитане повідомлення",
+  "menu": "Меню",
+  "builderObjects": "Об'єкти від забудовників",
+  "investorObjects": "Об'єкти від інвесторів",
+  "secondaryRealEstate": "Вторинна нерухомість",
+  "housesAndLots": "Будинки та ділянки",
+  "commercial": "Комерційна",
+  "buyers": "Покупці",
+  "applications": "Заявки",
+  "branches": "Філії",
+  "realtors": "Ріелтори",
+  "websiteManagement": "Управління сайтом",
+  "banners": "Баннери",
+  "systemUsers": "Користувачі системи",
+  "pages": "Сторінки",
+  "changes": "Зміни",
+  "websiteRequests": "Заявки з сайту",
+  "questions": "Питання",
+  "language": "Мова",
+  "selectBranchPlaceholder": "Оберіть філію",
+  "loading": "Завантаження...",
+  "selectRole": "Оберіть роль",
+  "errorLoadingRoles": "Помилка завантаження ролей",
+  "download": "Завантажити",
+  "delete": "Видалити",
+  "deleteReviewTitle": "Видалити відгук",
+  "nameLabel": "Ім'я",
+  "contactLabel": "Контакт",
+  "reviewLabel": "Відгук",
+  "documentFallbackName": "Документ",
+  "filesSelected": "Вибрано файлів: ",
+  "noFileSelected": "Файл не вибрано",
+  "confirmDeleteDocument": "Ви впевнені, що хочете видалити цей документ?",
+  "personal": {
+    "validation": {
+      "phone": {
+        "pattern": "Invalid phone number format"
+      }
+    },
+    "createUser": "Створення користувача",
+    "editUser": "Редагування користувача",
+    "personal": "Користувач",
+    "users": "Користувачі",
+    "addUser": "Додати користувача",
+    "role": "Роль",
+    "surname": "Прізвище",
+    "name": "Ім'я",
+    "lastName": "По батькові",
+    "phoneNumber": "Телефон",
+    "email": "Email",
+    "actions": "Дії",
+    "rolePlaceholder": "Роль...",
+    "surnamePlaceholder": "Прізвище...",
+    "namePlaceholder": "Ім'я...",
+    "lastNamePlaceholder": "По батькові...",
+    "phoneNumberPlaceholder": "Телефон...",
+    "emailPlaceholder": "Email...",
+    "clearFilters": "Очистити фільтри",
+    "confirmDeletion": "Підтвердження видалення",
+    "confirmDeletionMessage": "Ви впевнені, що хочете видалити цього користувача?",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "informationTab": "Інформація",
+    "testimonialsTab": "Відгуки",
+    "uploadAvatar": "Завантажити аватар",
+    "reset": "Скинути",
+    "allowedFormats": "Дозволені JPG, GIF або PNG. Максимальний розмір 800K",
+    "branches": "Філії",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердження пароля",
+    "attachPdfFiles": "Прикріпити PDF файли",
+    "selectFile": "Вибрати файл",
+    "fileUploadInfo": "Якщо завантажено файл, його можна завантажити для перегляду або видалити.",
+    "saveChanges": "Зберегти зміни",
+    "confirmDeleteReviewMessage": "Ви впевнені, що хочете видалити цей відгук?",
+    "toast": {
+      "delete": {
+        "successful": "Видалено {{entity}}",
+        "errorApi": "Помилка видалення: {{message}}",
+        "errorStatus": "Не вдалося видалити {{entity}} (Помилка {{status}}).",
+        "errorGeneric": "Сталася невідома помилка під час видалення {{entity}}."
+      },
+      "fetch": {
+        "errorApi": "Помилка завантаження даних: {{message}}",
+        "errorGeneric": "Не вдалося завантажити дані. Будь ласка, спробуйте пізніше."
+      }
+    },
+    "createBranch": "Створення філіалу",
+    "editBranch": "Редагування філіалу"
+  },
+  "roles": {
+    "MANAGER": "Менеджер"
+  },
+  "print": "Роздрукувати",
+  "branch": {
+    "validation": {
+      "code": {
+        "size": "Код філії не повинен перевищувати 50 символів"
+      },
+      "phone": {
+        "pattern": "Номер телефону повинен бути у форматі +380XX1234567 з дійсним кодом українського оператора"
+      },
+      "name": {
+        "required": "Назва філії є обов'язковою",
+        "size": "Назва філії повинна містити від 2 до 100 символів"
+      },
+      "email": {
+        "format": "Будь ласка, вкажіть дійсну електронну адресу",
+        "size": "Електронна пошта не повинна перевищувати 100 символів"
+      },
+      "address": {
+        "size": "Адреса не повинна перевищувати 255 символів"
+      }
+    },
+    "branches": "Філії",
+    "addBranch": "Додати філію",
+    "branch": "Філія",
+    "code": "Код",
+    "name": "Назва",
+    "address": "Адреса",
+    "actions": "Дії",
+    "clearFilters": "Очистити фільтри",
+    "confirmDeletion": "Підтвердження видалення",
+    "confirmDeletionMessage": "Ви впевнені, що хочете видалити цю філію?",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "phoneNumber": "Телефон",
+    "email": "Email",
+    "photo": "Прикріпити фото",
+    "createBranch": "Створення філії",
+    "editBranch": "Редагування філії",
+    "information": "Інформація",
+    "save": "Зберегти",
+    "saving": "Збереження...",
+    "imageUploaded": "Зображення завантажено",
+    "imageNotUploaded": "Зображення не завантажено",
+    "imageNotSelected": "Зображення не вибрано",
+    "fileNotSelected": "Файл не вибрано",
+    "errorLoadingBranch": "Не вдалося завантажити дані філії: {{message}}",
+    "errorSavingBranch": "Помилка при збереженні філії: {{message}}",
+    "errorSavingBranchGeneric": "Сталася помилка при збереженні філії: {{message}}",
+    "requiredFieldName": "Будь ласка, заповніть поле \"Назва\"",
+    "toast": {
+      "delete": {
+        "successful": "Видалено філію",
+        "errorApi": "Помилка видалення: {{message}}",
+        "errorStatus": "Не вдалося видалити філію (Помилка {{status}}).",
+        "errorGeneric": "Сталася невідома помилка під час видалення філії."
+      },
+      "fetch": {
+        "errorApi": "Помилка завантаження даних: {{message}}",
+        "errorGeneric": "Не вдалося завантажити дані. Будь ласка, спробуйте пізніше."
+      }
+    }
+  }
+}

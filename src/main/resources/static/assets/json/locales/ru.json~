@@ -1,0 +1,242 @@
+{
+  "system": {
+    "toast": {
+      "title": {
+        "success": "Успех",
+        "error": "Ошибка"
+      }
+    }
+  },
+  "ADMIN": "Администратор",
+  "USER": "Пользователь",
+  "Personal": "Персонал",
+  "search": "Поиск",
+  "megaMenu": "Мега Меню",
+  "overview": "Обзор",
+  "contacts": "Контакты",
+  "incidents": "Инциденты",
+  "companies": "Компании",
+  "dashboards": "Панели управления",
+  "favourites": "Избранное",
+  "reportsConversions": "Отчеты по конверсиям",
+  "quickStart": "Быстрый старт",
+  "new": "Новое",
+  "usersAndGroups": "Пользователи и группы",
+  "properties": "Свойства",
+  "salesAndMarketing": "Продажи и маркетинг",
+  "queues": "Очереди",
+  "resourceGroups": "Группы ресурсов",
+  "goalMetrics": "Целевые метрики",
+  "campaigns": "Кампании",
+  "settings": "Настройки",
+  "serviceCalendar": "Календарь обслуживания",
+  "knowledgeBase": "База знаний",
+  "accounts": "Аккаунты",
+  "products": "Продукты",
+  "rollupQueries": "Сводные запросы",
+  "cancel": "Отмена",
+  "common": {
+    "save": "Сохранить",
+    "cancel": "Отменить"
+  },
+  "projects": "Проекты",
+  "unlimitedOptions": "Неограниченные возможности",
+  "graphicDesign": "Графический дизайн",
+  "appDevelopment": "Разработка приложений",
+  "iconDesign": "Дизайн иконок",
+  "miscellaneous": "Разное",
+  "frontendDev": "Frontend разработка",
+  "gridDashboard": "Сетка панели управления",
+  "gridNavigation": "Удобная навигация по сетке в выпадающих меню",
+  "automation": "Автоматизация",
+  "notifications": "Уведомления",
+  "newMessages": "У вас есть <b>21</b> непрочитанное сообщение",
+  "menu": "Меню",
+  "builderObjects": "Объекты от строителей",
+  "investorObjects": "Объекты от инвесторов",
+  "secondaryRealEstate": "Вторичная недвижимость",
+  "housesAndLots": "Дома и участки",
+  "commercial": "Коммерческая",
+  "buyers": "Покупатели",
+  "applications": "Заявки",
+  "branches": "Филиалы",
+  "realtors": "Риелторы",
+  "websiteManagement": "Управление сайтом",
+  "banners": "Баннеры",
+  "systemUsers": "Пользователи системы",
+  "pages": "Страницы",
+  "changes": "Изменения",
+  "websiteRequests": "Заявки с сайта",
+  "questions": "Вопросы",
+  "language": "Язык",
+  "selectBranchPlaceholder": "Выберите филиал",
+  "loading": "Загрузка...",
+  "selectRole": "Выберите роль",
+  "errorLoadingRoles": "Ошибка загрузки ролей",
+  "download": "Скачать",
+  "delete": "Удалить",
+  "deleteReviewTitle": "Удалить отзыв",
+  "nameLabel": "Имя",
+  "contactLabel": "Контакт",
+  "reviewLabel": "Отзыв",
+  "documentFallbackName": "Документ",
+  "filesSelected": "Выбрано файлов: ",
+  "noFileSelected": "Файл не выбран",
+  "confirmDeleteDocument": "Вы уверены, что хотите удалить этот документ?",
+  "personal": {
+    "validation": {
+      "password": {
+        "match": "Пароли не совпадают"
+      },
+      "surname": {
+        "required": "Фамилия обязательна"
+      },
+      "name": {
+        "required": "Имя обязательно"
+      },
+      "lastname": {
+        "required": "Отчество обязательно"
+      },
+      "phone": {
+        "pattern": "Неверный формат номера"
+      },
+      "email": {
+        "required": "Email обязателен",
+        "format": "Некорректный email"
+      },
+      "role": {
+        "required": "Роль обязательна"
+      },
+      "branches": {
+        "required": "Необходимо выбрать хотя бы один филиал"
+      }
+    },
+    "feedback": {
+      "name": {
+        "required": "Имя обязательно"
+      },
+      "phone": {
+        "required": "Телефон обязателен"
+      },
+      "description": {
+        "required": "Описание обязательно"
+      }
+    },
+    "createUser": "Создать пользователя",
+    "editUser": "Редактировать пользователя",
+    "personal": "Пользователь",
+    "users": "Пользователи",
+    "addUser": "Добавить пользователя",
+    "role": "Роль",
+    "surname": "Фамилия",
+    "name": "Имя",
+    "lastName": "Отчество",
+    "phoneNumber": "Телефон",
+    "email": "Email",
+    "actions": "Действия",
+    "rolePlaceholder": "Роль...",
+    "surnamePlaceholder": "Фамилия...",
+    "namePlaceholder": "Имя...",
+    "lastNamePlaceholder": "Отчество...",
+    "phoneNumberPlaceholder": "Телефон...",
+    "emailPlaceholder": "Email...",
+    "clearFilters": "Очистить",
+    "confirmDeletion": "Подтверждение удаления",
+    "confirmDeletionMessage": "Вы уверены, что хотите удалить этого пользователя?",
+    "cancel": "Отменить",
+    "delete": "Удалить",
+    "informationTab": "Информация",
+    "testimonialsTab": "Отзывы",
+    "uploadAvatar": "Загрузить аватар",
+    "reset": "Сбросить",
+    "allowedFormats": "Разрешены JPG, GIF или PNG. Максимальный размер 800K",
+    "branches": "Филиалы",
+    "password": "Пароль",
+    "confirmPassword": "Подтверждение пароля",
+    "attachPdfFiles": "Прикрепить PDF файлы",
+    "selectFile": "Выбрать файл",
+    "fileUploadInfo": "Если загружен файл, его можно скачать для просмотра или удалить.",
+    "saveChanges": "Сохранить изменения",
+    "confirmDeleteReviewMessage": "Вы уверены, что хотите удалить этот отзыв?",
+    "toast": {
+      "delete": {
+        "successful": "Удалено {{entity}}",
+        "errorApi": "Ошибка удаления: {{message}}",
+        "errorStatus": "Не удалось удалить {{entity}} (Ошибка {{status}}).",
+        "errorGeneric": "Произошла неизвестная ошибка при удалении {{entity}}."
+      },
+      "fetch": {
+        "errorApi": "Ошибка загрузки данных: {{message}}",
+        "errorGeneric": "Не удалось загрузить данные. Пожалуйста, попробуйте позже."
+      }
+    },
+    "createBranch": "Создание филиала",
+    "editBranch": "Редактирование филиала"
+  },
+  "roles": {
+    "MANAGER": "Менеджер"
+  },
+  "print": "Распечатать",
+  "branch": {
+    "validation": {
+      "code": {
+        "size": "Код филиала не должен превышать 50 символов"
+      },
+      "phone": {
+        "pattern": "Номер телефона должен быть в формате +380XX1234567 с действительным кодом украинского оператора"
+      },
+      "name": {
+        "required": "Название филиала обязательно",
+        "size": "Название филиала должно содержать от 2 до 100 символов"
+      },
+      "email": {
+        "format": "Пожалуйста, укажите действительный адрес электронной почты",
+        "size": "Электронная почта не должна превышать 100 символов"
+      },
+      "address": {
+        "size": "Адрес не должен превышать 255 символов"
+      }
+    },
+    "branches": "Филиалы",
+    "addBranch": "Добавить филиал",
+    "branch": "Филиал",
+    "code": "Код",
+    "name": "Название",
+    "address": "Адрес",
+    "phoneNumber": "Телефон",
+    "email": "Email",
+    "photo": "Прикрепить фото",
+    "actions": "Действия",
+    "clearFilters": "Очистить",
+    "confirmDeletion": "Подтверждение удаления",
+    "confirmDeletionMessage": "Вы уверены, что хотите удалить этот филиал?",
+    "cancel": "Отменить",
+    "delete": "Удалить",
+    "createBranch": "Создание филиала",
+    "editBranch": "Редактирование филиала",
+    "information": "Информация",
+    "imageUploaded": "Изображение загружено",
+    "imageNotUploaded": "Изображение не загружено",
+    "imageNotSelected": "Изображение не выбрано",
+    "fileNotSelected": "Файл не выбран",
+    "saving": "Сохранение...",
+    "loadError": "Не удалось загрузить данные филиала",
+    "loadErrorEmpty": "Не удалось загрузить данные филиала: ответ пустой",
+    "loadErrorUnknown": "Не удалось загрузить данные филиала: неизвестная ошибка",
+    "saveError": "Ошибка при сохранении филиала",
+    "saveErrorUnknown": "Произошла ошибка при сохранении филиала",
+    "fillRequiredFields": "Пожалуйста, заполните поле \"Название\"",
+    "toast": {
+      "delete": {
+        "successful": "Удален филиал",
+        "errorApi": "Ошибка удаления: {{message}}",
+        "errorStatus": "Не удалось удалить филиал (Ошибка {{status}}).",
+        "errorGeneric": "Произошла неизвестная ошибка при удалении филиала."
+      },
+      "fetch": {
+        "errorApi": "Ошибка загрузки данных: {{message}}",
+        "errorGeneric": "Не удалось загрузить данные. Пожалуйста, попробуйте позже."
+      }
+    }
+  }
+}
