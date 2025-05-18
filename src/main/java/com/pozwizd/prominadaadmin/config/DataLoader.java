@@ -2,6 +2,7 @@ package com.pozwizd.prominadaadmin.config;
 
 import com.pozwizd.prominadaadmin.entity.*;
 import com.pozwizd.prominadaadmin.models.RegDistrictResponse;
+import com.pozwizd.prominadaadmin.repository.PhoneNumberRepository;
 import com.pozwizd.prominadaadmin.service.*;
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.entity.Role; // Assuming Role enum exists here
@@ -30,6 +31,7 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class DataLoader {
     private final PersonalService personalService;
+    private final RealtorService realtorService;
     private final PersonalRepository personalRepository;
     private final BuilderPropertyService builderPropertyService;
     private final CityService cityService;
@@ -43,6 +45,7 @@ public class DataLoader {
     private final DocumentFeedbackServiceImp documentFeedbackServiceImp;
     private final Faker faker;
     private final RegionService regionService;
+    private final PhoneNumberRepository phoneNumberRepository;
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadEntity() {
@@ -56,7 +59,7 @@ public class DataLoader {
         loadFakeBuilderProperties();
         loadPersonal();
         loadDocumentFeedback();
-
+        loadRealtor();
 //        loadRegion();
     }
 
@@ -121,7 +124,7 @@ public class DataLoader {
                     if (file.getName().endsWith(".pdf")) {
                         DocumentFeedback feedback = new DocumentFeedback();
                         feedback.setName(file.getName());
-                        feedback.setPath("uploads/"+file.getName());
+                        feedback.setPath("uploads/" + file.getName());
                         feedback.setPersonal(personal);
 
                         documentFeedbacks.add(feedback);
@@ -159,6 +162,42 @@ public class DataLoader {
             }
         }
     }
+
+    public void loadRealtor() {
+        Faker faker = new Faker(new Locale("en"));
+
+        for (int i = 0; i < 100; i++) {
+            Realtor realtor = new Realtor();
+            realtor.setName(faker.name().firstName());
+            realtor.setSurname(faker.name().nameWithMiddle());
+            realtor.setLastName(faker.name().firstName());
+            realtor.setEmail(faker.internet().emailAddress());
+            realtor.setPassword(faker.internet().password());
+            realtor.setDateOfBirthday(LocalDate.now());
+            realtor.setCode(String.valueOf(faker.number().numberBetween(1, 31)));
+
+            Realtor savedRealtor = realtorService.save(realtor);
+
+            int phoneCount = faker.number().numberBetween(2, 4);
+            for (int j = 0; j < phoneCount; j++) {
+                PhoneNumber phone = new PhoneNumber();
+                phone.setPhoneNumber(faker.phoneNumber().phoneNumber());
+                phone.setContactType(ContactType.TELEGRAM);
+                phone.setRealtor(savedRealtor);
+                phoneNumberRepository.save(phone);
+            }
+
+            for (int j = 0; j < 5; j++) {
+                Feedback feedback = new Feedback();
+                feedback.setName(savedRealtor.getName());
+                feedback.setPhoneNumber(faker.phoneNumber().cellPhone());
+                feedback.setDescription(faker.lorem().sentence(10));
+                feedback.setRealtor(savedRealtor);
+                feedbackService.save(feedback);
+            }
+        }
+    }
+
 
     public void loadFakeCities() {
         Faker faker = new Faker(new Locale("uk"));
@@ -217,7 +256,7 @@ public class DataLoader {
     public void loadFakeBuilderProperties() {
         Faker faker = new Faker(new Locale("uk"));
         Random random = new Random();
-        if(builderPropertyService.getAll().isEmpty()){
+        if (builderPropertyService.getAll().isEmpty()) {
             for (int i = 0; i < 25; i++) {
                 BuilderProperty builder = new BuilderProperty();
                 builder.setName(faker.company().name());

@@ -301,5 +301,81 @@
   "viewChessboard": "Переглянути шахматку",
   "viewInstallmentTerms": "Переглянути умови розстрочки",
   "viewPrices": "Переглянути ціни",
-  "edit": "Редагувати"
+  "edit": "Редагувати",
+  "realtor": {
+    "validation": {
+      "password": {
+        "match": "Паролі не співпадають"
+      },
+      "surname": {
+        "required": "Прізвище обов’язкове"
+      },
+      "name": {
+        "required": "Ім’я обов’язкове"
+      },
+      "lastname": {
+        "required": "По батькові обов’язкове"
+      },
+      "phone": {
+        "pattern": "Невірний формат номера телефону"
+      },
+      "email": {
+        "required": "Електронна пошта обов’язкова",
+        "format": "Невірний формат електронної пошти"
+      },
+      "branches": {
+        "required": "Потрібно обрати хоча б один філіал"
+      }
+    },
+    "createRelator": "Створити рієлтора",
+    "editUser": "Редагувати рієлтора",
+    "personal": "Рієлтор",
+    "users": "Рієлтори",
+    "addUser": "Додати рієлтора",
+    "role": "Роль",
+    "surname": "Прізвище",
+    "name": "Ім’я",
+    "lastName": "По батькові",
+    "phoneNumber": "Номер телефону",
+    "email": "Електронна пошта",
+    "actions": "Дії",
+    "rolePlaceholder": "Роль...",
+    "surnamePlaceholder": "Прізвище...",
+    "namePlaceholder": "Ім’я...",
+    "lastNamePlaceholder": "По батькові...",
+    "phoneNumberPlaceholder": "Номер телефону...",
+    "emailPlaceholder": "Електронна пошта...",
+    "clearFilters": "Очистити фільтри",
+    "confirmDeletion": "Підтвердити видалення",
+    "confirmDeletionMessage": "Ви впевнені, що хочете видалити цього користувача?",
+    "cancel": "Скасувати",
+    "delete": "Видалити",
+    "informationTab": "Інформація",
+    "testimonialsTab": "Відгуки",
+    "uploadAvatar": "Завантажити аватар",
+    "reset": "Скинути",
+    "allowedFormats": "Дозволені формати JPG, GIF або PNG. Максимальний розмір — 800КБ",
+    "branches": "Філіали",
+    "password": "Пароль",
+    "confirmPassword": "Підтвердження пароля",
+    "attachPdfFiles": "Додати PDF-файли",
+    "selectFile": "Обрати файл",
+    "fileUploadInfo": "Після завантаження файл можна переглянути або видалити.",
+    "saveChanges": "Зберегти зміни",
+    "confirmDeleteReviewMessage": "Ви впевнені, що хочете видалити цей відгук?",
+    "toast": {
+      "delete": {
+        "successful": "Видалено {{entity}}",
+        "errorApi": "Помилка видалення: {{message}}",
+        "errorStatus": "Не вдалося видалити {{entity}} (Помилка {{status}}).",
+        "errorGeneric": "Сталася невідома помилка при видаленні {{entity}}."
+      },
+      "fetch": {
+        "errorApi": "Помилка завантаження даних: {{message}}",
+        "errorGeneric": "Не вдалося завантажити дані. Спробуйте пізніше."
+      }
+    },
+    "createBranch": "Створити філіал",
+    "editBranch": "Редагувати філіал"
+  }
 }

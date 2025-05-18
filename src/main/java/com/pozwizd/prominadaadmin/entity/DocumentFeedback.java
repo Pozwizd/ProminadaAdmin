@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 @Getter
 @Setter
-@ToString(exclude = {"personal"})
+@ToString(exclude = {"personal","realtor"})
 @EqualsAndHashCode(of = "id")
 @Entity
 public class DocumentFeedback {
@@ -24,5 +24,7 @@ public class DocumentFeedback {
     @JoinColumn(name = "personal_id")
     private Personal personal;
 
-
+    @ManyToOne
+    @JoinColumn(name = "realtor_id")
+    private Realtor realtor;
 }

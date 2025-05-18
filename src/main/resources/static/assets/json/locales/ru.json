@@ -301,5 +301,81 @@
   "viewChessboard": "Посмотреть шахматку",
   "viewInstallmentTerms": "Посмотреть условие россрочки",
   "viewPrices": "Посмотреть цены",
-  "edit": "Редактировать"
+  "edit": "Редактировать",
+  "realtor": {
+    "validation": {
+      "password": {
+        "match": "Пароли не совпадают"
+      },
+      "surname": {
+        "required": "Фамилия обязательна"
+      },
+      "name": {
+        "required": "Имя обязательно"
+      },
+      "lastname": {
+        "required": "Отчество обязательно"
+      },
+      "phone": {
+        "pattern": "Неверный формат номера телефона"
+      },
+      "email": {
+        "required": "Email обязателен",
+        "format": "Неверный формат email"
+      },
+      "branches": {
+        "required": "Необходимо выбрать хотя бы один филиал"
+      }
+    },
+    "createRelator": "Создать риэлтора",
+    "editUser": "Редактировать риэлтора",
+    "personal": "Риэлтор",
+    "users": "Риэлторы",
+    "addUser": "Добавить риэлтора",
+    "role": "Роль",
+    "surname": "Фамилия",
+    "name": "Имя",
+    "lastName": "Отчество",
+    "phoneNumber": "Номер телефона",
+    "email": "Электронная почта",
+    "actions": "Действия",
+    "rolePlaceholder": "Роль...",
+    "surnamePlaceholder": "Фамилия...",
+    "namePlaceholder": "Имя...",
+    "lastNamePlaceholder": "Отчество...",
+    "phoneNumberPlaceholder": "Номер телефона...",
+    "emailPlaceholder": "Электронная почта...",
+    "clearFilters": "Очистить фильтры",
+    "confirmDeletion": "Подтверждение удаления",
+    "confirmDeletionMessage": "Вы уверены, что хотите удалить этого пользователя?",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "informationTab": "Информация",
+    "testimonialsTab": "Отзывы",
+    "uploadAvatar": "Загрузить аватар",
+    "reset": "Сбросить",
+    "allowedFormats": "Допустимые форматы JPG, GIF или PNG. Макс. размер 800КБ",
+    "branches": "Филиалы",
+    "password": "Пароль",
+    "confirmPassword": "Подтверждение пароля",
+    "attachPdfFiles": "Прикрепить PDF-файлы",
+    "selectFile": "Выбрать файл",
+    "fileUploadInfo": "После загрузки файл можно скачать для просмотра или удалить.",
+    "saveChanges": "Сохранить изменения",
+    "confirmDeleteReviewMessage": "Вы уверены, что хотите удалить этот отзыв?",
+    "toast": {
+      "delete": {
+        "successful": "Удалено: {{entity}}",
+        "errorApi": "Ошибка удаления: {{message}}",
+        "errorStatus": "Не удалось удалить {{entity}} (Ошибка {{status}}).",
+        "errorGeneric": "Произошла неизвестная ошибка при удалении {{entity}}."
+      },
+      "fetch": {
+        "errorApi": "Ошибка загрузки данных: {{message}}",
+        "errorGeneric": "Не удалось загрузить данные. Попробуйте позже."
+      }
+    },
+    "createBranch": "Создать филиал",
+    "editBranch": "Редактировать филиал"
+  }
 }

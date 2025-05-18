@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.EqualsAndHashCode;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -34,6 +35,12 @@ public class Realtor {
 
     private String email;
 
+    private String code;
+
+    private String password;
+
+    private LocalDate dateOfBirthday;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "realtor")
     private List<PhoneNumber> phoneNumbers;
 
@@ -55,4 +62,10 @@ public class Realtor {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
     private List<CommercialProperties> commercialProperties;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<DocumentFeedback> documentFeedbacks;
+
+    @ManyToMany(mappedBy = "realtors", cascade = CascadeType.REFRESH)
+    private List<Branch> branches;
 }

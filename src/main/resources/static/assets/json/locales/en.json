@@ -302,5 +302,81 @@
   "viewChessboard": "View chessboard",
   "viewInstallmentTerms": "View installment terms",
   "viewPrices": "View prices",
-  "edit": "Edit"
+  "edit": "Edit",
+  "realtor": {
+    "validation": {
+      "password": {
+        "match": "Passwords do not match"
+      },
+      "surname": {
+        "required": "Surname is required"
+      },
+      "name": {
+        "required": "Name is required"
+      },
+      "lastname": {
+        "required": "Last name is required"
+      },
+      "phone": {
+        "pattern": "Invalid phone number format"
+      },
+      "email": {
+        "required": "Email is required",
+        "format": "Invalid email format"
+      },
+      "branches": {
+        "required": "At least one branch must be selected"
+      }
+    },
+    "createRelator": "Create Realtor",
+    "editUser": "Edit Realtor",
+    "personal": "Realtor",
+    "users": "Realtors",
+    "addUser": "Add Realtor",
+    "role": "Role",
+    "surname": "Surname",
+    "name": "Name",
+    "lastName": "Last Name",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "actions": "Actions",
+    "rolePlaceholder": "Role...",
+    "surnamePlaceholder": "Surname...",
+    "namePlaceholder": "Name...",
+    "lastNamePlaceholder": "Last Name...",
+    "phoneNumberPlaceholder": "Phone Number...",
+    "emailPlaceholder": "Email...",
+    "clearFilters": "Clear Filters",
+    "confirmDeletion": "Confirm Deletion",
+    "confirmDeletionMessage": "Are you sure you want to delete this user?",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "informationTab": "Information",
+    "testimonialsTab": "Testimonials",
+    "uploadAvatar": "Upload Avatar",
+    "reset": "Reset",
+    "allowedFormats": "Allowed JPG, GIF or PNG. Max size of 800K",
+    "branches": "Branches",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "attachPdfFiles": "Attach PDF files",
+    "selectFile": "Select file",
+    "fileUploadInfo": "If a file is uploaded, it can be downloaded for viewing or deleted.",
+    "saveChanges": "Save Changes",
+    "confirmDeleteReviewMessage": "Are you sure you want to delete this review?",
+    "toast": {
+      "delete": {
+        "successful": "Deleted {{entity}}",
+        "errorApi": "Deletion error: {{message}}",
+        "errorStatus": "Failed to delete {{entity}} (Error {{status}}).",
+        "errorGeneric": "An unknown error occurred while deleting {{entity}}."
+      },
+      "fetch": {
+        "errorApi": "Data loading error: {{message}}",
+        "errorGeneric": "Failed to load data. Please try again later."
+      }
+    },
+    "createBranch": "Create Branch",
+    "editBranch": "Edit Branch"
+  }
 }

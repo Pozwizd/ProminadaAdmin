@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/layout.html}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout ">
+<body>
+<div layout:fragment="content">
+
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <h4 class="fw-bold m-0" data-i18n="realtor.users">Реалторы</h4>
+    </div>
+
+    <div class="main-card mb-3 card" id="card-block">
+        <div class="card-header py-2">
+            <div class="row w-100 align-items-center justify-content-end">
+
+
+                <div class="col-lg-2 col-md-4 col-sm-4">
+                    <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
+                        <span data-i18n="realtor.addUser">Добавить реалтора</span>
+                        <i class="ti ti-plus"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table style="width: 100%;" class="table table-hover table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th data-i18n="realtor.id"></th>
+                        <th data-i18n="realtor.code"></th>
+                        <th data-i18n="realtor.fullname"></th>
+                        <th data-i18n="realtor.email"></th>
+                        <th data-i18n="realtor.dateOfBirthday"></th>
+                        <th class="text-center" data-i18n="realtor.actions"></th>
+                    </tr>
+                    <!-- Filter Row -->
+                    <tr>
+                        <th><input type="text" class="form-control form-control-sm filter-input"
+                                   data-filter-key="id"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input"
+                                   data-filter-key="code"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input"
+                                   data-filter-key="fullname"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input"
+                                   data-filter-key="email"></th>
+                        <th><input type="text" class="form-control form-control-sm filter-input"
+                                   data-filter-key="dateOfBirthday"></th>
+                        <th class="text-center">
+                            <button type="button" id="clearFiltersBtn" class="btn btn-light btn-sm"
+                                    data-i18n="realtor.clearFilters">Очистить
+                            </button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="realtorTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between align-items-center py-3">
+            <label class="d-flex align-items-center gap-1 mb-0">
+                <select id="pageSize" class="custom-select custom-select-sm form-control form-control-sm mx-2"
+                        style="width: auto;">
+                    <option value="10" selected>10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </label>
+            <nav aria-label="Навигация по страницам">
+                <ul class="pagination mb-0" id="pagination">
+
+                </ul>
+            </nav>
+        </div>
+
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteConfirmModalLabel" data-i18n="realtor.confirmDeletion">
+                            Подтверждение удаления</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Закрыть"></button>
+                    </div>
+                    <div class="modal-body">
+                        <span data-i18n="realtor.confirmDeletionMessage">Вы уверены, что хотите удалить этого пользователя?</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary"
+                                data-bs-dismiss="modal" data-i18n="realtor.cancel">Отменить
+                        </button>
+                        <button type="button" class="btn btn-danger" id="confirm-delete-btn"
+                                data-i18n="realtor.delete">Удалить
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        let realtorAppInstance = null;
+
+        function initializePersonalTable() {
+            if (realtorAppInstance && typeof realtorAppInstance.destroy === 'function') {
+                realtorAppInstance.destroy();
+            }
+
+            const tbody = document.getElementById('realtorTableBody');
+            if (tbody) {
+                tbody.innerHTML = '';
+            }
+
+            const appConfig = {
+                api: {
+                    baseURL: '[[@{/}]]'.replaceAll("\"", ""),
+                    endpoints: {
+                        getAll: 'realtor/getAllRealtor',
+                        delete: 'realtor/{id}',
+                    }
+                },
+                entityName: i18next.t('realtor.realtor'),
+                tableBodyId: 'realtorTableBody',
+                columns: [
+                    {key: 'id'},
+                    {key: 'code'},
+                    {key: 'fullname'},
+                    {key: 'email'},
+                    {key: 'dateOfBirthday'}
+                ],
+                paginationId: 'pagination',
+                deleteModalId: 'deleteConfirmModal',
+                confirmDeleteBtnId: 'confirm-delete-btn',
+                pageSizeSelectId: 'pageSize',
+                createButtonId: 'createEntity',
+                filterInputSelector: '.filter-input',
+                clearFiltersBtnId: 'clearFiltersBtn',
+                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'realtor/create',
+                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'realtor/edit/',
+                notificationKeyword: 'message',
+
+                // Новая секция для ключей i18n
+                i18nKeys: {
+                    successTitle: 'toast.title.success',
+                    errorTitle: 'toast.title.error',
+
+                    // Сообщения для toast уведомлений
+                    deleteSuccess: 'realtor.toast.delete.successful',
+                    deleteErrorApi: 'realtor.toast.delete.errorApi',
+                    deleteErrorStatus: 'realtor.toast.delete.errorStatus',
+                    deleteErrorGeneric: 'realtor.toast.delete.errorGeneric',
+                    fetchErrorApi: 'realtor.toast.fetch.errorApi',
+                    fetchErrorGeneric: 'realtor.toast.fetch.errorGeneric',
+                    loadingMessage: 'app.loading'
+                }
+            };
+            realtorAppInstance = new GenericCRUDApp(appConfig);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            initializePersonalTable();
+        });
+    </script>
+
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <script>
+        function localize() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+
+            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+            if (currentLanguageEle) {
+                currentLanguageEle.click();
+            }
+
+            i18nList.forEach(function (item) {
+                item.innerHTML = i18next.t(item.dataset.i18n);
+            });
+        }
+
+        localize();
+    </script>
+
+</div>
+</body>
+</html>

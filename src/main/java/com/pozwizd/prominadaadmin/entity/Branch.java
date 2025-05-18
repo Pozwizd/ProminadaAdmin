@@ -38,8 +38,21 @@ public class Branch {
     )
     private List<Personal> personals;
 
+    @ManyToMany
+    @JoinTable(
+            name = "branch_realtor",
+            joinColumns = @JoinColumn(name = "branch_id"),
+            inverseJoinColumns = @JoinColumn(name = "realtor_id")
+    )
+    private List<Realtor> realtors;
+
     public void addPersonal(Personal personal) {
         personals.add(personal);
         personal.getBranches().add(this);
+    }
+
+    public void addRealtor(Realtor realtor) {
+        realtors.add(realtor);
+        realtor.getBranches().add(this);
     }
 }

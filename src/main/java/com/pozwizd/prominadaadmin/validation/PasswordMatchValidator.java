@@ -1,6 +1,5 @@
 package com.pozwizd.prominadaadmin.validation;
 
-import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.BeanWrapperImpl;

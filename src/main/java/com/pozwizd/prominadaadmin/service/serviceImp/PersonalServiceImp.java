@@ -131,7 +131,6 @@ public class PersonalServiceImp implements PersonalService {
                         email,
                         role),
                 pageRequest));
-
     }
 
     /**
