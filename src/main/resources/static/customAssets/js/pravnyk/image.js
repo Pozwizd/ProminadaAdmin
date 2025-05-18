@@ -52,7 +52,7 @@ document.addEventListener('change', function (event) {
         const file = target.files[0];
         if (!file) return;
 
-        const col = target.closest('.col-md-4');
+        const col = target.closest('.col-md-5');
         const path = col?.querySelector('small');
 
         if (path) path.textContent = '';

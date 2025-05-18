@@ -15,4 +15,5 @@ public class MediaDtoDrop {
     private String name;
     private String pathImage;
     private MultipartFile file;
+    private String size;
 }

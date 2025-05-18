@@ -3,6 +3,7 @@ package com.pozwizd.prominadaadmin.mapper;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyLayouts;
+import com.pozwizd.prominadaadmin.models.builderProperty.BuilderForView;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyLayoutDto;
@@ -11,12 +12,10 @@ import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface BuilderPropertyMapper {
-//    @Mapping(source = "distinct.name", target = "nameDistinct")
-//    @Mapping(source = "topozone.name", target = "nameTopozone")
-//    BuilderProperty toResponseForTable(BuilderPropertyDto dto);
 
     default Page<BuilderPropertyDtoForTable> toDto(Page<BuilderProperty> page) {
         return page.map(this::toResponseForTable);
@@ -38,7 +37,7 @@ public interface BuilderPropertyMapper {
                 .districtId(entity.getDistinct() != null ? entity.getDistinct().getId().toString() : null)
                 .topozoneId(entity.getTopozone() != null ? entity.getTopozone().getId().toString() : null)
                 .buildingCompanyId(entity.getBuildingCompany() != null ? entity.getBuildingCompany().getId().toString() : null)
-                .deliveryDateId(entity.getDeliveryDate()!=null?entity.getDeliveryDate().toString():null)
+                .deliveryDateId(entity.getDeliveryDate() != null ? entity.getDeliveryDate().toString() : null)
                 .houseNumber(entity.getHouseNumber())
                 .phoneNumber(entity.getPhoneNumber())
                 .description(entity.getDescription())
@@ -58,7 +57,7 @@ public interface BuilderPropertyMapper {
                 .nameDistinct(entity.getDistinct() != null ? entity.getDistinct().getName() : null)
                 .nameTopozone(entity.getTopozone() != null ? entity.getTopozone().getName() : null)
                 .street(entity.getStreet())
-                .totalFloor(entity.getPathToChessPlanFile())
+                .totalFloor(String.valueOf(entity.getTotalFloor()))
                 .build();
     }
 
@@ -69,12 +68,18 @@ public interface BuilderPropertyMapper {
     MediaDtoDrop toDto(BuilderPropertyGalleryImage gallery);
 
     BuilderPropertyLayoutDto toDto(BuilderPropertyLayouts entity);
+
     default BuilderPropertyGalleryImage toEntityFromRequest(MediaDtoDrop dto, BuilderProperty entity) {
         BuilderPropertyGalleryImage gallery = new BuilderPropertyGalleryImage();
+
+
         gallery.setId(dto.getId());
-        gallery.setName(dto.getName());
+        gallery.setName(dto.getFile() != null ? dto.getFile().getOriginalFilename() : null);
         gallery.setPathImage(dto.getPathImage());
         gallery.setBuilderProperty(entity);
+        gallery.setSize(dto.getFile() != null
+                ? String.valueOf(dto.getFile().getSize())
+                : null);
         return gallery;
     }
 
@@ -82,7 +87,7 @@ public interface BuilderPropertyMapper {
         BuilderPropertyLayouts layout = new BuilderPropertyLayouts();
         layout.setId(dto.getId());
         layout.setName(dto.getName());
-        layout.setPriceByM2(dto.getPriceByM2());
+        layout.setPriceByM2(dto.getPriceByM2() != null ? dto.getPriceByM2() : 0);
         layout.setRooms(dto.getRooms());
         layout.setTotalArea(dto.getTotalArea());
         layout.setLivingArea(dto.getLivingArea());
@@ -97,5 +102,23 @@ public interface BuilderPropertyMapper {
         layout.setDescription(dto.getDescription());
         layout.setBuilderProperty(entity);
         return layout;
+    }
+
+    default BuilderForView toDtoForView(BuilderProperty entity) {
+        Optional<BuilderPropertyGalleryImage> builderImage = entity.getBuilderPropertyGalleryImages().stream().findFirst();
+        return BuilderForView.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .district(entity.getDistinct().getName())
+                .topozone(entity.getTopozone().getName())
+                .street(entity.getStreet())
+                .roof(String.valueOf(entity.getTotalFloor()))
+                .promotion(entity.getIsAction())
+                .description(entity.getDescription())
+                .pathToImage(builderImage.map(BuilderPropertyGalleryImage::getPathImage).orElse(null))
+                .pathToPriceFile(entity.getPathToPriceFile())
+                .pathToChessPlanFile(entity.getPathToChessPlanFile())
+                .pathToMortgageConditionsFile(entity.getPathToMortgageConditionsFile())
+                .build();
     }
 }

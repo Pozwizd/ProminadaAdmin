@@ -242,6 +242,7 @@
     }
   },
   "builder": {
+    "viewBuilder": "Просмотр здание",
     "editBuilder": "Редактирование здание",
     "name": "Название",
     "namePlaceHolder": "Жилой комплекс Ривьера Сити",
@@ -271,7 +272,17 @@
     "selectDistrict": "Выберите район",
     "selectTopozone": "Выберите топозону",
     "gallery": "Галерея",
-    "layouts": "Планировки"
+    "layout": {
+      "name": "Планировки",
+      "price": "Цена от(м.кв)",
+      "room": "Комнат",
+      "totalArea": "Общая площадь (м²)",
+      "livingRoom": "Жилая площадь (м²)",
+      "kitchenRoom": "Кухонная площадь (м²)",
+      "showSite": "Показать сайт",
+      "description": "Описание:",
+      "load": "Загрузить"
+    }
   },
   "deliveryType": {
     "selectDeliveryType": "Выберите тип доставки",
@@ -285,5 +296,10 @@
   },
   "main": "Основное",
   "gallery": "Галерея",
-  "planning": "Планировка"
+  "planning": "Планировка",
+  "addPlaning": "Добавить планировку",
+  "viewChessboard": "Посмотреть шахматку",
+  "viewInstallmentTerms": "Посмотреть условие россрочки",
+  "viewPrices": "Посмотреть цены",
+  "edit": "Редактировать"
 }

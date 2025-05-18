@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template/layout.html}">
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <h4 class="fw-bold m-0" data-i18n="builder.viewBuilder">Просмотр здание</h4>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="main-card mb-3 card">
+                <div class="card-body">
+                    <form id="formBranch">
+                        <input type="hidden" id="branchId" name="branchId"/>
+                        <div class="row">
+                            <div class="col-3 col-md-6">
+                                <h5 class="mb-3" data-i18n="branch.information">Просмотр новостроя</h5>
+                            </div>
+                            <div class="col-3 col-md-6 text-end">
+                                <a type="button" id="clearFiltersBtn" class="btn btn-light btn-sm"
+                                   data-i18n="edit" th:href="@{/builder/edit/{id} (id=${id})}">Редактировать</a>
+                            </div>
+                            <div class="col-3 col-md-6">
+                                <img id="photoStatus" class="rounded"
+                                     src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg"
+                                     style="height: 250px; width: 500px;"/>
+                            </div>
+                            <div class="col-3 col-md-6 d-flex flex-column justify-content-end" style="height: 100%;">
+                                <a href="#" class="text-end" data-i18n="viewChessboard">Посмотреть шахматку</a>
+                                <a href="#" class="text-end" data-i18n="viewInstallmentTerms">Посмотреть условие
+                                    россрочки</a>
+                                <a href="#" class="text-end" data-i18n="viewPrices">Посмотреть цены</a>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <div class="d-table table-bordered w-100 mb-4">
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" data-i18n="builder.name">
+                                                Назва:
+                                            </div>
+                                            <div class="d-table-cell p-2 border" id="builder_name">КТ Крентта</div>
+                                        </div>
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" data-i18n="builder.district">
+                                                Район:
+                                            </div>
+                                            <div class="d-table-cell p-2 border" id="builder_district">пров. Ліста</div>
+                                        </div>
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" data-i18n="builder.topozone">
+                                                Топозона:
+                                            </div>
+                                            <div class="d-table-cell p-2 border" id="builder_topozone">4</div>
+                                        </div>
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" data-i18n="builder.street">
+                                                Вулиця:
+                                            </div>
+                                            <div class="d-table-cell p-2 border" id="builder_street">пл. Староміська
+                                            </div>
+                                        </div>
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" data-i18n="builder.totalFloor">
+                                                Кількість поверхів:
+                                            </div>
+                                            <div class="d-table-cell p-2 border" id="builder_roof">5</div>
+                                        </div>
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" data-i18n="builder.promotion">
+                                                Акція:
+                                            </div>
+                                            <div class="d-table-cell p-2 border" id="builder_promotion">включена</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Опис окремим блоком -->
+                                <div class="table-responsive">
+                                    <div class="d-table table-bordered w-100">
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell fw-bold p-2 border" colspan="2"
+                                                 data-i18n="builder.description">Опис:
+                                            </div>
+                                        </div>
+                                        <div class="d-table-row">
+                                            <div class="d-table-cell p-2 border" colspan="2"
+                                                 id="builder_description">
+                                                Якщо бажаєш, можу згенерувати автоматично для всіх записів (на основі
+                                                JSON чи HTML), або адаптувати під динамічне JS-рендерення. Хочеш приклад
+                                                з циклом на JavaScript?
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+    <script th:src="@{/assets/js/forms-selects.js}"></script>
+    <script th:src="@{/assets/axios.min.js}"></script>
+
+    <script th:inline="javascript">
+        window.contextPath = '[[@{/}]]'.replaceAll('"', '');
+    </script>
+
+    <script>
+
+        // Получить филиал по id
+        function getBuilder(id) {
+            axios.get(window.contextPath + 'builder/' + id + '/view')
+                .then(function (response) {
+                    if (response.data) {
+                        console.log(response.data);
+                        document.getElementById('builder_name').value = response.data.name || '';
+                        document.getElementById('builder_district').value = response.data.district || '';
+                        document.getElementById('builder_topozone').value = response.data.topozone || '';
+                        document.getElementById('builder_street').value = response.data.street || '';
+                        document.getElementById('builder_roof').value = response.data.roof || '';
+                        document.getElementById('builder_promotion').value = response.data.promotion || '';
+                        document.getElementById('builder_description').textContent = response.data.description || '';
+
+                        const photoStatusElem = document.getElementById('photoStatus');
+                        const fileChess = document.querySelector('a[data-i18n="viewChessboard"]');
+                        const fileTerms = document.querySelector('a[data-i18n="viewInstallmentTerms"]');
+                        const filePrices = document.querySelector('a[data-i18n="viewPrices"]');
+                        if (fileChess && response.data.pathToChessPlanFile) fileChess.href = '/admin/' + response.data.pathToChessPlanFile;
+                        if (fileTerms && response.data.pathToMortgageConditionsFile) fileTerms.href = '/admin/' + response.data.pathToMortgageConditionsFile;
+                        if (filePrices && response.data.pathToPriceFile) filePrices.href = '/admin/' + response.data.pathToPriceFile;
+
+                        if (photoStatusElem && response.data.pathToImage) {
+                            let prefPath = '[[@{/}]]'.replaceAll('"', '');
+                            photoStatusElem.src = prefPath + response.data.pathToImage;
+                        }
+                        console.log('Данные филиала успешно загружены:', response.data);
+                    } else {
+                        console.error('Ответ сервера не содержит данных');
+                        alert(i18next.t('branch.loadErrorEmpty'));
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Ошибка при загрузке данных филиала:', error);
+                    alert(i18next.t('branch.loadError') + ': ' + (error.response?.data?.message || error.message || i18next.t('branch.loadErrorUnknown')));
+                })
+        }
+
+        function localize() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+
+            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+            if (currentLanguageEle) {
+                currentLanguageEle.click();
+            }
+
+            i18nList.forEach(function (item) {
+                item.innerHTML = i18next.t(item.dataset.i18n);
+            });
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const currentUrl = window.location.href;
+            const lastSegment = currentUrl.split('/').pop();
+            const branchId = !isNaN(lastSegment) && lastSegment.trim() !== "" ? Number(lastSegment) : null;
+            if (branchId) {
+                getBuilder(branchId);
+            } else {
+                const photoStatusElem = document.getElementById('photoStatus');
+                if (photoStatusElem) {
+                    photoStatusElem.textContent = i18next.t('branch.imageNotSelected');
+                }
+            }
+        });
+
+        localize();
+    </script>
+
+</div>
+</body>
+</html>

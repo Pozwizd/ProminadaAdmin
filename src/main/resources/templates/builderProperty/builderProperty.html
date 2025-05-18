@@ -6,18 +6,18 @@
 <div layout:fragment="content">
 
     <div class="d-flex justify-content-between align-items-center py-3 mb-4">
-        <h4 class="fw-bold m-0" data-i18n="personal.users">Пользователи</h4>
+        <h4 class="fw-bold m-0" data-i18n="builderObjects">Объекты от строителей</h4>
     </div>
 
     <div class="main-card mb-3 card" id="card-block">
         <div class="card-header py-2">
             <div class="row w-100 align-items-center justify-content-end">
                 <div class="col-lg-2 col-md-4 col-sm-4">
-                    <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100">
+                    <a href="" class="btn btn-primary btn-sm w-100" id="btn-write">
                         <span data-i18n="print">Роспечатать</span>
                     </a>
                 </div>
-                <div class="col-lg-2 col-md-4 col-sm-4">
+                <div class="col-lg-auto col-md-4 col-sm-4">
                     <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
                         <span data-i18n="personal.addUser">Добавить пользователя</span>
                         <i class="ti ti-plus"></i>
@@ -25,37 +25,31 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="table-for-print">
             <div class="table-responsive">
                 <table style="width: 100%;" class="table table-hover table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th data-i18n="personal.role">Роль</th>
-                        <th data-i18n="personal.surname">Фамилия</th>
-                        <th data-i18n="personal.name">Имя</th>
-                        <th data-i18n="personal.lastName">Отчество</th>
-                        <th data-i18n="personal.phoneNumber">Телефон</th>
-                        <th data-i18n="personal.email">Email</th>
+                        <th data-i18n="builder.name">Название</th>
+                        <th data-i18n="builder.district">Район</th>
+                        <th data-i18n="builder.topozone">Топозона</th>
+                        <th data-i18n="builder.street">Улица</th>
+                        <th data-i18n="builder.totalFloor">Этажность</th>
                         <th class="text-center" data-i18n="personal.actions">Действия</th>
                     </tr>
                     <!-- Filter Row -->
                     <tr>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="roleName" data-i18n="[placeholder]personal.rolePlaceholder"></th>
+                                   data-filter-key="name"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_surname"
-                                   data-i18n="[placeholder]personal.surnamePlaceholder"></th>
+                                   data-filter-key="nameDistinct"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_name" data-i18n="[placeholder]personal.namePlaceholder"></th>
+                                   data-filter-key="nameTopozone"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_lastName"
-                                   data-i18n="[placeholder]personal.lastNamePlaceholder"></th>
+                                   data-filter-key="street"></th>
                         <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_phoneNumber"
+                                   data-filter-key="totalFloor"
                                    data-i18n="[placeholder]personal.phoneNumberPlaceholder"></th>
-                        <th><input type="text" class="form-control form-control-sm filter-input"
-                                   data-filter-key="filter_email" data-i18n="[placeholder]personal.emailPlaceholder">
-                        </th>
                         <th class="text-center">
                             <button type="button" id="clearFiltersBtn" class="btn btn-light btn-sm"
                                     data-i18n="personal.clearFilters">Очистить
@@ -63,7 +57,7 @@
                         </th>
                     </tr>
                     </thead>
-                    <tbody id="personalTableBody">
+                    <tbody id="builderTableBody">
                     </tbody>
                 </table>
             </div>
@@ -116,33 +110,87 @@
         </div>
     </div>
     <script>
+        function printTable() {
+            const rowsPerPage = 20;
+            const tableElement = document.getElementById('table-for-print');
+            const originalContents = document.body.innerHTML;
+
+            if (!tableElement) {
+                console.error('Table element not found!');
+                return;
+            }
+
+            const clonedTable = tableElement.cloneNode(true);
+            const rows = Array.from(clonedTable.querySelectorAll('tr'));
+            const totalPages = Math.ceil(rows.length / rowsPerPage);
+
+            const printContainer = document.createElement('div');
+
+            for (let page = 0; page < totalPages; page++) {
+                const pageContainer = document.createElement('div');
+                pageContainer.classList.add('print-page');
+
+                const header = document.createElement('h2');
+                header.textContent = `Page ${page + 1} of ${totalPages}`;
+                pageContainer.appendChild(header);
+
+                const pageTable = document.createElement('table');
+                pageTable.classList.add('print-table');
+
+                if (page === 0) {
+                    const headerRow = rows[0].cloneNode(true);
+                    pageTable.appendChild(headerRow);
+                }
+
+                const startRow = page * rowsPerPage + 1;
+                const endRow = Math.min(startRow + rowsPerPage, rows.length);
+                for (let i = startRow; i < endRow; i++) {
+                    const row = rows[i].cloneNode(true);
+                    pageTable.appendChild(row);
+                }
+
+                pageContainer.appendChild(pageTable);
+                printContainer.appendChild(pageContainer);
+            }
+
+            document.body.innerHTML = '';
+            document.body.appendChild(printContainer);
+
+            window.print();
+
+            document.body.innerHTML = originalContents;
+            location.reload();
+        }
+    </script>
+    <script>
         let personalAppInstance = null;
         let isTableInitialized = false;
+        const enableViewButton = true;
 
-        function initializePersonalTable() {
+        function initializePersonalTable({enableView = true} = {}) {
             if (isTableInitialized) return;
             // If an existing app instance exists and has a destroy method, destroy it
             if (personalAppInstance && typeof personalAppInstance.destroy === 'function') {
                 personalAppInstance.destroy();
             }
             // Optionally clear the table body to avoid duplicates
-            const tbody = document.getElementById('personalTableBody');
+            const tbody = document.getElementById('builderTableBody');
             if (tbody) {
                 tbody.innerHTML = '';
             }
             // Rebuild the config with updated translations
+            let baseURL = '[[@{/}]]'.replaceAll("\"", "");
             const appConfig = {
                 api: {
-                    baseURL: '[[@{/}]]'.replaceAll("\"", ""),
+                    baseURL: baseURL,
                     endpoints: {
                         getAll: 'builder/getAllBuilders',
                         delete: 'builder/{id}',
                     }
                 },
                 entityName: i18next.t('personal.personal'),
-                tableBodyId: 'personalTableBody',
+                tableBodyId: 'builderTableBody',
                 columns: [
-                    {key: 'id'},
                     {key: 'name'},
                     {key: 'nameDistinct'},
                     {key: 'nameTopozone'},
@@ -157,9 +205,10 @@
                 createButtonId: 'createEntity',
                 filterInputSelector: '.filter-input',
                 clearFiltersBtnId: 'clearFiltersBtn',
-                createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'builder/create',
-                editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'builder/edit/',
-                notificationKeyword: 'message'
+                createUrl: baseURL + 'builder/create',
+                editUrl: baseURL + 'builder/edit/',
+                notificationKeyword: 'message',
+                viewUrl: enableView ? baseURL + 'builder/view/' : null
             };
             personalAppInstance = new GenericCRUDApp(appConfig);
             isTableInitialized = true;
@@ -167,6 +216,9 @@
 
         document.addEventListener('DOMContentLoaded', function () {
             initializePersonalTable();
+            document.getElementById('btn-write').addEventListener('click', function () {
+                printTable();
+            });
         });
     </script>
     <script>
@@ -254,7 +306,6 @@
             item.innerHTML = i18next.t(item.dataset.i18n);
         });
     </script>
-
 </div>
 </body>
 </html>

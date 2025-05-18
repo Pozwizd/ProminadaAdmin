@@ -242,6 +242,7 @@
     }
   },
   "builder": {
+    "viewBuilder": "View Builder",
     "editBuilder": "Edit builder",
     "name": "Name",
     "namePlaceHolder": "Residential complex Riviera City",
@@ -272,7 +273,17 @@
     "selectTopozone": "Select a topozone",
     "selectCompany": "Select a company",
     "gallery": "Gallery",
-    "layouts": "Layouts"
+    "layout": {
+      "name": "Layouts",
+      "price": "Price from (m²)",
+      "room": "Rooms",
+      "totalArea": "Total area (м²)",
+      "livingRoom": "Living area (м²)",
+      "kitchenRoom": "Kitchen area (м²)",
+      "showSite": "Show on site",
+      "description": "Description:",
+      "load": "Upload"
+    }
   },
   "deliveryType": {
     "selectDeliveryType": "Select the delivery type",
@@ -286,5 +297,10 @@
   },
   "main": "Main",
   "gallery": "Gallery",
-  "planning": "Planning"
+  "planning": "Planning",
+  "addPlaning": "Add layout",
+  "viewChessboard": "View chessboard",
+  "viewInstallmentTerms": "View installment terms",
+  "viewPrices": "View prices",
+  "edit": "Edit"
 }

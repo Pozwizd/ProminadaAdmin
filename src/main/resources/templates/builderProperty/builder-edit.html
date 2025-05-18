@@ -55,7 +55,7 @@
                                 data-bs-target="#navs-pills-top-home"
                                 aria-controls="navs-pills-top-home"
                                 aria-selected="true"
-                        data-i18n="main">
+                                data-i18n="main">
                             Основное
                         </button>
                     </li>
@@ -207,35 +207,37 @@
                             </div>
 
                             <div class="col-md-8"></div>
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <label for="chessPlanFile" class="form-label"
                                        data-i18n="builder.chessPlan">Шахматка</label>
-                                <input type="file" class="form-control file-hidden file-alone" id="chessPlanFile"
+                                <input type="file" class="form-control file-hidden file-alone file-pdf"
+                                       id="chessPlanFile"
                                        data-error="chessPlanFile">
                                 <small id="chessPlanFileLink"></small>
                             </div>
 
-                            <div class="col-md-8" style="align-content: end"></div>
-                            <div class="col-md-4">
+                            <div class="col-md-7" style="align-content: end"></div>
+                            <div class="col-md-5">
                                 <label for="mortgageConditionsFile" class="form-label"
                                        data-i18n="builder.mortgageConditions">Условия
                                     рассрочки</label>
-                                <input type="file" class="form-control file-hidden file-alone" id="mortgageConditionsFile"
+                                <input type="file" class="form-control file-hidden file-alone file-pdf"
+                                       id="mortgageConditionsFile"
                                        data-error="mortgageConditionsFile">
                                 <small id="mortgageConditionsFileLink"></small>
                             </div>
-                            <div class="col-md-8" style="align-content: end"></div>
+                            <div class="col-md-7" style="align-content: end"></div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <label for="priceFile" class="form-label" data-i18n="builder.priceFile">Файл с
                                     ценами</label>
-                                <input type="file" class="form-control file-hidden file-alone" id="priceFile"
+                                <input type="file" class="form-control file-hidden file-alone file-pdf" id="priceFile"
                                        data-error="priceFile">
                                 <small id="priceFileLink"></small>
                             </div>
-                            <div class="col-md-8"></div>
+                            <div class="col-md-7"></div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <label for="description" class="form-label" data-i18n="builder.description"
                                        data-error="description">Описание:</label>
                                 <textarea class="form-control" id="description" rows="3" required></textarea>
@@ -291,7 +293,7 @@
                                     <img data-dz-thumbnail style="width: 100%; height: 100%; object-fit: cover;"/>
                                 </div>
                                 <div class="dz-details" style="text-align: center;">
-<!--                                    <div class="dz-size"><span data-dz-size></span></div>-->
+                                    <div class="dz-size"><span data-dz-size></span></div>
                                     <div class="dz-filename"><span data-dz-name></span></div>
                                 </div>
                                 <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
@@ -315,7 +317,8 @@
                     <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
                         <div id="layoutsContainer" class="row"></div>
                         <div class="col-12 mt-4 text-end">
-                            <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="">Добавить планировку
+                            <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="addPlaning">Добавить
+                                планировку
                             </button>
                         </div>
                         <div class="col-12 mt-4 text-end">
@@ -353,6 +356,7 @@
             });
 
         function changeLangMy(lang) {
+            document.cookie = `locale=${lang}; path=/;`;
             i18next.changeLanguage(lang, function () {
                 $('body').localize();
             });
@@ -363,7 +367,6 @@
             $("#isAction").on('click', function () {
                 const title = $('#actionTitle');
                 const description = $('#actionDescription');
-                console.log($(this).prop('checked'));
                 if ($(this).prop('checked')) {
                     title.prop('required', true).prop('disabled', false);
                     description.prop('required', true).prop('disabled', false);
@@ -434,6 +437,7 @@
         let containerDistrictSelector = $('#districtId');
 
         function loadCitiesByRegDistrictId(regDistrictId) {
+            if (!regDistrictId) return;
             return fetch(`/admin/city/get?regDistrictId=` + encodeURIComponent(regDistrictId))
                 .then(response => response.json())
                 .then(data => {
@@ -475,13 +479,13 @@
         }
 
         function loadTopZonesByDistrict(districtId) {
+            if (!districtId) return;
             return fetch(`/admin/topozone/get?districtId=` + encodeURIComponent(districtId))
                 .then(response => response.json())
                 .then(data => {
                     if (containerTopozoneSelector) {
                         containerTopozoneSelector.prop('disabled', false);
                         let optionFirst = containerTopozoneSelector.find('option').first().prop('outerHTML');
-                        console.log(optionFirst);
                         containerTopozoneSelector.empty();
                         containerTopozoneSelector.append(optionFirst);
                         data.forEach(el => {
@@ -522,6 +526,7 @@
         }
 
         function loadDistrictByCity(cityId) {
+            if (!cityId) return;
             return fetch(`/admin/district/get?cityId=` + encodeURIComponent(cityId))
                 .then(response => response.json())
                 .then(data => {
@@ -558,6 +563,7 @@
             });
         }
 
+        let myDropZone;
         document.addEventListener('DOMContentLoaded', function () {
             loadRegDistrict();
             loadBuildCompanies();
@@ -603,9 +609,10 @@
                         document.getElementById('actionTitle').value = data.actionTitle;
                         document.getElementById('actionDescription').value = data.actionDescription;
                         document.getElementById('isAction').checked = data.isAction;
-                        document.getElementById('priceFileLink').textContent = data.pathToPriceFile;
-                        document.getElementById('mortgageConditionsFileLink').textContent = data.pathToMortgageConditionsFile;
-                        document.getElementById('chessPlanFileLink').textContent = data.pathToChessPlanFile;
+                        document.getElementById('priceFileLink').textContent = substringFilePath(data.pathToPriceFile);
+                        document.getElementById('mortgageConditionsFileLink').textContent = substringFilePath(data.pathToMortgageConditionsFile);
+                        document.getElementById('chessPlanFileLink').textContent = substringFilePath(data.pathToChessPlanFile);
+
                         await loadBuildCompanies();
                         $('#buildingCompanyId').val(data.buildingCompanyId);
 
@@ -621,7 +628,7 @@
                         await loadTopZonesByDistrict(data.districtId);
                         $('#topozoneId').val(data.topozoneId);
 
-                        const myDropzone = new Dropzone("#dropzone-basic", {
+                        myDropZone = new Dropzone("#dropzone-basic", {
                             url: "/upload",
                             autoProcessQueue: false,
                             uploadMultiple: true,
@@ -629,31 +636,103 @@
                             maxFiles: 5,
                             paramName: "filesDto",
                             previewTemplate: document.querySelector("#preview-template").innerHTML,
-                            init: function() {
+                            init: function () {
                                 const dz = this;
+                                console.log(dz);
                                 data.filesDto.forEach(fileInfo => {
                                     console.log(fileInfo);
                                     const mockFile = {
                                         name: fileInfo.name,
-                                        size: fileInfo.size || 0,
+                                        size: Number(fileInfo.size) || 0,
                                         accepted: true,
-                                        dataURL: fileInfo.pathImage
+                                        dataURL: fileInfo.pathImage,
                                     };
-
-                                    // 3. Викликаємо подію додавання файлу
                                     dz.emit("addedfile", mockFile);
-
-                                    // 4. Підставляємо мініатюру (передаємо mockFile і URL картинки)
-                                    dz.emit("thumbnail", mockFile, fileInfo.pathImage);
-
-                                    // 5. Завершуємо «завантаження», щоб прибрати прогрес-бар
+                                    dz.emit("thumbnail", mockFile, '/admin/' + fileInfo.pathImage);
                                     dz.emit("complete", mockFile);
-
-                                    // 6. Додаємо до внутрішнього списку Dropzone
                                     dz.files.push(mockFile);
                                 });
                             }
                         });
+
+                        let layoutContainer = $('#layoutsContainer');
+                        if (layoutContainer.length) {
+                            data.layoutDto.forEach(function (item) {
+                                layoutContainer.append(` <div class="layout-block col-12 row border rounded p-3 mb-4">
+        <div class="col-12 text-end mb-2">
+            <a href="javascript:void(0);" class="ti ti-trash text-danger delete-layout" style="cursor: pointer;"></a>
+        </div>
+        <div class="col-12">
+            <label class="form-label" data-i18n="builder.layout.name">${translate('builder.layout.name')}</label>
+            <input type="text" class="form-control layout-name" placeholder="Планировка 2к левое крыло" value="${item.name}">
+        </div>
+        <div class="col">
+            <label class="form-label" data-i18n="builder.layout.price">${translate('builder.layout.price')}</label>
+            <input type="number" class="form-control layout-price" placeholder="500" value="${item.priceByM2}">
+        </div>
+        <div class="col">
+            <label class="form-label" data-i18n="builder.layout.room">${translate('builder.layout.room')}</label>
+            <input type="number" class="form-control layout-rooms" placeholder="2" value="${item.rooms}">
+        </div>
+        <div class="col">
+            <label class="form-label" data-i18n="builder.layout.totalArea">${translate('builder.layout.totalArea')}</label>
+            <input type="number" class="form-control layout-total-area" placeholder="36" value="${item.totalArea}">
+        </div>
+        <div class="col">
+            <label class="form-label" data-i18n="builder.layout.livingRoom">${translate('builder.layout.livingRoom')}</label>
+            <input type="number" class="form-control layout-living-area" placeholder="21" value="${item.livingArea}">
+        </div>
+        <div class="col">
+            <label class="form-label" data-i18n="builder.layout.kitchenRoom">${translate('builder.layout.kitchenRoom')}</label>
+            <input type="number" class="form-control layout-kitchen-area" placeholder="12" value="${item.kitchenArea}">
+        </div>
+        <div class="col-12">
+            <div class="form-check mt-4">
+                <input class="form-check-input layout-visible" type="checkbox" ${item.visibleForSite ? 'checked' : ''}>
+                <label class="form-check-label" data-i18n="builder.layout.showSite">${translate('builder.layout.showSite')}</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label" data-i18n="builder.layout.description">${translate('builder.layout.description')}</label>
+            <textarea class="form-control layout-description" rows="3">${item.description}</textarea>
+        </div>
+        <div class="col-12 mt-3">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card h-100 p-2 text-center">
+                        <img src="${item.pathImage1 ? '/admin/' + item.pathImage1 : 'https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg'}" class="img-fluid mb-2" alt="error"
+                        style="height: 204px; width: 100%;">
+                        <button type="button" id="${imageId + 1}" class="btn btn-label-primary btn-select"
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
+                        <input type="file" class="form-control files layout-file1" accept="image/*,video/*" style="display: none;">
+                        <input type="text" class="paths layout-path1" style="display: none;" value="${item.pathImage1}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-2 text-center">
+                        <img src="${item.pathImage2 ? '/admin/' + item.pathImage2 : 'https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg'}" class="img-fluid mb-2" alt="error"
+                        style="height: 204px; width: 100%;">
+                        <button type="button" id="${imageId + 2}" class="btn btn-label-primary btn-select"
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
+                        <input type="file" class="files layout-file2" accept="image/*,video/*" style="display: none;">
+                        <input type="text" class="paths layout-path2" style="display: none;" value="${item.pathImage2}">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 p-2 text-center">
+                        <img src="${item.pathImage3 ? '/admin/' + item.pathImage3 : 'https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg'}" class="img-fluid mb-2" alt="error"
+                        style="height: 204px; width: 100%;">
+                        <button type="button" id="${imageId + 3}" class="btn btn-label-primary btn-select"
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
+                        <input type="file" class="files layout-file3" accept="image/*,video/*" style="display: none;">
+                        <input type="text" class="paths layout-path3" style="display: none;" value="${item.pathImage3}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`);
+                            });
+                        }
                     })
                     .catch(error => {
                         console.error('Error loading user data:', error);
@@ -665,8 +744,8 @@
             const method = isEdit ? 'PUT' : 'POST';
             $('[data-i18n="builder.save"]').on('click', function () {
                 let formData = collectFormData();
-                // appendDropzoneFilesToFormData(myDropzone, formData, "filesDto");
-                saveRequest(url, method, formData)
+                appendDropzoneFilesToFormData(myDropZone, formData);
+                saveRequest(url, method, formData);
             });
 
             let imageId = 0;
@@ -678,37 +757,37 @@
             <a href="javascript:void(0);" class="ti ti-trash text-danger delete-layout" style="cursor: pointer;"></a>
         </div>
         <div class="col-12">
-            <label class="form-label">Название</label>
+            <label class="form-label" data-i18n="builder.layout.name">${translate('builder.layout.name')}</label>
             <input type="text" class="form-control layout-name" placeholder="Планировка 2к левое крыло">
         </div>
         <div class="col">
-            <label class="form-label">Цена от(м.кв)</label>
+            <label class="form-label" data-i18n="builder.layout.price">${translate('builder.layout.price')}</label>
             <input type="number" class="form-control layout-price" placeholder="500">
         </div>
         <div class="col">
-            <label class="form-label">Комнат</label>
+            <label class="form-label" data-i18n="builder.layout.room">${translate('builder.layout.room')}</label>
             <input type="number" class="form-control layout-rooms" placeholder="2">
         </div>
         <div class="col">
-            <label class="form-label">S общая(м.кв.)</label>
+            <label class="form-label" data-i18n="builder.layout.totalArea">${translate('builder.layout.totalArea')}</label>
             <input type="number" class="form-control layout-total-area" placeholder="36">
         </div>
         <div class="col">
-            <label class="form-label">S жилая(м.кв.)</label>
+            <label class="form-label" data-i18n="builder.layout.livingRoom">${translate('builder.layout.load')}</label>
             <input type="number" class="form-control layout-living-area" placeholder="21">
         </div>
         <div class="col">
-            <label class="form-label">S кухни(м.кв.)</label>
+            <label class="form-label" data-i18n="builder.layout.kitchenRoom">${translate('builder.layout.kitchenRoom')}</label>
             <input type="number" class="form-control layout-kitchen-area" placeholder="12">
         </div>
         <div class="col-12">
             <div class="form-check mt-4">
                 <input class="form-check-input layout-visible" type="checkbox">
-                <label class="form-check-label">Показать сайт</label>
+                <label class="form-check-label" data-i18n="builder.layout.showSite">${translate('builder.layout.showSite')}</label>
             </div>
         </div>
         <div class="col-md-4">
-            <label class="form-label">Описание:</label>
+            <label class="form-label" data-i18n="builder.layout.description">${translate('builder.layout.description')}</label>
             <textarea class="form-control layout-description" rows="3"></textarea>
         </div>
         <div class="col-12 mt-3">
@@ -716,9 +795,9 @@
                 <div class="col-md-4">
                     <div class="card h-100 p-2 text-center">
                         <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 304px;">
+                        style="height: 204px; width: 100%;">
                         <button type="button" id="${imageId + 1}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;">Загрузить</button>
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
                         <input type="file" class="form-control files layout-file1" accept="image/*,video/*" style="display: none;">
                         <input type="text" class="paths layout-path1" style="display: none;">
                     </div>
@@ -726,9 +805,9 @@
                 <div class="col-md-4">
                     <div class="card h-100 p-2 text-center">
                         <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 304px;">
+                        style="height: 204px; width: 100%;">
                         <button type="button" id="${imageId + 2}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;">Загрузить</button>
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
                         <input type="file" class="files layout-file2" accept="image/*,video/*" style="display: none;">
                         <input type="text" class="paths layout-path2" style="display: none;">
                     </div>
@@ -736,9 +815,9 @@
                 <div class="col-md-4">
                     <div class="card h-100 p-2 text-center">
                         <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 304px;">
+                        style="height: 204px; width: 100%;">
                         <button type="button" id="${imageId + 3}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;">Загрузить</button>
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
                         <input type="file" class="files layout-file3" accept="image/*,video/*" style="display: none;">
                         <input type="text" class="paths layout-path3" style="display: none;">
                     </div>
@@ -756,15 +835,23 @@
                     e.target.closest('.layout-block').remove();
                 }
             });
+
+            document.querySelectorAll('input.file-pdf').forEach(input => {
+                input.setAttribute('accept', 'application/pdf, .pdf');
+            });
         });
 
+        function substringFilePath(path) {
+            if (!path) return;
+            return path.split('/').pop();
+        }
 
         function appendDropzoneFilesToFormData(dropzoneInstance, formData) {
             dropzoneInstance.files.forEach(function (file, index) {
-                if (file.path !== undefined && file.path !== '') {
-                    formData.append(`filesDto[${index}].path`, file.path);
-                } else {
+                if (file instanceof File) {
                     formData.append(`filesDto[${index}].file`, file);
+                } else {
+                    formData.append(`filesDto[${index}].pathImage`, file.dataURL);
                 }
             });
         }
@@ -817,9 +904,9 @@
                     formData.append(`${prefix}.file3`, file3);
                 }
 
-                formData.append(`${prefix}.path1`, $block.find('.layout-path1').val());
-                formData.append(`${prefix}.path2`, $block.find('.layout-path2').val());
-                formData.append(`${prefix}.path3`, $block.find('.layout-path2').val());
+                formData.append(`${prefix}.pathImage1`, $block.find('.layout-path1').val());
+                formData.append(`${prefix}.pathImage2`, $block.find('.layout-path2').val());
+                formData.append(`${prefix}.pathImage3`, $block.find('.layout-path3').val());
             });
 
             return formData;

@@ -242,6 +242,7 @@
     }
   },
   "builder": {
+    "viewBuilder": "Перегляд будинку",
     "editBuilder": "Редагування будинку",
     "name": "Назва",
     "namePlaceHolder": "Житловий комплекс Рів'єра Сіті",
@@ -271,7 +272,17 @@
     "selectDistrict": "Оберіть район",
     "selectTopozone": "Оберіть топозону",
     "gallery": "Галерея",
-    "layouts": "Планування"
+    "layout": {
+      "name": "Планування",
+      "price": "Ціна від (м²)",
+      "room": "Кімнат",
+      "totalArea": "Загальна площа (м²)",
+      "livingRoom": "Житлова площа (м²)",
+      "kitchenRoom": "Кухонна площа (м²)",
+      "showSite": "Показати на сайті",
+      "description": "Опис:",
+      "load": "Завантажити"
+    }
   },
   "deliveryType": {
     "selectDeliveryType": "Оберіть тип доставки",
@@ -285,5 +296,10 @@
   },
   "main": "Головна",
   "gallery": "Галерея",
-  "planning": "Планіровка"
+  "planning": "Планіровка",
+  "addPlaning": "Додати планування",
+  "viewChessboard": "Переглянути шахматку",
+  "viewInstallmentTerms": "Переглянути умови розстрочки",
+  "viewPrices": "Переглянути ціни",
+  "edit": "Редагувати"
 }

@@ -12,7 +12,7 @@ class GenericAPIService {
             const response = await fetch(url, options);
             if (!response.ok) {
                 const errorData = await this._parseErrorResponse(response);
-                throw { status: response.status, data: errorData };
+                throw {status: response.status, data: errorData};
             }
             return await this._parseResponse(response);
         } catch (error) {
@@ -32,7 +32,7 @@ class GenericAPIService {
         try {
             return await response.json();
         } catch {
-            return { message: 'Failed to parse error response' };
+            return {message: 'Failed to parse error response'};
         }
     }
 
@@ -66,13 +66,13 @@ class GenericAPIService {
 
     delete(id) {
         const endpoint = this.endpoints.delete.replace('{id}', id);
-        return this.request(endpoint, { method: 'DELETE' });
+        return this.request(endpoint, {method: 'DELETE'});
     }
 
     _prepareBody(method, data, entityType) {
         let options = {
             method: method,
-            headers: { 'Accept': 'application/json' }
+            headers: {'Accept': 'application/json'}
         };
 
         if (entityType === 'formdata') {
@@ -193,13 +193,22 @@ class Pagination {
 
 
 class GenericTable {
-    constructor({ tableBodyId, columns, onEdit, onDelete, noDataText = 'No data', editUrl = '/edit/' }) {
+    constructor({
+                    tableBodyId,
+                    columns,
+                    onEdit,
+                    onDelete,
+                    noDataText = 'No data',
+                    editUrl = '/edit/',
+                    viewUrl = '/view/'
+                }) {
         this.tableBody = document.getElementById(tableBodyId);
         this.columns = columns;
         this.onEdit = onEdit;
         this.onDelete = onDelete;
         this.noDataText = noDataText;
         this.editUrl = editUrl;
+        this.viewUrl = viewUrl;
 
         if (!this.tableBody) {
             console.error(`Table body with ID "${tableBodyId}" not found.`);
@@ -227,6 +236,8 @@ class GenericTable {
     _createActionButton(action, id, iconClass, className) {
         if (action === 'edit') {
             return `<a href="${this.editUrl}${id}" class="btn btn-sm ${className}"><i class="${iconClass}"></i></a>`;
+        } else if (action === 'view' && this.viewUrl) {
+            return `<a href="${this.viewUrl}${id}" class="btn btn-sm ${className}"><i class="${iconClass}"></i></a>`;
         }
         return `<button class="btn btn-sm ${className}" data-action="${action}" data-id="${id}"><i class="${iconClass}"></i></button>`;
     }
@@ -247,12 +258,12 @@ class GenericTable {
         });
 
         const actionCell = `
-            <td class="text-center action-buttons">
-                ${this._createActionButton('edit', item.id, 'ti ti-pencil', 'btn-warning me-2')}
-                ${this._createActionButton('delete', item.id, 'ti ti-trash', 'btn-danger')}
-            </td>
-        `;
-
+    <td class="text-center action-buttons">
+        ${this.viewUrl ? this._createActionButton('view', item.id, 'ti ti-eye', 'btn-info me-2') : ''}
+        ${this._createActionButton('edit', item.id, 'ti ti-pencil', 'btn-warning me-2')}
+        ${this._createActionButton('delete', item.id, 'ti ti-trash', 'btn-danger')}
+    </td>
+`;
         row.innerHTML = cells + actionCell;
 
         const actionTd = row.querySelector('td.action-buttons');
@@ -267,9 +278,9 @@ class GenericTable {
         if (deleteButton) {
             const id = deleteButton.getAttribute('data-id');
             deleteButton.addEventListener('click', () => {
-                 if (this.onDelete) {
-                     this.onDelete(id);
-                 }
+                if (this.onDelete) {
+                    this.onDelete(id);
+                }
             });
         }
 
@@ -343,7 +354,8 @@ class GenericCRUDApp {
             tableBodyId: config.tableBodyId,
             columns: config.columns,
             onDelete: this.handleDelete.bind(this),
-            editUrl: config.editUrl || '/edit/'
+            editUrl: config.editUrl || '/edit/',
+            viewUrl: config.viewUrl || null
         });
         this.pagination = new Pagination(config.paginationId, this.handlePageChange.bind(this));
         this.deleteConfirmModal = new GenericDeleteConfirmModal(
@@ -468,7 +480,7 @@ class GenericCRUDApp {
                 this.pagination.setup(adjustedData.totalPages, this.currentPage);
             } else {
                 if (data.totalPages === 0) {
-                   this.currentPage = 0;
+                    this.currentPage = 0;
                 }
                 this.table.populate(data.content);
                 this.pagination.setup(data.totalPages, this.currentPage);
@@ -476,7 +488,7 @@ class GenericCRUDApp {
         } catch (error) {
             console.error('Error fetching or rendering data:', error);
             if (error && error.data && error.data[this.notificationKeyword]) {
-                this.showToast('error', this.i18nKeys.fetchErrorApi, null, { message: error.data[this.notificationKeyword] });
+                this.showToast('error', this.i18nKeys.fetchErrorApi, null, {message: error.data[this.notificationKeyword]});
             } else {
                 this.showToast('error', this.i18nKeys.fetchErrorGeneric);
             }
@@ -516,9 +528,9 @@ class GenericCRUDApp {
         } catch (error) {
             console.error('Error during deletion:', error);
             if (error && error.data && error.data[this.notificationKeyword]) {
-                this.showToast('error', this.i18nKeys.deleteErrorApi, 'personal.personal', { message: error.data[this.notificationKeyword] });
+                this.showToast('error', this.i18nKeys.deleteErrorApi, 'personal.personal', {message: error.data[this.notificationKeyword]});
             } else if (error && error.status) {
-                this.showToast('error', this.i18nKeys.deleteErrorStatus, 'personal.personal', { status: error.status });
+                this.showToast('error', this.i18nKeys.deleteErrorStatus, 'personal.personal', {status: error.status});
             } else {
                 this.showToast('error', this.i18nKeys.deleteErrorGeneric, 'personal.personal');
             }
@@ -532,7 +544,7 @@ class GenericCRUDApp {
         }
 
         // Получаем локализованное сообщение для toast
-        const title = i18next.t(this.i18nKeys[type + 'Title'], { defaultValue: 'Error' });
+        const title = i18next.t(this.i18nKeys[type + 'Title'], {defaultValue: 'Error'});
         const message = i18next.t(messageKey, {
             ...extraParams,
             entity: i18next.t(entityNameKey || this.entityName)

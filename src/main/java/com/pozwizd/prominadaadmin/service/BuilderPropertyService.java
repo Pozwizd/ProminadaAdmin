@@ -1,6 +1,7 @@
 package com.pozwizd.prominadaadmin.service;
 
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
+import com.pozwizd.prominadaadmin.models.builderProperty.BuilderForView;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
 import org.springframework.data.domain.Page;
@@ -16,9 +17,14 @@ public interface BuilderPropertyService {
 
     BuilderPropertyDto getByIdInDto(Long id);
 
+    BuilderForView getByIdInDtoForView(Long id);
+
     BuilderProperty save(BuilderProperty builderProperty);
 
     BuilderProperty save(BuilderPropertyDto dto);
 
     List<BuilderProperty> getAll();
+
+    public BuilderProperty update(BuilderPropertyDto dto);
+
 }

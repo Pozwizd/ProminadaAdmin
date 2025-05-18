@@ -107,7 +107,8 @@
                             <div class="col-md-3">
                                 <label for="cityId" class="form-label" data-i18n="builder.city">Нас. пункт</label>
                                 <select class="form-select" id="cityId" required disabled>
-                                    <option value="" data-i18n="builder.selectCity" selected>Выберите нас. пункт</option>
+                                    <option value="" data-i18n="builder.selectCity" selected>Выберите нас. пункт
+                                    </option>
                                 </select>
                             </div>
 
@@ -122,7 +123,8 @@
                             <div class="col-md-3">
                                 <label for="topozoneId" class="form-label" data-i18n="builder.topozone">Топозона</label>
                                 <select class="form-select" id="topozoneId" required disabled>
-                                    <option value="" data-i18n="builder.selectTopozone" selected>Выберите топзону</option>
+                                    <option value="" data-i18n="builder.selectTopozone" selected>Выберите топзону
+                                    </option>
                                 </select>
                             </div>
 
@@ -207,29 +209,24 @@
                             <div class="col-md-4">
                                 <label for="chessPlanFile" class="form-label"
                                        data-i18n="builder.chessPlan">Шахматка</label>
-                                <input type="file" class="form-control file-hidden" id="chessPlanFile"
+                                <input type="file" class="form-control file-hidden file-pdf" id="chessPlanFile"
                                        data-error="chessPlanFile">
-                                <!--                                <button type="button" data-type="fileImage" class="btn btn-success btn-image btn-select"-->
-                                <!--                                        style="left: 13%;"></button>-->
-                                <!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
                             <div class="col-md-4">
                                 <label for="mortgageConditionsFile" class="form-label"
                                        data-i18n="builder.mortgageConditions">Условия
                                     рассрочки</label>
-                                <input type="file" class="form-control file-hidden" id="mortgageConditionsFile"
+                                <input type="file" class="form-control file-hidden file-pdf" id="mortgageConditionsFile"
                                        data-error="mortgageConditionsFile">
-                                <!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
 
                             <div class="col-md-4">
                                 <label for="priceFile" class="form-label" data-i18n="builder.priceFile">Файл с
                                     ценами</label>
-                                <input type="file" class="form-control file-hidden" id="priceFile"
+                                <input type="file" class="form-control file-hidden file-pdf" id="priceFile"
                                        data-error="priceFile">
-                                <!--                                <button type="button" class="btn btn-primary uploadButton" data-i18n="file.select">Виберіть файл</button>-->
                             </div>
                             <div class="col-md-8"></div>
 
@@ -314,7 +311,8 @@
                     <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
                         <div id="layoutsContainer" class="row"></div>
                         <div class="col-12 mt-4 text-end">
-                            <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="">Добавить планировку
+                            <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="addPlaning">Добавить
+                                планировку
                             </button>
                         </div>
                         <div class="col-12 mt-4 text-end">
@@ -617,7 +615,7 @@
             const method = isEdit ? 'PUT' : 'POST';
             $('[data-i18n="builder.save"]').on('click', function () {
                 let formData = collectFormData();
-                appendDropzoneFilesToFormData(myDropzone, formData, "filesDto");
+                appendDropzoneFilesToFormData(myDropzone, formData);
                 saveRequest(url, method, formData)
             });
 
@@ -630,37 +628,38 @@
             <a href="javascript:void(0);" class="ti ti-trash text-danger delete-layout" style="cursor: pointer;"></a>
         </div>
         <div class="col-12">
-            <label class="form-label">Название</label>
+            <label class="form-label" data-i18n="builder.name">${translate('builder.name')}</label>
             <input type="text" class="form-control layout-name" placeholder="Планировка 2к левое крыло">
         </div>
         <div class="col">
-            <label class="form-label">Цена от(м.кв)</label>
+            <label class="form-label" data-i18n="builder.layout.price">${translate('builder.layout.price')}</label>
             <input type="number" class="form-control layout-price" placeholder="500">
         </div>
         <div class="col">
-            <label class="form-label">Комнат</label>
+            <label class="form-label" data-i18n="builder.layout.room">${translate('builder.layout.room')}</label>
             <input type="number" class="form-control layout-rooms" placeholder="2">
         </div>
         <div class="col">
-            <label class="form-label">S общая(м.кв.)</label>
+            <label class="form-label" data-i18n="builder.layout.totalArea">${translate('builder.layout.totalArea')}</label>
             <input type="number" class="form-control layout-total-area" placeholder="36">
         </div>
         <div class="col">
-            <label class="form-label">S жилая(м.кв.)</label>
+            <label class="form-label" data-i18n="builder.layout.livingRoom">${translate('builder.layout.livingRoom')}</label>
             <input type="number" class="form-control layout-living-area" placeholder="21">
         </div>
         <div class="col">
-            <label class="form-label">S кухни(м.кв.)</label>
+            <label class="form-label" data-i18n="builder.layout.kitchenRoom">${translate('builder.layout.kitchenRoom')}</label>
             <input type="number" class="form-control layout-kitchen-area" placeholder="12">
         </div>
         <div class="col-12">
             <div class="form-check mt-4">
                 <input class="form-check-input layout-visible" type="checkbox">
-                <label class="form-check-label">Показать сайт</label>
+                <label class="form-check-label" data-i18n="builder.layout.showSite">
+${translate('builder.layout.showSite')}</label>
             </div>
         </div>
         <div class="col-md-4">
-            <label class="form-label">Описание:</label>
+            <label class="form-label" data-i18n="builder.layout.description">${translate('builder.layout.description')}</label>
             <textarea class="form-control layout-description" rows="3"></textarea>
         </div>
         <div class="col-12 mt-3">
@@ -668,9 +667,9 @@
                 <div class="col-md-4">
                     <div class="card h-100 p-2 text-center">
                         <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 304px;">
+                        style="height: 204px; width: 100%;">
                         <button type="button" id="${imageId + 1}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;">Загрузить</button>
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
                         <input type="file" class="form-control files layout-file1" accept="image/*,video/*" style="display: none;">
                         <input type="text" class="paths layout-path1" style="display: none;">
                     </div>
@@ -678,9 +677,9 @@
                 <div class="col-md-4">
                     <div class="card h-100 p-2 text-center">
                         <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 304px;">
+                        style="height: 204px; width: 100%;">
                         <button type="button" id="${imageId + 2}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;">Загрузить</button>
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
                         <input type="file" class="files layout-file2" accept="image/*,video/*" style="display: none;">
                         <input type="text" class="paths layout-path2" style="display: none;">
                     </div>
@@ -688,9 +687,9 @@
                 <div class="col-md-4">
                     <div class="card h-100 p-2 text-center">
                         <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 304px;">
+                        style="height: 204px; width: 100%;">
                         <button type="button" id="${imageId + 3}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;">Загрузить</button>
+                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
                         <input type="file" class="files layout-file3" accept="image/*,video/*" style="display: none;">
                         <input type="text" class="paths layout-path3" style="display: none;">
                     </div>
@@ -707,6 +706,14 @@
                 if (e.target.classList.contains('delete-layout')) {
                     e.target.closest('.layout-block').remove();
                 }
+            });
+
+            document.querySelectorAll('input[type="file"].files').forEach(input => {
+                input.setAttribute('accept', 'application/pdf, .pdf');
+            });
+
+            document.querySelectorAll('input.file-pdf').forEach(input => {
+                input.setAttribute('accept', 'application/pdf, .pdf');
             });
         });
 

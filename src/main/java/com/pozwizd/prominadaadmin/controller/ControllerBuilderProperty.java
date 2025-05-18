@@ -1,6 +1,7 @@
 package com.pozwizd.prominadaadmin.controller;
 
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
+import com.pozwizd.prominadaadmin.models.builderProperty.BuilderForView;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
 import com.pozwizd.prominadaadmin.service.BuilderPropertyService;
@@ -40,10 +41,10 @@ public class ControllerBuilderProperty {
 
     @ResponseBody
     @GetMapping("/getAllBuilders")
-    public Page<BuilderPropertyDtoForTable> getPageablePersonal(@RequestParam(defaultValue = "0") int page,
-                                                                @ModelAttribute BuilderPropertyDtoForTable dto,
-                                                                @RequestParam(defaultValue = "10") Integer size) {
-        return builderPropertyService.getPageableBuilders(page, size, dto);
+    public ResponseEntity<Page<BuilderPropertyDtoForTable>> getPageablePersonal(@RequestParam(defaultValue = "0") int page,
+                                                                                @ModelAttribute BuilderPropertyDtoForTable dto,
+                                                                                @RequestParam(defaultValue = "10") Integer size) {
+        return new ResponseEntity<>(builderPropertyService.getPageableBuilders(page, size, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -99,7 +100,7 @@ public class ControllerBuilderProperty {
                     .body(errors);
         }
         dto.setId(id);
-        BuilderProperty product = builderPropertyService.save(dto);
+        BuilderProperty product = builderPropertyService.update(dto);
         return ResponseEntity.ok(Map.of(
                 "success", true,
                 "message", "Успішно збережено"
@@ -113,6 +114,13 @@ public class ControllerBuilderProperty {
         model.addAttribute("pageActive", "builder");
         model.addAttribute("isEdit", true);
         return new ModelAndView("builderProperty/builder-edit");
+    }
+
+    @GetMapping("/view/{id}")
+    public ModelAndView showBuilderProperty(@PathVariable Long id, Model model) {
+        model.addAttribute("pageActive", "builder");
+        model.addAttribute("id",id);
+        return new ModelAndView("builderProperty/builder-view");
     }
 
     @Autowired
@@ -130,6 +138,12 @@ public class ControllerBuilderProperty {
     @ResponseBody
     public ResponseEntity<BuilderPropertyDto> getPersonal(@PathVariable Long id) {
         return ResponseEntity.ok(builderPropertyService.getByIdInDto(id));
+    }
+
+    @GetMapping("/{id}/view")
+    @ResponseBody
+    public ResponseEntity<BuilderForView> getBuilderForView(@PathVariable Long id) {
+        return ResponseEntity.ok(builderPropertyService.getByIdInDtoForView(id));
     }
 
     // @PostMapping

@@ -6,7 +6,7 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
-<!--th:text="${title}"-->
+    <!--th:text="${title}"-->
     <title th:data-i18n="${pageTitle}">Prominada</title>
 
     <meta name="description" content="" />
@@ -61,4 +61,25 @@
     <script th:src="@{/assets/vendor/js/template-customizer.js}"></script>
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script th:src="@{/assets/js/config.js}"></script>
+
+
+    <style>
+        @media print {
+            .print-page {
+                page-break-after: always;
+            }
+            .print-page:last-child {
+                page-break-after: auto;
+            }
+            .print-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .print-table th, .print-table td {
+                border: 1px solid #000;
+                padding: 8px;
+                text-align: left;
+            }
+        }
+    </style>
 </head>

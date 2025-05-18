@@ -26,11 +26,20 @@ public class BuilderPropertyDto {
     private String pathToChessPlanFile;
     private String pathToMortgageConditionsFile;
     private String pathToPriceFile;
-    @MediaValidation(message = "error.file.valid", allowedTypes = {"image/png", "image/jpg", "image/jpeg"})
+    @MediaValidation(message = "error.file.valid", allowedTypes = {
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/pdf"})
     private MultipartFile chessPlanFile;
-    @MediaValidation(message = "error.file.valid", allowedTypes = {"image/png", "image/jpg", "image/jpeg"})
+    @MediaValidation(message = "error.file.valid", allowedTypes = {
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/pdf"})
     private MultipartFile mortgageConditionsFile;
-    @MediaValidation(message = "error.file.valid", allowedTypes = {"image/png", "image/jpg", "image/jpeg"})
+    @MediaValidation(message = "error.file.valid", allowedTypes = {
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/pdf"})
     private MultipartFile priceFile;
     private String cityId;
     private String districtId;

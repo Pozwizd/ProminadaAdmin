@@ -86,6 +86,7 @@ public class PersonalServiceImp implements PersonalService {
     @Transactional
     @Override
     public Personal save(Personal personal) {
+        if(personal.getPassword()!=null)
         personal.setPassword(passwordEncoder.encode(personal.getPassword()));
         return personalRepository.save(personal);
     }

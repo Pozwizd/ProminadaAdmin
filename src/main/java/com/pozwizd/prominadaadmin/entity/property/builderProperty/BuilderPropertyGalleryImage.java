@@ -15,6 +15,8 @@ public class BuilderPropertyGalleryImage {
 
     private String pathImage;
 
+    private String size;
+
     @ManyToOne
     @JoinColumn(name = "builder_property_id")
     private BuilderProperty builderProperty;
