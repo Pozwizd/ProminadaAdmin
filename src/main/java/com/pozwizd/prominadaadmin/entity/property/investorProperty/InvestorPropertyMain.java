@@ -44,7 +44,7 @@ public class InvestorPropertyMain {
     private Double price;
 
     // Срок сдачи
-    private DeliveryDate deliveryDate;
+    private DeliveryType deliveryDate;
 
     // Дата ввода в эксплуатацию
     private LocalDate commissioningDate;

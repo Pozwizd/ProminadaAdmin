@@ -31,12 +31,8 @@ public interface BuilderPropertySpecification {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("street")), "%" + dto.getStreet().toLowerCase() + "%"));
             }
             if (StringUtils.hasText(dto.getTotalFloor())) {
-                predicates.add(criteriaBuilder.like(root.get("totalFloor"), "%" + dto.getTotalFloor() + "%"));
+                predicates.add(criteriaBuilder.equal(root.get("totalFloor"), dto.getTotalFloor()));
             }
-//            if (StringUtils.hasText(dto.getPriceFrom())) {
-//                predicates.add(criteriaBuilder.greaterThanOrEqualTo((root.get("builderPropertyLayouts").get("priceByM2")), Double.parseDouble(dto.getPriceFrom())));
-//            }
-
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }

@@ -22,6 +22,7 @@ public interface RealtorService {
     void deleteById(Long id);
 
     Page<RealtorTableResponse> getPageableRealtor(int page, Integer size,
+                                                  String id,
                                                   String code,
                                                   String fullName,
                                                   String email,

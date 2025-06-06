@@ -34,39 +34,44 @@ function loadBranchesSelect(selectedBranchIds = []) {
 }
 
 function loadRolesSelect() {
-    const selectElement = document.getElementById('rolePersonal');
+    const selectElement = document.getElementById('rolerealtor');
     selectElement.innerHTML = '<option value="" disabled selected>' + i18next.t('loading') + '</option>';
 
-    axios.get(`${contextPath}personal/getRoles`)
-        .then(function (response) {
-            selectElement.innerHTML = '<option value="" data-i18n="selectRole" disabled selected>' + i18next.t('selectRole') + '</option>';
-
-            if (response.data && Array.isArray(response.data)) {
-                response.data.forEach(function (role) {
-                    const option = document.createElement('option');
-                    // Сохраняем оригинальное значение enum в value
-                    option.setAttribute("data-i18n", role);
-                    option.value = role;
-                    // Используем i18n для перевода
-                    option.textContent = i18next.t(role);
-                    selectElement.appendChild(option);
-                });
-            } else {
-                console.error('Неверный формат данных ролей', response.data);
-                selectElement.innerHTML = '<option value="" disabled selected >' + i18next.t('errorLoadingRoles') + '</option>';
-            }
-        })
-        .catch(function (error) {
-            console.error('Ошибка при загрузке ролей:', error);
-            selectElement.innerHTML = '<option value="" disabled selected >' + i18next.t('errorLoadingRoles') + '</option>';
-        });
+    // axios.get(`${contextPath}realtor/getRoles`)
+    //     .then(function (response) {
+    //         selectElement.innerHTML = '<option value="" data-i18n="selectRole" disabled selected>' + i18next.t('selectRole') + '</option>';
+    //
+    //         if (response.data && Array.isArray(response.data)) {
+    //             response.data.forEach(function (role) {
+    //                 const option = document.createElement('option');
+    //                 // Сохраняем оригинальное значение enum в value
+    //                 option.setAttribute("data-i18n", role);
+    //                 option.value = role;
+    //                 // Используем i18n для перевода
+    //                 option.textContent = i18next.t(role);
+    //                 selectElement.appendChild(option);
+    //             });
+    //         } else {
+    //             console.error('Неверный формат данных ролей', response.data);
+    //             selectElement.innerHTML = '<option value="" disabled selected >' + i18next.t('errorLoadingRoles') + '</option>';
+    //         }
+    //     })
+    //     .catch(function (error) {
+    //         console.error('Ошибка при загрузке ролей:', error);
+    //         selectElement.innerHTML = '<option value="" disabled selected >' + i18next.t('errorLoadingRoles') + '</option>';
+    //     });
 }
 
 
 loadBranchesSelect();
 
 document.addEventListener('DOMContentLoaded', function () {
-    loadRolesSelect();
+    // loadRolesSelect();
+    var flatpickrDate = document.querySelector("#dateOfBirthday");
+    flatpickrDate.flatpickr({
+        monthSelectorType: "static",
+        dateFormat: "d.M.y"
+    });
 });
 
 
@@ -97,7 +102,6 @@ fileInput.addEventListener('change', (e) => {
 
 
 function getFileIcon(file) {
-
     if (file.file && file.file.type) {
         if (file.file.type.startsWith('image/')) return '<i class="ti ti-photo me-2"></i>';
         if (file.file.type === 'application/pdf') return '<i class="ti ti-file-text me-2"></i>';
@@ -112,15 +116,12 @@ function renderFiles() {
         let downloadUrl;
         let fileIcon = '<i class="ti ti-file me-2"></i>';
         let fileName = file.name;
-
-
         if (file.file) {
-
             downloadUrl = URL.createObjectURL(file.file);
             fileIcon = getFileIcon(file);
         } else if (file.id) {
             // Это файл с сервера
-            downloadUrl = `${contextPath}personal/documents/${file.id}/download`;
+            downloadUrl = `${contextPath}realtor/documents/${file.id}/download`;
             // Определяем иконку по расширению файла
             if (file.name.toLowerCase().endsWith('.pdf')) {
                 fileIcon = '<i class="ti ti-file-text me-2"></i>';
@@ -159,19 +160,21 @@ window.deleteFile = function (idx) {
 
 
 function fillFormData(data) {
-    document.getElementById('userId').value = data.id || '';
+    console.log(data);
+    document.getElementById('realtorId').value = data.id || '';
     document.getElementById('surname').value = data.surname || '';
+    document.getElementById('code').value = data.code || '';
     document.getElementById('name').value = data.name || '';
     document.getElementById('lastName').value = data.lastName || '';
-    document.getElementById('phoneNumber').value = data.phoneNumber || '';
     document.getElementById('email').value = data.email || '';
 
-    const roleElement = document.getElementById('rolePersonal');
-    if (data.role) {
-        roleElement.value = data.role;
-    } else {
-        console.log('Role not found');
-        roleElement.value = 'ADMIN';
+    const flatpickrInstance = flatpickr("#dateOfBirthday", {
+        monthSelectorType: "static",
+        dateFormat: "d.M.y"
+    });
+
+    if (data.dateOfBirthday) {
+        flatpickrInstance.setDate(data.dateOfBirthday, true);
     }
 
     let selectedBranchIds = [];
@@ -179,7 +182,6 @@ function fillFormData(data) {
         selectedBranchIds = data.branches.map(b => String(b.id));
     }
     loadBranchesSelect(selectedBranchIds);
-    console.log(window.contextPath + data.pathAvatar);
     if (data.pathAvatar) {
         console.log(window.contextPath + data.pathAvatar);
         document.getElementById('uploadedAvatar').src = window.contextPath + data.pathAvatar;
@@ -187,6 +189,7 @@ function fillFormData(data) {
 
     // Заполнение отзывов
     if (data.feedBacks && data.feedBacks.length > 0) {
+        console.log(data.feedBacks);
         const container = document.getElementById('reviewSectionsContainer');
         container.innerHTML = '';
         data.feedBacks.forEach((feedback, index) => {
@@ -208,25 +211,34 @@ function fillFormData(data) {
         });
         renderFiles();
     }
+
+    if (data.phoneNumbers && data.phoneNumbers.length > 0) {
+        data.phoneNumbers.forEach(function (item) {
+            // console.log(item);
+            addPhoneBlock(item.phoneNumber, item.contactType.toLowerCase());
+        });
+    }
 }
 
-async function loadPersonalData(userId) {
+async function loadRealtorData(realtorId) {
     try {
-        const response = await axios.get(`${contextPath}personal/${userId}`);
-        console.log(response.data);
+        const response = await axios.get(`${contextPath}realtor/${realtorId}`);
+        // console.log(response.data);
         fillFormData(response.data);
     } catch (error) {
-        console.error('Error loading personal data:', error);
+        console.error('Error loading realtor data:', error);
     }
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    const userId = new URLSearchParams(window.location.search).get('id') ||
-        window.location.pathname.split('/').filter(Boolean).pop();
-    const isEditMode = Boolean(userId);
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const realtorId = pathParts[pathParts.length - 1];
+    const isEditMode = pathParts.includes('edit');
 
+    // console.log(realtorId);
+    // console.log(isEditMode);
     if (isEditMode) {
-        loadPersonalData(userId);
+        loadRealtorData(realtorId);
     } else {
         loadBranchesSelect();
     }
@@ -237,6 +249,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 function createReviewSection(index, feedback = {}) {
+    console.log(feedback);
     const section = document.createElement('div');
     section.className = 'review-section mb-4 border p-3 rounded position-relative';
     section.innerHTML = `
@@ -257,7 +270,7 @@ function createReviewSection(index, feedback = {}) {
             </div>
             <div class="mb-3">
                 <label for="reviewText${index}" data-i18n="reviewLabel" class="form-label">Feedback</label>
-                <textarea class="form-control" id="reviewText${index}" rows="3">${feedback.text || ''}</textarea>
+                <textarea class="form-control" id="reviewText${index}" rows="3">${feedback.description || ''}</textarea>
             </div>
         `;
     return section;
@@ -291,9 +304,9 @@ function setupFormSubmission() {
         e.preventDefault();
 
         const formData = new FormData(form);
-        const userId = formData.get('userId');
-        const url = `${contextPath}personal${userId ? `/${userId}` : ''}`;
-        const method = userId ? 'put' : 'post';
+        const realtorId = formData.get('realtorId');
+        const url = `${contextPath}realtor${realtorId ? `/${realtorId}` : ''}`;
+        const method = realtorId ? 'put' : 'post';
 
         try {
             const response = await axios[method](url, Object.fromEntries(formData), {
@@ -302,9 +315,9 @@ function setupFormSubmission() {
                 }
             });
 
-            window.location.href = `${contextPath}personal`;
+            window.location.href = `${contextPath}realtor`;
         } catch (error) {
-            console.error('Error saving personal data:', error);
+            console.error('Error saving realtor data:', error);
         }
     });
 }
@@ -349,7 +362,7 @@ function setupFileUpload() {
 
 async function downloadDocument(docId) {
     try {
-        const response = await axios.get(`${contextPath}personal/documents/${docId}/download`, {
+        const response = await axios.get(`${contextPath}realtor/documents/${docId}/download`, {
             responseType: 'blob'
         });
 
@@ -371,7 +384,7 @@ async function deleteDocument(docId) {
     if (!confirm('Вы уверены, что хотите удалить этот документ?')) return;
 
     try {
-        await axios.delete(`${contextPath}personal/documents/${docId}`);
+        await axios.delete(`${contextPath}realtor/documents/${docId}`);
         const fileIndex = files.findIndex(file => file.id === parseInt(docId) || file.id === docId);
         if (fileIndex !== -1) {
             files.splice(fileIndex, 1);
@@ -457,15 +470,15 @@ function collectFormData() {
 
     const formData = new FormData();
 
-    const userId = document.getElementById('userId').value;
-    if (userId) formData.append('id', userId);
+    const realtorId = document.getElementById('realtorId').value;
+    if (realtorId) formData.append('id', realtorId);
 
-    formData.append('surname', document.getElementById('surname').value);
+    formData.append('code', document.getElementById('code').value);
+    formData.append('dateOfBirthday', document.getElementById('dateOfBirthday').value);
     formData.append('name', document.getElementById('name').value);
+    formData.append('surname', document.getElementById('surname').value);
     formData.append('lastName', document.getElementById('lastName').value);
-    formData.append('phoneNumber', document.getElementById('phoneNumber').value);
     formData.append('email', document.getElementById('email').value);
-    formData.append('role', document.getElementById('rolePersonal').value);
 
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
@@ -515,6 +528,19 @@ function collectFormData() {
             formData.append(`feedBacks[${index}].name`, nameInput.value);
             formData.append(`feedBacks[${index}].phoneNumber`, contactInput.value);
             formData.append(`feedBacks[${index}].description`, textArea.value);
+        }
+    });
+
+    const phoneRows = document.querySelectorAll('#container-phones > .row');
+    phoneRows.forEach((row, index) => {
+        const phoneInput = row.querySelector(`input[id="phoneNumbers[${index}].phoneNumber"]`);
+        const contactTypeSelect = row.querySelector(`select[id="phoneNumbers[${index}].contactType"]`);
+
+        console.log(phoneInput.value);
+        console.log(contactTypeSelect.value);
+        if (phoneInput && contactTypeSelect) {
+            formData.append(`phoneNumbers[${index}].phoneNumber`, phoneInput.value);
+            formData.append(`phoneNumbers[${index}].contactType`, contactTypeSelect.value);
         }
     });
 
@@ -579,19 +605,18 @@ function displayValidationErrors(errors) {
                     fieldElement.classList.add('is-invalid');
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'error-message invalid-feedback';
-                    const errorKey = `personal.validation.${errorMessage}`;
+                    const errorKey = `realtor.validation.${errorMessage}`;
                     errorDiv.setAttribute('data-i18n', errorKey);
-
-                    const { code, params } = errorMessage;
-                    errorDiv.textContent = i18next.t(`personal.validation.${code}`, params);
-
+                    errorDiv.textContent = i18next.t(errorKey);
                     fieldElement.parentNode.appendChild(errorDiv);
                 } else if (fieldPath === 'branchIds') {
                     const select2Container = document.querySelector('.select2-container');
                     if (select2Container) {
                         const errorSpan = document.createElement('div');
                         errorSpan.className = 'error-message text-danger mt-1';
-                        errorSpan.textContent = i18next.t(errorMessage);
+                        let errorKey = `realtor.validation.${errorMessage}`;
+                        errorSpan.setAttribute('data-i18n',errorKey);
+                        errorSpan.textContent = i18next.t(errorKey);
                         select2Container.parentNode.appendChild(errorSpan);
                     }
                 } else {
@@ -602,7 +627,7 @@ function displayValidationErrors(errors) {
     }
 
     if (hasFeedbackErrors) {
-        const testimonialsTab = document.querySelector('[data-bs-target="#testimonialsPersonal"]');
+        const testimonialsTab = document.querySelector('[data-bs-target="#testimonialsrealtor"]');
         if (testimonialsTab) {
             const tab = new bootstrap.Tab(testimonialsTab);
             tab.show();
@@ -614,9 +639,9 @@ function submitForm() {
     clearValidationErrors();
 
     const formData = collectFormData();
-    const userId = document.getElementById('userId').value;
-    const url = `${contextPath}personal${userId ? `/${userId}` : '/create'}`;
-    const method = userId ? 'put' : 'post';
+    const realtorId = document.getElementById('realtorId').value;
+    const url = `${contextPath}realtor${realtorId ? `/${realtorId}` : '/create'}`;
+    const method = realtorId ? 'put' : 'post';
 
     axios({
         method: method,
@@ -629,9 +654,9 @@ function submitForm() {
         .then(response => {
             showI18nToast('success',
                 'system.toast.title.success',
-                'personal.toast.update.successful');
+                'realtor.toast.update.successful');
             setTimeout(() => {
-                window.location.href = `${contextPath}personal`;
+                // window.location.href = `${contextPath}realtor`;
             }, 1500);
         })
         .catch(error => {
@@ -644,13 +669,13 @@ function submitForm() {
                     displayValidationErrors(error.response.data);
                 } else if (Array.isArray(error.response.data)) {
                     const errorMessages = error.response.data.map(err => err.defaultMessage || err.message).join('\n');
-                    showI18nToast('error', 'system.toast.title.error', 'personal.toast.update.error');
+                    showI18nToast('error', 'system.toast.title.error', 'realtor.toast.update.error');
                     console.log('Ошибка при сохранении: ' + errorMessages);
                 } else if (typeof error.response.data === 'string') {
-                    showI18nToast('error', 'system.toast.title.error', 'personal.toast.update.error');
+                    showI18nToast('error', 'system.toast.title.error', 'realtor.toast.update.error');
                     console.log('Ошибка: ' + error.response.data);
                 } else {
-                    showI18nToast('error', 'system.toast.title.error', 'personal.toast.update.error');
+                    showI18nToast('error', 'system.toast.title.error', 'realtor.toast.update.error');
                     console.log('Произошла ошибка при сохранении данных');
                 }
             } else {
@@ -692,4 +717,60 @@ document.addEventListener('DOMContentLoaded', function () {
             submitForm();
         });
     }
+});
+
+function addPhoneBlock(phoneValue = '', contactType = '') {
+    const container = document.getElementById('container-phones');
+
+    const rowBlock = document.createElement('div');
+    rowBlock.className = 'row align-items-end';
+
+    const phoneBlock = document.createElement('div');
+    phoneBlock.className = 'mb-3 col-md-4';
+    phoneBlock.innerHTML = `
+        <input class="form-control" type="text" name="phone${phoneCounter}" placeholder="202 555 0111" value="${phoneValue}" required 
+        id="phoneNumbers[${phoneCounter}].phoneNumber"/>
+    `;
+
+    const selectBlock = document.createElement('div');
+    selectBlock.className = 'mb-3 col-md-4';
+    selectBlock.innerHTML = `
+        <select class="selectpicker w-100" data-style="btn-default" name="contactType${phoneCounter}"
+       id="phoneNumbers[${phoneCounter}].contactType">
+            <option value="TELEGRAM" ${contactType === 'telegram' ? 'selected' : ''}>Telegram</option>
+            <option value="VIBER" ${contactType === 'viber' ? 'selected' : ''}>Viber</option>
+            <option value="WHATSAPP" ${contactType === 'whatsapp' ? 'selected' : ''}>Whatsapp</option>
+        </select>
+    `;
+
+    const blockLast = document.createElement('div');
+    blockLast.className = 'mb-3 col-md-4';
+    blockLast.innerHTML = `
+        <button type="button" class="btn btn-danger" title="Видалити">
+            <i class="fas fa-trash-alt"></i>
+        </button>
+    `;
+
+    blockLast.querySelector('button').addEventListener('click', function () {
+        rowBlock.remove();
+    });
+
+    rowBlock.appendChild(phoneBlock);
+    rowBlock.appendChild(selectBlock);
+    rowBlock.appendChild(blockLast);
+
+    container.appendChild(rowBlock);
+
+    const newSelect = selectBlock.querySelector('.selectpicker');
+    if (window.jQuery && $(newSelect).selectpicker) {
+        $(newSelect).selectpicker();
+    }
+
+    phoneCounter++;
+}
+
+let phoneCounter = 0;
+
+document.getElementById('btn-add-phone').addEventListener('click', function () {
+    addPhoneBlock();
 });

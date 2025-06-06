@@ -63,19 +63,17 @@ public class ControllerBuilderProperty {
 
     @SneakyThrows
     @PostMapping("/save")
-    public ResponseEntity<?> saveProduct(@ModelAttribute @Valid BuilderPropertyDto dto,
-                                         BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            Locale locale = LocaleContextHolder.getLocale();
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(),
-                    messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, locale)));
-            return ResponseEntity
-                    .status(HttpStatus.valueOf(400))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(errors);
-        }
+    public ResponseEntity<?> saveProduct(@ModelAttribute @Valid BuilderPropertyDto dto) {
+//        if (bindingResult.hasErrors()) {
+//            Locale locale = LocaleContextHolder.getLocale();
+//            Map<String, String> errors = new HashMap<>();
+//            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(),
+//                    messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, locale)));
+//            return ResponseEntity
+//                    .status(HttpStatus.valueOf(400))
+//                    .contentType(MediaType.APPLICATION_JSON)
+//                    .body(errors);
+//        }
         BuilderProperty product = builderPropertyService.save(dto);
         return ResponseEntity.ok(Map.of(
                 "success", true,
@@ -86,19 +84,7 @@ public class ControllerBuilderProperty {
     @SneakyThrows
     @PutMapping("/{id}/save")
     public ResponseEntity<?> updateProduct(@PathVariable Long id,
-                                           @ModelAttribute @Valid BuilderPropertyDto dto,
-                                           BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            Locale locale = LocaleContextHolder.getLocale();
-            Map<String, String> errors = new HashMap<>();
-            bindingResult.getFieldErrors().forEach(error -> errors.put(error.getField(),
-                    messageSource.getMessage(Objects.requireNonNull(error.getDefaultMessage()), null, locale)));
-            return ResponseEntity
-                    .status(HttpStatus.valueOf(400))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(errors);
-        }
+                                           @ModelAttribute @Valid BuilderPropertyDto dto) {
         dto.setId(id);
         BuilderProperty product = builderPropertyService.update(dto);
         return ResponseEntity.ok(Map.of(

@@ -9,6 +9,7 @@ import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTa
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyLayoutDto;
 import com.pozwizd.prominadaadmin.models.media.MediaDtoDrop;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -29,6 +30,8 @@ public interface BuilderPropertyMapper {
                 .name(entity.getName())
                 .street(entity.getStreet())
                 .totalFloor(entity.getTotalFloor())
+                .houseSection(entity.getHouseSection())
+                .deliveryType(entity.getDeliveryType() != null ? entity.getDeliveryType().getMessageKey() : null)
                 .pathToChessPlanFile(entity.getPathToChessPlanFile())
                 .pathToMortgageConditionsFile(entity.getPathToMortgageConditionsFile())
                 .pathToPriceFile(entity.getPathToPriceFile())
@@ -37,7 +40,6 @@ public interface BuilderPropertyMapper {
                 .districtId(entity.getDistinct() != null ? entity.getDistinct().getId().toString() : null)
                 .topozoneId(entity.getTopozone() != null ? entity.getTopozone().getId().toString() : null)
                 .buildingCompanyId(entity.getBuildingCompany() != null ? entity.getBuildingCompany().getId().toString() : null)
-                .deliveryDateId(entity.getDeliveryDate() != null ? entity.getDeliveryDate().toString() : null)
                 .houseNumber(entity.getHouseNumber())
                 .phoneNumber(entity.getPhoneNumber())
                 .description(entity.getDescription())
@@ -61,6 +63,7 @@ public interface BuilderPropertyMapper {
                 .build();
     }
 
+    @Mapping(target = "deliveryType", ignore = true)
     BuilderProperty toEntityFromRequest(BuilderPropertyDto dto);
 
     BuilderPropertyGalleryImage toEntityFromRequest(MediaDtoDrop dto);
@@ -109,8 +112,8 @@ public interface BuilderPropertyMapper {
         return BuilderForView.builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .district(entity.getDistinct().getName())
-                .topozone(entity.getTopozone().getName())
+                .district(entity.getDistinct() != null ? entity.getDistinct().getName() : null)
+                .topozone(entity.getTopozone() != null ? entity.getTopozone().getName() : null)
                 .street(entity.getStreet())
                 .roof(String.valueOf(entity.getTotalFloor()))
                 .promotion(entity.getIsAction())
@@ -119,6 +122,7 @@ public interface BuilderPropertyMapper {
                 .pathToPriceFile(entity.getPathToPriceFile())
                 .pathToChessPlanFile(entity.getPathToChessPlanFile())
                 .pathToMortgageConditionsFile(entity.getPathToMortgageConditionsFile())
+                .company(entity.getBuildingCompany() != null ? entity.getBuildingCompany().getName() : null)
                 .build();
     }
 }

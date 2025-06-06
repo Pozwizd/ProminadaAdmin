@@ -1,12 +1,7 @@
 package com.pozwizd.prominadaadmin.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 @Entity
 @Getter
@@ -15,6 +10,7 @@ import lombok.EqualsAndHashCode;
 @ToString(exclude = {"personal", "realtor"})
 @EqualsAndHashCode(of = "id")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Feedback {
 
     @Id
@@ -34,9 +30,4 @@ public class Feedback {
     @ManyToOne
     @JoinColumn(name = "realtor_id")
     private Realtor realtor;
-
-
-    public Feedback() {
-
-    }
 }

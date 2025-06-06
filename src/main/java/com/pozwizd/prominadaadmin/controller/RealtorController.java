@@ -7,6 +7,7 @@ import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorTableResponse;
 import com.pozwizd.prominadaadmin.service.serviceImp.RealtorServiceImp;
+import com.pozwizd.prominadaadmin.util.DateUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -41,12 +43,13 @@ public class RealtorController {
 
     @GetMapping("/getAllRealtor")
     public @ResponseBody Page<RealtorTableResponse> getPageableRealtor(@RequestParam(defaultValue = "0") int page,
-                                                                        @RequestParam(required = false, name = "code") String code,
-                                                                        @RequestParam(required = false, name = "fullname") String fullname,
-                                                                        @RequestParam(required = false, name = "email") String email,
-                                                                        @RequestParam(required = false, name = "dateOfBirthday") String dateOfBirthday,
-                                                                        @RequestParam(defaultValue = "10") Integer size) {
-        return realtorServiceImp.getPageableRealtor(page, size, code, fullname, email, dateOfBirthday);
+                                                                       @RequestParam(required = false, name = "id") String id,
+                                                                       @RequestParam(required = false, name = "code") String code,
+                                                                       @RequestParam(required = false, name = "fullname") String fullname,
+                                                                       @RequestParam(required = false, name = "email") String email,
+                                                                       @RequestParam(required = false, name = "dateOfBirthday") String dateOfBirthday,
+                                                                       @RequestParam(defaultValue = "10") Integer size) {
+        return realtorServiceImp.getPageableRealtor(page, size, id, code, fullname, email, dateOfBirthday);
     }
 
     @DeleteMapping("/{id}")
@@ -81,7 +84,10 @@ public class RealtorController {
     @ResponseBody
     public RealtorResponse getRealtorProfile(@PathVariable Long id) {
         Realtor realtor = realtorServiceImp.getRealtorById(id);
-        return realtorMapper.toRealtorProfileResponse(realtor);
+        RealtorResponse realtorProfileResponse = realtorMapper.toRealtorProfileResponse(realtor);
+        realtorProfileResponse.setDateOfBirthday(DateUtil.toFormatDateFromDB(realtor.getDateOfBirthday(),"dd.MM.yyyy"));
+        realtorProfileResponse.setCode(realtor.getCode());
+        return realtorProfileResponse;
     }
 
     @GetMapping("/getRoles")
@@ -90,7 +96,7 @@ public class RealtorController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> updateRealtor(@Valid @ModelAttribute RealtorRequest realtorRequest, @PathVariable Long id) {
+    public ResponseEntity<?> updateRealtor(@ModelAttribute @Valid RealtorRequest realtorRequest, @PathVariable Long id) {
 
         if (realtorRequest.getId() != null && !realtorRequest.getId().equals(id)) {
             return ResponseEntity.badRequest().body("ID в пути и в теле запроса не совпадают");
@@ -103,7 +109,7 @@ public class RealtorController {
 
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/create")
-    public ResponseEntity<?> createRealtor(@ModelAttribute RealtorRequest realtorRequest) {
+    public ResponseEntity<?> createRealtor(@ModelAttribute @Valid RealtorRequest realtorRequest) {
 
         realtorServiceImp.saveFromRequest(realtorRequest);
         return ResponseEntity.ok("Реалтор успешно создан");

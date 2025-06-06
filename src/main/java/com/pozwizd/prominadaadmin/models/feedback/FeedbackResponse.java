@@ -11,6 +11,6 @@ public class FeedbackResponse {
     private Long id;
     private String name;
     private String phoneNumber;
-    private String text;
+    private String description;
     
 }

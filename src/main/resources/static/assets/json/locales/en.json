@@ -242,6 +242,97 @@
     }
   },
   "builder": {
+    "validation": {
+      "regDistrict": {
+        "required": "District of the region is required"
+      },
+      "city": {
+        "required": "City is required"
+      },
+      "district": {
+        "required": "District is required"
+      },
+      "topozone": {
+        "required": "Topozone is required"
+      },
+      "name": {
+        "required": "Name is required"
+      },
+      "street": {
+        "required": "Street is required"
+      },
+      "buildingCompany": {
+        "required": "Building company is required"
+      },
+      "deliveryType": {
+        "required": "Type of delivery is required"
+      },
+      "houseNumber": {
+        "required": "House number is required",
+        "min": "House number must be at least 0",
+        "max": "House number should be large than 10"
+      },
+      "houseSection": {
+        "required": "Total number of house sections is required",
+        "min": "House number must be at least 0",
+        "max": "House number should be large than 10"
+      },
+      "totalFloor": {
+        "required": "Total number of floors are required",
+        "min": "House number must be at least 0",
+        "max": "House number shouldn't be large than 5"
+      },
+      "phone": {
+        "pattern": "Invalid phone number format"
+      },
+      "title": {
+        "required": "Title is required",
+        "length": "Title shouldn't be large than 50 characters"
+      },
+      "description": {
+        "length": "The description must contain more than 300 characters"
+      },
+      "file": {
+        "valid": "Invalid file format pdf,word,vnd"
+      },
+      "layout": {
+        "name": {
+          "required": "Name is required",
+          "length": "Name must not exceed 50 characters"
+        },
+        "priceByM2": {
+          "required": "Price is required",
+          "min": "Price must be at least 0",
+          "max": "Price must not exceed 100000"
+        },
+        "rooms": {
+          "required": "Number of rooms is required",
+          "min": "Number of rooms must be at least 0",
+          "max": "Number of rooms must not exceed 100000"
+        },
+        "totalArea": {
+          "required": "Total area is required",
+          "min": "Total area must be at least 0",
+          "max": "Total area must not exceed 1000"
+        },
+        "livingArea": {
+          "required": "Living area is required",
+          "min": "Living area must be at least 0",
+          "max": "Living area must not exceed 500"
+        },
+        "kitchenArea": {
+          "required": "Kitchen area is required",
+          "min": "Kitchen area must be at least 0",
+          "max": "Kitchen area must not exceed 100"
+        },
+        "file": {
+          "valid": "File invalid format png,jpeg,webp"
+        },
+        "description": {
+          "length": "The text must be no less than 0 or more than 300 characters"
+        }
+      }
+    },
     "viewBuilder": "View Builder",
     "editBuilder": "Edit builder",
     "name": "Name",
@@ -285,12 +376,15 @@
       "load": "Upload"
     }
   },
+  "dropzone": {
+    "information": "Drop files here or click to upload \n(This is just a demo dropzone. Selected files are not actually uploaded.)"
+  },
   "deliveryType": {
     "selectDeliveryType": "Select the delivery type",
     "underConstruction": "Under construction",
-    "processOfHandingOver": "In the process of handing over",
-    "handedOver": "The house is handed over",
-    "readyForOccupancy": "Ready for occupancy"
+    "partiallyDelivered": "In the process of handing over",
+    "readyForOccupancy": "The house is handed over",
+    "completed": "Ready for occupancy"
   },
   "file": {
     "select": "Select file"
@@ -326,9 +420,19 @@
       },
       "branches": {
         "required": "At least one branch must be selected"
+      },
+      "code": {
+        "required": "Code is required"
+      },
+      "date": {
+        "required": "Date is required"
       }
     },
-    "createRelator": "Create Realtor",
+    "id": "ID",
+    "code": "Code",
+    "fullName": "Full Name",
+    "dateOfBirthday": "Date of birthday",
+    "createRealtor": "Create Realtor",
     "editUser": "Edit Realtor",
     "personal": "Realtor",
     "users": "Realtors",

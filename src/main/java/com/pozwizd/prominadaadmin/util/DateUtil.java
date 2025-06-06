@@ -2,6 +2,7 @@ package com.pozwizd.prominadaadmin.util;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class DateUtil {
     public static String toFormatDateFromDB(LocalDate date, String outputFormat) {
@@ -12,6 +13,6 @@ public class DateUtil {
     }
 
     public static LocalDate toFormatDateToDB(String date, String pattern) {
-        return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern));
+        return LocalDate.parse(date, DateTimeFormatter.ofPattern(pattern, Locale.ENGLISH));
     }
 }

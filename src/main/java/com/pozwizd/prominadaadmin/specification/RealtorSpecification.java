@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface RealtorSpecification {
-    static Specification<Realtor> search(String code, String fullname, String email, String dateOfBirthday) {
+    static Specification<Realtor> search(String id, String code, String fullname, String email, String dateOfBirthday) {
 
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -37,9 +37,14 @@ public interface RealtorSpecification {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), "%" + email.toLowerCase() + "%"));
             }
 
+            if (StringUtils.hasText(id)) {
+                predicates.add(criteriaBuilder.equal(root.get("id"), Integer.valueOf(id)));
+            }
+
             if (StringUtils.hasText(code)) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("code")), "%" + code.toLowerCase() + "%"));
             }
+
 
             if (StringUtils.hasText(dateOfBirthday)) {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");

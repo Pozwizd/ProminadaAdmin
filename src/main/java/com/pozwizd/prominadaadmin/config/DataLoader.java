@@ -1,7 +1,6 @@
 package com.pozwizd.prominadaadmin.config;
 
 import com.pozwizd.prominadaadmin.entity.*;
-import com.pozwizd.prominadaadmin.models.RegDistrictResponse;
 import com.pozwizd.prominadaadmin.repository.PhoneNumberRepository;
 import com.pozwizd.prominadaadmin.service.*;
 import com.pozwizd.prominadaadmin.entity.Personal;
@@ -12,7 +11,7 @@ import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
-import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
+import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryType;
 import com.pozwizd.prominadaadmin.repository.PersonalRepository;
 import com.pozwizd.prominadaadmin.service.serviceImp.*;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +21,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 import java.io.File;
-import java.util.Locale;
-import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -58,8 +55,8 @@ public class DataLoader {
         loadFakeBuildingCompany();
         loadFakeBuilderProperties();
         loadPersonal();
-        loadDocumentFeedback();
         loadRealtor();
+        loadDocumentFeedbackForAll();
 //        loadRegion();
     }
 
@@ -113,36 +110,64 @@ public class DataLoader {
         }
     }
 
-    public void loadDocumentFeedback() {
-        List<DocumentFeedback> documentFeedbacks = new java.util.ArrayList<>();
+    public void loadDocumentFeedbackForAll() {
         File dir = new File("uploads/");
-        if (dir.exists() && dir.isDirectory()) {
-            File[] files = dir.listFiles();
-            if (files != null) {
-                Personal personal = personalService.getPersonalById(1L);
-                for (File file : files) {
-                    if (file.getName().endsWith(".pdf")) {
-                        DocumentFeedback feedback = new DocumentFeedback();
-                        feedback.setName(file.getName());
-                        feedback.setPath("uploads/" + file.getName());
-                        feedback.setPersonal(personal);
+        if (!dir.exists() || !dir.isDirectory()) return;
 
-                        documentFeedbacks.add(feedback);
-                    }
-                }
+        File[] files = dir.listFiles(f -> f.getName().endsWith(".pdf"));
+        if (files == null || files.length == 0) return;
 
-                documentFeedbacks.forEach(feedback -> feedback.setPersonal(personal));
-                documentFeedbackServiceImp.saveAllDocumentFeedback(documentFeedbacks);
-                personal.setDocumentFeedbacks(documentFeedbacks);
-                personalService.save(personal);
+        // Завантажуємо всіх персоналів і ріелторів
+        List<Personal> allPersonals = personalService.findAll();
+        List<Realtor> allRealtors = realtorService.findAll();
 
-            }
+        int totalFiles = files.length;
+
+        // Розділяємо файли на дві групи, наприклад, половина для персоналів, половина для ріелторів
+        int half = totalFiles / 2;
+
+        // Група файлів для персоналів
+        File[] personalFiles = Arrays.copyOfRange(files, 0, half);
+        // Група файлів для ріелторів
+        File[] realtorFiles = Arrays.copyOfRange(files, half, totalFiles);
+
+        List<DocumentFeedback> feedbacksToSave = new ArrayList<>();
+
+        // Роздаємо файли персоналам циклічно
+        for (int i = 0; i < allPersonals.size(); i++) {
+            Personal personal = allPersonals.get(i);
+            // Візьмемо файл за індексом i % personalFiles.length
+            File file = personalFiles[i % personalFiles.length];
+
+            DocumentFeedback feedback = new DocumentFeedback();
+            feedback.setName(file.getName());
+            feedback.setPath("uploads/" + file.getName());
+            feedback.setPersonal(personal);
+
+            feedbacksToSave.add(feedback);
         }
+
+        // Аналогічно для ріелторів
+        for (int i = 0; i < allRealtors.size(); i++) {
+            Realtor realtor = allRealtors.get(i);
+            File file = realtorFiles[i % realtorFiles.length];
+
+            DocumentFeedback feedback = new DocumentFeedback();
+            feedback.setName(file.getName());
+            feedback.setPath("uploads/" + file.getName());
+            feedback.setRealtor(realtor);
+
+            feedbacksToSave.add(feedback);
+        }
+
+        // Зберігаємо всі створені DocumentFeedback одночасно
+        documentFeedbackServiceImp.saveAllDocumentFeedback(feedbacksToSave);
     }
+
 
     public void loadPersonal() {
         Faker faker = new Faker(new Locale("uk"));
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
             Personal personal = new Personal();
             personal.setName(faker.name().firstName());
             personal.setSurname(faker.name().lastName());
@@ -166,8 +191,9 @@ public class DataLoader {
     public void loadRealtor() {
         Faker faker = new Faker(new Locale("en"));
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 20; i++) {
             Realtor realtor = new Realtor();
+            realtor.setFeedBacks(new ArrayList<>());
             realtor.setName(faker.name().firstName());
             realtor.setSurname(faker.name().nameWithMiddle());
             realtor.setLastName(faker.name().firstName());
@@ -187,17 +213,18 @@ public class DataLoader {
                 phoneNumberRepository.save(phone);
             }
 
-            for (int j = 0; j < 5; j++) {
+            for (int j = 0; j < 3; j++) {
                 Feedback feedback = new Feedback();
                 feedback.setName(savedRealtor.getName());
                 feedback.setPhoneNumber(faker.phoneNumber().cellPhone());
                 feedback.setDescription(faker.lorem().sentence(10));
                 feedback.setRealtor(savedRealtor);
+
+                savedRealtor.getFeedBacks().add(feedback);
                 feedbackService.save(feedback);
             }
         }
     }
-
 
     public void loadFakeCities() {
         Faker faker = new Faker(new Locale("uk"));
@@ -282,7 +309,7 @@ public class DataLoader {
                 builder.setHouseSection(Integer.valueOf(String.valueOf(faker.number().numberBetween(1, 5))));
                 builder.setTotalFloor(faker.number().numberBetween(5, 25));
 
-                builder.setDeliveryDate(DeliveryDate.values()[random.nextInt(DeliveryDate.values().length)]);
+                builder.setDeliveryType(DeliveryType.values()[random.nextInt(DeliveryType.values().length)]);
                 builder.setPhoneNumber(faker.phoneNumber().phoneNumber());
 
                 builder.setPathToChessPlanFile("floor_plan_" + faker.file().fileName());

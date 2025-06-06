@@ -5,7 +5,7 @@ import com.pozwizd.prominadaadmin.entity.other.District;
 import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
 import com.pozwizd.prominadaadmin.entity.other.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
-import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
+import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -53,7 +53,7 @@ public class BuilderProperty {
     private BuildingCompany buildingCompany;
 
     // Срок сдачи обьекта
-    private DeliveryDate deliveryDate;
+    private DeliveryType deliveryType;
 
     private String phoneNumber;
 

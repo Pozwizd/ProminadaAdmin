@@ -10,11 +10,11 @@ import org.springframework.data.domain.Page;
 public interface FeedbackMapper {
     Feedback toEntity(FeedbackResponse feedbackResponse);
 
-    @Mapping(source = "description", target = "text")
+//    @Mapping(source = "description", target = "text")
     FeedbackResponse toFeedbackResponse(Feedback feedback);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    @Mapping(source = "text", target = "description")
+//    @Mapping(source = "text", target = "description")
     Feedback partialUpdate(FeedbackResponse feedbackResponse, @MappingTarget Feedback feedback);
 
     default Page<FeedbackResponse> toFeedbackResponse(Page<Feedback> feedbackPage) {

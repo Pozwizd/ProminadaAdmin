@@ -18,4 +18,5 @@ public class BuilderForView {
     private String pathToChessPlanFile;
     private String pathToMortgageConditionsFile;
     private String pathToPriceFile;
+    private String company;
 }

@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -43,4 +45,21 @@ public class DocumentFeedbackServiceImp implements DocumentFeedbackService {
     public List<DocumentFeedback> saveAllDocumentFeedback(List<DocumentFeedback> documentFeedbacks) {
         return documentFeedbackRepository.saveAll(documentFeedbacks);
     }
+
+    public Set<String> getAllFileNamesByPersonalId(Long personalId) {
+        return documentFeedbackRepository
+                .findByPersonalId(personalId)
+                .stream()
+                .map(DocumentFeedback::getName)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<String> getAllFileNamesByRealtorId(Long realtorId) {
+        return documentFeedbackRepository
+                .findByRealtorId(realtorId)
+                .stream()
+                .map(DocumentFeedback::getName)
+                .collect(Collectors.toSet());
+    }
+
 }

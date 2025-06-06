@@ -3,6 +3,7 @@ package com.pozwizd.prominadaadmin.service.serviceImp;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyLayouts;
+import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryType;
 import com.pozwizd.prominadaadmin.mapper.BuilderPropertyMapper;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderForView;
 import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
@@ -35,6 +36,7 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
     private final CityServiceImp cityServiceImp;
     private final TopozoneService topozoneService;
     private final FileService fileService;
+    private final BuildingCompanyService buildingCompanyService;
 
     @Value("${file.upload.dir}")
     private String contextPath;
@@ -104,6 +106,7 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
         }
 
         BuilderProperty builderProperty = builderPropertyMapper.toEntityFromRequest(dto);
+        builderProperty.setDeliveryType(DeliveryType.fromMessageKey(dto.getDeliveryType()));
         if (dto.getRegDistrictId() != null && !dto.getRegDistrictId().isEmpty())
             builderProperty.setRegDistrict(regDistrictService.getById(Long.parseLong(dto.getRegDistrictId())));
         if (dto.getCityId() != null && !dto.getCityId().isEmpty())
@@ -112,6 +115,8 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
             builderProperty.setDistinct(districtServiceImp.getById(Long.parseLong(dto.getDistrictId())));
         if (dto.getTopozoneId() != null && !dto.getTopozoneId().isEmpty())
             builderProperty.setTopozone(topozoneService.getById(Long.parseLong(dto.getTopozoneId())));
+        if (dto.getBuildingCompanyId() != null && !dto.getBuildingCompanyId().isEmpty())
+            builderProperty.setBuildingCompany(buildingCompanyService.getById(Long.valueOf(dto.getBuildingCompanyId())));
 
         if(dto.getLayoutDto()!=null){
             for (BuilderPropertyLayoutDto m : dto.getLayoutDto()) {
@@ -223,6 +228,8 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
             newBuilderProperty.setDistinct(districtServiceImp.getById(Long.parseLong(dto.getDistrictId())));
         if (dto.getTopozoneId() != null && !dto.getTopozoneId().isEmpty())
             newBuilderProperty.setTopozone(topozoneService.getById(Long.parseLong(dto.getTopozoneId())));
+        if (dto.getBuildingCompanyId() != null && !dto.getBuildingCompanyId().isEmpty())
+            newBuilderProperty.setBuildingCompany(buildingCompanyService.getById(Long.parseLong(dto.getBuildingCompanyId())));
 
         if (dto.getLayoutDto() != null) {
             for (BuilderPropertyLayoutDto m : dto.getLayoutDto()) {

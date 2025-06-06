@@ -43,306 +43,271 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <div class="nav-align-top">
-                <ul class="nav nav-pills mb-4" role="tablist">
-                    <li class="nav-item">
-                        <button
-                                type="button"
-                                class="nav-link active"
-                                role="tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#navs-pills-top-home"
-                                aria-controls="navs-pills-top-home"
-                                aria-selected="true"
-                                data-i18n="main">
-                            Основное
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                                type="button"
-                                class="nav-link"
-                                role="tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#navs-pills-top-profile"
-                                aria-controls="navs-pills-top-profile"
-                                aria-selected="false"
-                                data-i18n="gallery">
-                            Галерея
-                        </button>
-                    </li>
-                    <li class="nav-item">
-                        <button
-                                type="button"
-                                class="nav-link"
-                                role="tab"
-                                data-bs-toggle="tab"
-                                data-bs-target="#navs-pills-top-messages"
-                                aria-controls="navs-pills-top-messages"
-                                aria-selected="false"
-                                data-i18n="planning">
-                            Планировки
-                        </button>
-                    </li>
-                </ul>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
-                        <form id="personalForm" class="row g-3 needs-validation" novalidate>
-                            <input type="hidden" id="builderId">
-                            <div class="col-md-3">
-                                <label for="name" class="form-label" data-i18n="builder.name">Название</label>
-                                <input type="text" class="form-control" id="name"
-                                       data-i18n="[placeholder]builder.namePlaceHolder"
-                                       placeholder="ЖК 'Ривьера Сити'" data-error="name">
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="regDistrictId" class="form-label" data-i18n="builder.regDistrict">Обл.
-                                    район</label>
-                                <select class="form-select" id="regDistrictId" required>
-                                    <option value="" data-i18n="builder.selectRegDistrict" selected></option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="cityId" class="form-label" data-i18n="builder.city">Нас. пункт</label>
-                                <select class="form-select" id="cityId" required disabled>
-                                    <option value="" data-i18n="builder.selectCity" selected>Выберите нас. пункт
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="districtId" class="form-label"
-                                       data-i18n="builder.selectDistrict">Район</label>
-                                <select class="form-select" id="districtId" required disabled>
-                                    <option value="" data-i18n="builder.selectDistrict" selected>Выберите район</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="topozoneId" class="form-label" data-i18n="builder.topozone">Топозона</label>
-                                <select class="form-select" id="topozoneId" required disabled>
-                                    <option value="" data-i18n="builder.selectTopozone" selected>Выберите топзону
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="street" class="form-label" data-i18n="builder.street">Улица</label>
-                                <input type="text" class="form-control" id="street"
-                                       placeholder="Чехова" required
-                                       data-error="street"
-                                       data-i18n="[placeholder]builder.streetPlaceHolder">
-                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста, введите
-                                    улицу
+            <form id="formBuilderProperty">
+                <div class="nav-align-top">
+                    <ul class="nav nav-pills mb-4" role="tablist">
+                        <li class="nav-item">
+                            <button
+                                    type="button"
+                                    class="nav-link active"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-pills-top-home"
+                                    aria-controls="navs-pills-top-home"
+                                    aria-selected="true"
+                                    data-i18n="main">
+                                Основное
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                    type="button"
+                                    class="nav-link"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-pills-top-profile"
+                                    aria-controls="navs-pills-top-profile"
+                                    aria-selected="false"
+                                    data-i18n="gallery">
+                                Галерея
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <button
+                                    type="button"
+                                    class="nav-link"
+                                    role="tab"
+                                    data-bs-toggle="tab"
+                                    data-bs-target="#navs-pills-top-messages"
+                                    aria-controls="navs-pills-top-messages"
+                                    aria-selected="false"
+                                    data-i18n="planning">
+                                Планировки
+                            </button>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active row" id="navs-pills-top-home" role="tabpanel">
+                            <div class="row g-3 needs-validation" novalidate>
+                                <input type="hidden" id="builderId">
+                                <div class="col-md-3">
+                                    <label for="name" class="form-label" data-i18n="builder.name">Название</label>
+                                    <input type="text" class="form-control" id="name"
+                                           data-i18n="[placeholder]builder.namePlaceHolder"
+                                           placeholder="ЖК 'Ривьера Сити'" data-error="name">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="regDistrictId" class="form-label" data-i18n="builder.regDistrict">Обл.
+                                        район</label>
+                                    <select class="form-select" id="regDistrictId" required>
+                                        <option value="" data-i18n="builder.selectRegDistrict" selected></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="cityId" class="form-label" data-i18n="builder.city">Нас. пункт</label>
+                                    <select class="form-select" id="cityId" required disabled>
+                                        <option value="" data-i18n="builder.selectCity" selected>Выберите нас. пункт
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="districtId" class="form-label"
+                                           data-i18n="builder.district">Район</label>
+                                    <select class="form-select" id="districtId" required disabled>
+                                        <option value="" data-i18n="builder.selectDistrict" selected>Выберите район
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="topozoneId" class="form-label"
+                                           data-i18n="builder.topozone">Топозона</label>
+                                    <select class="form-select" id="topozoneId" required disabled>
+                                        <option value="" data-i18n="builder.selectTopozone" selected>Выберите топзону
+                                        </option>
+                                    </select>
+                                    <span data-error="topozoneId"></span>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="street" class="form-label" data-i18n="builder.street">Улица</label>
+                                    <input type="text" class="form-control" id="street"
+                                           placeholder="Чехова" required
+                                           data-error="street"
+                                           data-i18n="[placeholder]builder.streetPlaceHolder">
+                                </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-2">
+                                    <label for="houseNumber" class="form-label" data-i18n="builder.houseNumber">Номер
+                                        дома</label>
+                                    <input type="number" class="form-control" id="houseNumber" placeholder="7" required
+                                           data-error="houseNumber">
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="houseSection" class="form-label"
+                                           data-i18n="builder.houseSection">Секция/корпус</label>
+                                    <input type="number" class="form-control" id="houseSection" placeholder="7"
+                                           required>
+                                </div>
+                                <div class="col-md-2">
+                                    <label for="totalFloor" class="form-label"
+                                           data-i18n="builder.totalFloor">Єтажность</label>
+                                    <input type="number" class="form-control" id="totalFloor" placeholder="9" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="buildingCompanyId" class="form-label"
+                                           data-i18n="builder.buildingCompany">
+                                        Строительная компания</label>
+                                    <select class="form-select" id="buildingCompanyId" required>
+                                        <option value="" data-i18n="builder.selectCompany">Выберите компанию</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="deliveryType" class="form-label"
+                                           data-i18n="deliveryType.selectDeliveryType">Срок сдачи</label>
+                                    <select class="form-select" id="deliveryType" required>
+                                        <option value="" data-i18n="deliveryType.selectDeliveryType">Выберите тип сдачи</option>
+                                        <option value="deliveryType.underConstruction" data-i18n="deliveryType.underConstruction">
+                                            Строится
+                                        </option>
+                                        <option value="deliveryType.partiallyDelivered"
+                                                data-i18n="deliveryType.partiallyDelivered">В процессе сдачи
+                                        </option>
+                                        <option value="deliveryType.readyForOccupancy" data-i18n="deliveryType.readyForOccupancy">
+                                            Готово к заселению
+                                        </option>
+                                        <option value="deliveryType.completed" data-i18n="deliveryType.completed">Дом сдан</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="phoneNumber" class="form-label"
+                                           data-i18n="builder.phone">Телефон</label>
+                                    <input type="tel" class="form-control" id="phoneNumber" placeholder="+380991112233"
+                                           required data-error="phoneNumber">
+                                </div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <label for="chessPlanFile" class="form-label"
+                                           data-i18n="builder.chessPlan">Шахматка</label>
+                                    <input type="file" class="form-control file-hidden file-pdf" id="chessPlanFile"
+                                           data-error="chessPlanFile">
+                                </div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <label for="mortgageConditionsFile" class="form-label"
+                                           data-i18n="builder.mortgageConditions">Условия
+                                        рассрочки</label>
+                                    <input type="file" class="form-control file-hidden file-pdf"
+                                           id="mortgageConditionsFile"
+                                           data-error="mortgageConditionsFile">
+                                </div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <label for="priceFile" class="form-label" data-i18n="builder.priceFile">Файл с
+                                        ценами</label>
+                                    <input type="file" class="form-control file-hidden file-pdf" id="priceFile"
+                                           data-error="priceFile">
+                                </div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <label for="description" class="form-label" data-i18n="builder.description"
+                                           data-error="description">Описание:</label>
+                                    <textarea class="form-control" id="description" rows="3" required></textarea>
+                                </div>
+                                <h4 data-i18n="builder.promotion">Акция</h4>
+                                <div class="col-md-4">
+                                    <label for="actionTitle" class="form-label" data-i18n="builder.name"
+                                           data-error="actionTitle">Название</label>
+                                    <input type="text" class="form-control" id="actionTitle" disabled>
+                                </div>
+                                <div class="col-md-8"></div>
+                                <div class="col-md-4">
+                                    <label for="actionDescription" class="form-label" data-i18n="builder.description"
+                                           data-error="ActionDescription">Описание:</label>
+                                    <textarea class="form-control" id="actionDescription" rows="3" disabled></textarea>
+                                    <div class="form-check mt-4">
+                                        <input class="form-check-input" type="checkbox" value="" id="isAction"/>
+                                        <label class="form-check-label" for="isAction" data-i18n="builder.isAction">
+                                            Включить акцию
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-8"></div>
+                                <div class="col-12 mt-4 text-end">
+                                    <button type="submit" class="btn btn-primary me-2" data-i18n="builder.save">
+                                        Сохранить
+                                    </button>
+                                    <a th:href="@{/builder}" class="btn btn-label-secondary"
+                                       data-i18n="personal.cancel">Отмена</a>
                                 </div>
                             </div>
-
-                            <div class="col-md-6"></div>
-
-                            <div class="col-md-2">
-                                <label for="houseNumber" class="form-label" data-i18n="builder.houseNumber">Номер
-                                    дома</label>
-                                <input type="text" class="form-control" id="houseNumber" placeholder="7" required
-                                       data-error="houseNumber">
-                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста,
-                                    введите номер дома
+                        </div>
+                        <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
+                            <div class="dropzone needsclick" id="dropzone-basic">
+                                <div class="dz-message needsclick" data-i18n="dropzone.information"></div>
+                                <div class="fallback">
+                                    <input name="file" type="file"/>
                                 </div>
                             </div>
+                            <template id="preview-template">
+                                <div class="dz-preview dz-file-preview"
+                                     style="display: inline-block; margin: 10px; position: relative;">
+                                    <div class="dz-image" style="width: 120px; height: 120px; overflow: hidden;">
+                                        <img data-dz-thumbnail
+                                             style="width: 100%; height: 100%; object-fit: cover;"/>
+                                    </div>
+                                    <div class="dz-details" style="text-align: center;">
+                                        <div class="dz-size"><span data-dz-size></span></div>
+                                        <div class="dz-filename"><span data-dz-name></span></div>
+                                    </div>
+                                    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span>
+                                    </div>
+                                    <div class="dz-error-message"><span data-dz-errormessage></span></div>
 
-                            <div class="col-md-2">
-                                <label for="houseSection" class="form-label" data-i18n="builder.houseSection">Секция/корпус</label>
-                                <input type="text" class="form-control" id="houseSection" placeholder="7" required>
-                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста,
-                                    введите раздел дома
+                                    <!-- Хрестик для видалення -->
+                                    <a class="dz-remove" href="javascript:undefined;" data-dz-remove
+                                       style="position: absolute; top: 2px; right: 2px; background: white; color: red; border-radius: 50%; padding: 2px 6px; font-weight: bold; text-decoration: none;">
+                                        ✖
+                                    </a>
                                 </div>
-                            </div>
+                            </template>
 
-                            <div class="col-md-2">
-                                <label for="totalFloor" class="form-label"
-                                       data-i18n="builder.totalFloor">Єтажность</label>
-                                <input type="text" class="form-control" id="totalFloor" placeholder="9" required>
-                                <div class="invalid-feedback" data-i18n="personal.surnameRequired">Пожалуйста,
-                                    введите этажность
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="buildingCompanyId" class="form-label" data-i18n="builder.buildingCompany">
-                                    Строительная компания</label>
-                                <select class="form-select" id="buildingCompanyId" required>
-                                    <option value="" data-i18n="builder.selectCompany">Выберите компанию</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-3">
-                                <label for="deliveryDateId" class="form-label"
-                                       data-i18n="deliveryType.selectDeliveryType">Срок сдачи</label>
-                                <select class="form-select" id="deliveryDateId" required>
-                                    <option value="" data-i18n="deliveryType.selectDeliveryType">Выберите тип сдачи
-                                    </option>
-                                    <option value="UNDER_CONSTRUCTION" data-i18n="deliveryType.underConstruction">
-                                        Строится
-                                    </option>
-                                    <option value="PARTIALLY_DELIVERED" data-i18n="deliveryType.processOfHandingOver">В
-                                        процессе сдачи
-                                    </option>
-                                    <option value="READY_FOR_OCCUPANCY" data-i18n="deliveryType.readyForOccupancy">
-                                        Готово к заселению
-                                    </option>
-                                    <option value="COMPLETED" data-i18n="deliveryType.handedOver">Дом сдан</option>
-                                </select>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="phoneNumber" class="form-label"
-                                       data-i18n="builder.phone">Телефон</label>
-                                <input type="tel" class="form-control" id="phoneNumber" placeholder="+380991112233"
-                                       required data-error="phoneNumber">
-                                <div class="invalid-feedback" data-i18n="personal.phoneRequired">Пожалуйста, введите
-                                    телефон
-                                </div>
-                            </div>
-
-                            <div class="col-md-8"></div>
-                            <div class="col-md-4">
-                                <label for="chessPlanFile" class="form-label"
-                                       data-i18n="builder.chessPlan">Шахматка</label>
-                                <input type="file" class="form-control file-hidden file-pdf" id="chessPlanFile"
-                                       data-error="chessPlanFile">
-                            </div>
-                            <div class="col-md-8"></div>
-                            <div class="col-md-4">
-                                <label for="mortgageConditionsFile" class="form-label"
-                                       data-i18n="builder.mortgageConditions">Условия
-                                    рассрочки</label>
-                                <input type="file" class="form-control file-hidden file-pdf" id="mortgageConditionsFile"
-                                       data-error="mortgageConditionsFile">
-                            </div>
-                            <div class="col-md-8"></div>
-
-                            <div class="col-md-4">
-                                <label for="priceFile" class="form-label" data-i18n="builder.priceFile">Файл с
-                                    ценами</label>
-                                <input type="file" class="form-control file-hidden file-pdf" id="priceFile"
-                                       data-error="priceFile">
-                            </div>
-                            <div class="col-md-8"></div>
-
-
-                            <div class="col-md-4">
-                                <label for="description" class="form-label" data-i18n="builder.description"
-                                       data-error="description">Описание:</label>
-                                <textarea class="form-control" id="description" rows="3" required></textarea>
-                            </div>
-
-                            <h4 data-i18n="builder.promotion">Акция</h4>
-
-                            <div class="col-md-4">
-                                <label for="actionTitle" class="form-label" data-i18n="builder.name"
-                                       data-error="actionTitle">Название</label>
-                                <input type="text" class="form-control" id="actionTitle" disabled>
-                            </div>
-
-                            <div class="col-md-8"></div>
-                            <div class="col-md-4">
-                                <label for="actionDescription" class="form-label" data-i18n="builder.description"
-                                       data-error="ActionDescription">Описание:</label>
-                                <textarea class="form-control" id="actionDescription" rows="3" disabled></textarea>
-                                <div class="form-check mt-4">
-                                    <input class="form-check-input" type="checkbox" value="" id="isAction"/>
-                                    <label class="form-check-label" for="isAction" data-i18n="builder.isAction">
-                                        Включить акцию
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="col-md-8"></div>
                             <div class="col-12 mt-4 text-end">
-                                <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
+                                <button type="submit" class="btn btn-primary me-2" data-i18n="builder.save">
+                                    Сохранить
                                 </button>
                                 <a th:href="@{/builder}" class="btn btn-label-secondary"
                                    data-i18n="personal.cancel">Отмена</a>
                             </div>
-                        </form>
-                    </div>
-                    <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
-                        <form action="/upload" class="dropzone needsclick" id="dropzone-basic">
-                            <div class="dz-message needsclick">
-                                Drop files here or click to upload
-                                <span class="note needsclick">(This is just a demo dropzone. Selected files are
-                                    <span class="fw-medium">not</span> actually uploaded.)
-                                </span>
-                            </div>
-                            <div class="fallback">
-                                <input name="file" type="file"/>
-                            </div>
-                        </form>
-
-                        <template id="preview-template">
-                            <div class="dz-preview dz-file-preview"
-                                 style="display: inline-block; margin: 10px; position: relative;">
-                                <div class="dz-image" style="width: 120px; height: 120px; overflow: hidden;">
-                                    <img data-dz-thumbnail style="width: 100%; height: 100%; object-fit: cover;"/>
-                                </div>
-                                <div class="dz-details" style="text-align: center;">
-                                    <div class="dz-size"><span data-dz-size></span></div>
-                                    <div class="dz-filename"><span data-dz-name></span></div>
-                                </div>
-                                <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
-                                <div class="dz-error-message"><span data-dz-errormessage></span></div>
-
-                                <!-- Хрестик для видалення -->
-                                <a class="dz-remove" href="javascript:undefined;" data-dz-remove
-                                   style="position: absolute; top: 2px; right: 2px; background: white; color: red; border-radius: 50%; padding: 2px 6px; font-weight: bold; text-decoration: none;">
-                                    ✖
-                                </a>
-                            </div>
-                        </template>
-
-                        <div class="col-12 mt-4 text-end">
-                            <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
-                            </button>
-                            <a th:href="@{/builder}" class="btn btn-label-secondary"
-                               data-i18n="personal.cancel">Отмена</a>
                         </div>
-                    </div>
-                    <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
-                        <div id="layoutsContainer" class="row"></div>
-                        <div class="col-12 mt-4 text-end">
-                            <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="addPlaning">Добавить
-                                планировку
-                            </button>
-                        </div>
-                        <div class="col-12 mt-4 text-end">
-                            <button type="button" class="btn btn-primary me-2" data-i18n="builder.save">Сохранить
-                            </button>
-                            <a th:href="@{/builder}" class="btn btn-label-secondary"
-                               data-i18n="personal.cancel">Отмена</a>
+                        <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
+                            <div id="layoutsContainer" class="row"></div>
+                            <div class="col-12 mt-4 text-end">
+                                <button id="addLayoutBtn" class="btn btn-primary me-2" data-i18n="addPlaning">
+                                    Добавить планировку
+                                </button>
+                            </div>
+                            <div class="col-12 mt-4 text-end">
+                                <button type="submit" class="btn btn-primary me-2" data-i18n="builder.save">
+                                    Сохранить
+                                </button>
+                                <a th:href="@{/builder}" class="btn btn-label-secondary"
+                                   data-i18n="personal.cancel">Отмена</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
     <script th:src="@{/customAssets/js/pravnyk/image.js}"></script>
     <script th:src="@{/customAssets/js/pravnyk/validator.js}"></script>
     <script th:src="@{/assets/vendor/libs/dropzone/dropzone.js}"></script>
+    <script th:src="@{/customAssets/js/builderProperty/formBuilderProperty.js}"></script>
     <script src="https://unpkg.com/i18next@21.6.16/i18next.min.js"></script>
     <script src="https://unpkg.com/i18next-http-backend@1.4.2/i18nextHttpBackend.min.js"></script>
     <script src="https://unpkg.com/jquery-i18next@1.2.1/dist/umd/jquery-i18next.min.js"></script>
-
-    <script>
-        const myDropzone = new Dropzone("#dropzone-basic", {
-            url: "/upload",
-            autoProcessQueue: false,
-            uploadMultiple: true,
-            parallelUploads: 5,
-            maxFiles: 5,
-            paramName: "filesDto",
-            previewTemplate: document.querySelector("#preview-template").innerHTML
-        });
+    <script th:inline="javascript">
+        window.contextPath = '[[@{/}]]'.replaceAll('"', '');
+        window.defaultAvatarPath = '[[@{/assets/img/avatars/14.png}]]';
     </script>
     <script>
         i18next
@@ -364,428 +329,6 @@
             i18next.changeLanguage(lang, function () {
                 $('body').localize();
             });
-        }
-    </script>
-    <script>
-        function includeAd() {
-            $("#isAction").on('click', function () {
-                const title = $('#actionTitle');
-                const description = $('#actionDescription');
-                console.log($(this).prop('checked'));
-                if ($(this).prop('checked')) {
-                    title.prop('required', true).prop('disabled', false);
-                    description.prop('required', true).prop('disabled', false);
-                } else {
-                    title.prop('required', false).prop('disabled', true);
-                    description.prop('required', false).prop('disabled', true);
-                }
-            });
-        }
-
-        function saveRequest(url, method, formData) {
-            $.ajax({
-                type: method,
-                url: url,
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function () {
-                    window.location.replace(`/admin/builder`);
-                },
-                error: function (error) {
-                    clearValid();
-                    let data = JSON.parse(error.responseText);
-                    console.log(data);
-                    validate(data);
-                    console.log("Error submitting form:", error);
-                }
-            });
-        }
-
-        function getFormData() {
-            const resForm = new FormData();
-            resForm.append("name", $('#name').val());
-            resForm.append("nameDistinct", $('#regDistrictId').val());
-            resForm.append("cityId", $('#cityId').val());
-            resForm.append("districtId", $('#districtId').val());
-            resForm.append("topozoneId", $('#topozoneId').val());
-            resForm.append("deliveryDateId", $('#deliveryDateId').val());
-            resForm.append("street", $('#street').val());
-            resForm.append("houseNumber", $('#houseNumber').val());
-            resForm.append("houseSection", $('#houseSection').val());
-            resForm.append("totalFloor", $('#totalFloor').val());
-            resForm.append("buildingCompany", $('#buildingCompanyId').val());
-            resForm.append("phoneNumber", $('#phoneNumber').val());
-            resForm.append("description", $('#description').val());
-            resForm.append("isAction", $('#isAction').val());
-
-            let files = [
-                {id: "#chessPlanFile", fieldName: "chessPlanFile"},
-                {id: "#mortgageConditionsFile", fieldName: "mortgageConditionsFile"},
-                {id: "#priceFile", fieldName: "priceFile"},
-            ];
-
-            files.forEach(function (fileObj) {
-                let file = $(fileObj.id)[0].files[0];
-                if (file) {
-                    resForm.append(fileObj.fieldName, file);
-                }
-            });
-            return resForm;
-        }
-    </script>
-    <script>
-        const containerCitySelector = $('#cityId');
-        const containerBuildingCompanySelector = $('#buildingCompanyId');
-        const containerTopozoneSelector = $('#topozoneId');
-        let containerRegDistrictSelector = $('#regDistrictId');
-        let containerDistrictSelector = $('#districtId');
-
-        function loadCitiesByRegDistrictId(regDistrictId) {
-            fetch(`/admin/city/get?regDistrictId=` + encodeURIComponent(regDistrictId))
-                .then(response => response.json())
-                .then(data => {
-                    if (containerCitySelector) {
-                        containerCitySelector.prop('disabled', false);
-                        containerDistrictSelector.prop('disabled', true);
-                        containerTopozoneSelector.prop('disabled', true);
-                        let optionFirst = containerCitySelector.find('option').first().prop('outerHTML');
-                        containerCitySelector.empty();
-                        containerCitySelector.append(optionFirst);
-                        data.forEach(el => {
-                            containerCitySelector.append(`<option value="${el.id}">${el.name}</option>`);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user data:', error);
-                    showErrorMessage('Ошибка при загрузке данных');
-                });
-        }
-
-        function loadBuildCompanies() {
-            return fetch(`/admin/builderCompany/getAll`)
-                .then(response => response.json())
-                .then(data => {
-                    if (containerBuildingCompanySelector) {
-                        let optionFirst = containerBuildingCompanySelector.find('option').first().prop('outerHTML');
-                        containerBuildingCompanySelector.empty();
-                        containerBuildingCompanySelector.append(optionFirst);
-                        data.forEach(el => {
-                            containerBuildingCompanySelector.append(`<option value="${el.id}">${el.name}</option>`);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user data:', error);
-                    showErrorMessage('Ошибка при загрузке данных');
-                });
-        }
-
-        function loadTopZonesByDistrict(districtId) {
-            return fetch(`/admin/topozone/get?districtId=` + encodeURIComponent(districtId))
-                .then(response => response.json())
-                .then(data => {
-                    if (containerTopozoneSelector) {
-                        containerTopozoneSelector.prop('disabled', false);
-                        let optionFirst = containerTopozoneSelector.find('option').first().prop('outerHTML');
-                        containerTopozoneSelector.empty();
-                        containerTopozoneSelector.append(optionFirst);
-                        data.forEach(el => {
-                            containerTopozoneSelector.append(`<option value="${el.id}">${el.name}</option>`);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user data:', error);
-                    showErrorMessage('Ошибка при загрузке данных');
-                });
-        }
-
-        const translate = (key) => {
-            return i18next.isInitialized ? i18next.t(key) : key;
-        };
-
-        function loadRegDistrict() {
-            return fetch(`/admin/regDistrict/getAll`)
-                .then(response => response.json())
-                .then(data => {
-                    if (containerRegDistrictSelector) {
-                        containerCitySelector.prop('disabled', true);
-                        containerDistrictSelector.prop('disabled', true);
-                        containerTopozoneSelector.prop('disabled', true);
-                        let firstOption = containerRegDistrictSelector.find('option').first().prop('outerHTML');
-                        containerRegDistrictSelector.empty();
-                        containerRegDistrictSelector.append(firstOption);
-                        data.forEach(el => {
-                            containerRegDistrictSelector.append(`<option value="${el.id}">${el.name}</option>`);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user data:', error);
-                    showErrorMessage('Ошибка при загрузке данных');
-                });
-        }
-
-        function loadDistrictByCity(cityId) {
-            return fetch(`/admin/district/get?cityId=` + encodeURIComponent(cityId))
-                .then(response => response.json())
-                .then(data => {
-                    if (containerDistrictSelector) {
-                        containerDistrictSelector.prop('disabled', false);
-                        containerTopozoneSelector.prop('disabled', true);
-                        let optionFirst = containerDistrictSelector.find('option').first().prop('outerHTML');
-                        containerDistrictSelector.empty();
-                        containerDistrictSelector.append(optionFirst);
-                        data.forEach(el => {
-                            containerDistrictSelector.append(`<option value="${el.id}">${el.name}</option>`);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user data:', error);
-                    showErrorMessage('Ошибка при загрузке данных');
-                });
-        }
-    </script>
-    <script>
-        function handleSelectChange(selectorId, targetSelectors, loaderFn) {
-            $(selectorId).on('change', function () {
-                const value = $(this).val();
-                if (value) {
-                    loaderFn(value);
-                } else {
-                    targetSelectors.forEach(el => {
-                        el.prop('disabled', true);
-                        el.find('option:not(:first)').remove();
-                    });
-                }
-            });
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            loadRegDistrict();
-            loadBuildCompanies();
-            includeAd();
-            handleSelectChange('#regDistrictId', [containerCitySelector, containerDistrictSelector, containerTopozoneSelector], loadCitiesByRegDistrictId);
-            handleSelectChange('#cityId', [containerDistrictSelector, containerTopozoneSelector], loadDistrictByCity);
-            handleSelectChange('#districtId', [containerTopozoneSelector], loadTopZonesByDistrict);
-
-            const form = document.getElementById('personalForm');
-            const builderIdInput = document.getElementById('builderId');
-            const titleElement = document.querySelector('[data-i18n="builder.createTarget"]');
-            const passwordField = document.querySelector('.col-md-6:has(#password)');
-
-            // Определяем режим редактирования из URL
-            const pathname = window.location.pathname;
-            const isEdit = pathname.includes('/edit/');
-            const pathParts = pathname.split('/');
-            const builderId = pathParts[pathParts.length - 1];
-
-            if (isEdit) {
-                builderIdInput.value = builderId;
-                titleElement.textContent = i18next.t('editBuilder');
-                $('[data-i18n="builder.createTarget"]').text(i18next.t('editBuilder'));
-                $('#tab-main').text(i18next.t('main'));
-                $('#tab-gallery').text(i18next.t('gallery'));
-                $('#tab-planning').text(i18next.t('planning'));
-                if (passwordField) {
-                    passwordField.style.display = 'none';
-                }
-
-                // Загружаем данные пользователя
-                fetch(`/admin/builder/${builderId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('role').value = data.role;
-                        document.getElementById('surname').value = data.surname;
-                        document.getElementById('name').value = data.name;
-                        document.getElementById('lastName').value = data.lastName || '';
-                        document.getElementById('phoneNumber').value = data.phoneNumber;
-                        document.getElementById('email').value = data.email;
-                    })
-                    .catch(error => {
-                        console.error('Error loading user data:', error);
-                        showErrorMessage('Ошибка при загрузке данных пользователя');
-                    });
-            }
-
-            const url = isEdit ? `/admin/builder/${builderId}/save` : '/admin/builder/save';
-            const method = isEdit ? 'PUT' : 'POST';
-            $('[data-i18n="builder.save"]').on('click', function () {
-                let formData = collectFormData();
-                appendDropzoneFilesToFormData(myDropzone, formData);
-                saveRequest(url, method, formData)
-            });
-
-            let imageId = 0;
-            document.getElementById('addLayoutBtn').addEventListener('click', function () {
-                const container = document.getElementById('layoutsContainer');
-                const layoutHTML = `
-    <div class="layout-block col-12 row border rounded p-3 mb-4">
-        <div class="col-12 text-end mb-2">
-            <a href="javascript:void(0);" class="ti ti-trash text-danger delete-layout" style="cursor: pointer;"></a>
-        </div>
-        <div class="col-12">
-            <label class="form-label" data-i18n="builder.name">${translate('builder.name')}</label>
-            <input type="text" class="form-control layout-name" placeholder="Планировка 2к левое крыло">
-        </div>
-        <div class="col">
-            <label class="form-label" data-i18n="builder.layout.price">${translate('builder.layout.price')}</label>
-            <input type="number" class="form-control layout-price" placeholder="500">
-        </div>
-        <div class="col">
-            <label class="form-label" data-i18n="builder.layout.room">${translate('builder.layout.room')}</label>
-            <input type="number" class="form-control layout-rooms" placeholder="2">
-        </div>
-        <div class="col">
-            <label class="form-label" data-i18n="builder.layout.totalArea">${translate('builder.layout.totalArea')}</label>
-            <input type="number" class="form-control layout-total-area" placeholder="36">
-        </div>
-        <div class="col">
-            <label class="form-label" data-i18n="builder.layout.livingRoom">${translate('builder.layout.livingRoom')}</label>
-            <input type="number" class="form-control layout-living-area" placeholder="21">
-        </div>
-        <div class="col">
-            <label class="form-label" data-i18n="builder.layout.kitchenRoom">${translate('builder.layout.kitchenRoom')}</label>
-            <input type="number" class="form-control layout-kitchen-area" placeholder="12">
-        </div>
-        <div class="col-12">
-            <div class="form-check mt-4">
-                <input class="form-check-input layout-visible" type="checkbox">
-                <label class="form-check-label" data-i18n="builder.layout.showSite">
-${translate('builder.layout.showSite')}</label>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <label class="form-label" data-i18n="builder.layout.description">${translate('builder.layout.description')}</label>
-            <textarea class="form-control layout-description" rows="3"></textarea>
-        </div>
-        <div class="col-12 mt-3">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <div class="card h-100 p-2 text-center">
-                        <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 100%;">
-                        <button type="button" id="${imageId + 1}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
-                        <input type="file" class="form-control files layout-file1" accept="image/*,video/*" style="display: none;">
-                        <input type="text" class="paths layout-path1" style="display: none;">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 p-2 text-center">
-                        <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 100%;">
-                        <button type="button" id="${imageId + 2}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
-                        <input type="file" class="files layout-file2" accept="image/*,video/*" style="display: none;">
-                        <input type="text" class="paths layout-path2" style="display: none;">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card h-100 p-2 text-center">
-                        <img src="https://coffective.com/wp-content/uploads/2018/06/default-featured-image.png.jpg" class="img-fluid mb-2" alt="error"
-                        style="height: 204px; width: 100%;">
-                        <button type="button" id="${imageId + 3}" class="btn btn-label-primary btn-select"
-                                style="left: 13%;" data-i18n="builder.layout.load">${translate('builder.layout.load')}</button>
-                        <input type="file" class="files layout-file3" accept="image/*,video/*" style="display: none;">
-                        <input type="text" class="paths layout-path3" style="display: none;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    `;
-                imageId += 3;
-                container.insertAdjacentHTML('beforeend', layoutHTML);
-            });
-
-            document.getElementById('layoutsContainer').addEventListener('click', function (e) {
-                if (e.target.classList.contains('delete-layout')) {
-                    e.target.closest('.layout-block').remove();
-                }
-            });
-
-            document.querySelectorAll('input[type="file"].files').forEach(input => {
-                input.setAttribute('accept', 'application/pdf, .pdf');
-            });
-
-            document.querySelectorAll('input.file-pdf').forEach(input => {
-                input.setAttribute('accept', 'application/pdf, .pdf');
-            });
-        });
-
-        function appendDropzoneFilesToFormData(dropzoneInstance, formData) {
-            dropzoneInstance.files.forEach(function (file, index) {
-                if (file.path !== undefined && file.path !== '') {
-                    formData.append(`filesDto[${index}].path`, file.path);
-                } else {
-                    formData.append(`filesDto[${index}].file`, file);
-                }
-            });
-        }
-
-        function collectFormData(selector = 'form') {
-            const formData = new FormData();
-            const $elements = $(`${selector} input, ${selector} select, ${selector} textarea`);
-            $elements.each(function () {
-                const $el = $(this);
-                const name = $el.attr('id');
-                if (!name) return;
-                if ($el.attr('type') === 'checkbox') {
-                    formData.append(name, $el.prop('checked'));
-                } else if ($el.attr('type') === 'file') {
-                    const files = $el[0].files;
-                    if (files.length > 0) {
-                        formData.append(name, files[0]);
-                    }
-                } else {
-                    formData.append(name, $el.val());
-                }
-            });
-
-            $('#layoutsContainer .layout-block').each(function (i) {
-                const $block = $(this);
-                const prefix = `layoutDto[${i}]`;
-
-                formData.append(`${prefix}.name`, $block.find('.layout-name').val());
-                formData.append(`${prefix}.priceByM2`, $block.find('.layout-price').val());
-                formData.append(`${prefix}.rooms`, $block.find('.layout-rooms').val());
-                formData.append(`${prefix}.totalArea`, $block.find('.layout-total-area').val());
-                formData.append(`${prefix}.livingArea`, $block.find('.layout-living-area').val());
-                formData.append(`${prefix}.kitchenArea`, $block.find('.layout-kitchen-area').val());
-                formData.append(`${prefix}.visibleForSite`, $block.find('.layout-visible').is(':checked'));
-                formData.append(`${prefix}.description`, $block.find('.layout-description').val());
-
-                let file1 = $block.find('.layout-file1')[0].files[0];
-                if (file1) {
-                    formData.append(`${prefix}.file1`, file1);
-                }
-                console.log(file1);
-                let file2 = $block.find('.layout-file2')[0].files[0];
-                if (file2) {
-                    formData.append(`${prefix}.file2`, file2);
-                }
-
-                let file3 = $block.find('.layout-file3')[0].files[0];
-                if (file3) {
-                    formData.append(`${prefix}.file3`, file3);
-                }
-
-                formData.append(`${prefix}.path1`, $block.find('.layout-path1').val());
-                formData.append(`${prefix}.path2`, $block.find('.layout-path2').val());
-                formData.append(`${prefix}.path3`, $block.find('.layout-path2').val());
-            });
-
-            return formData;
-        }
-
-        function showErrorMessage(message) {
-            // Здесь можно добавить логику отображения ошибок пользователю
-            // Например, через всплывающее уведомление или в определенном месте на странице
-            alert(message);
         }
     </script>
 </div>

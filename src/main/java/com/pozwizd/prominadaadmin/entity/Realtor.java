@@ -16,7 +16,9 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString(exclude = {"phoneNumbers", "feedBacks", "customer", "investorProperties", "secondaryProperties", "residentialLands"})
+@ToString(exclude = {"phoneNumbers", "feedBacks", "customer", "investorProperties", "secondaryProperties", "residentialLands","documentFeedbacks",
+        "commercialProperties",
+        "branches"})
 @EqualsAndHashCode(of = "id")
 @Entity
 public class Realtor {
@@ -41,11 +43,10 @@ public class Realtor {
 
     private LocalDate dateOfBirthday;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "realtor")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhoneNumber> phoneNumbers;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "realtor_id")
+    @OneToMany(mappedBy = "realtor", fetch = FetchType.EAGER, cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Feedback> feedBacks;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "realtor")

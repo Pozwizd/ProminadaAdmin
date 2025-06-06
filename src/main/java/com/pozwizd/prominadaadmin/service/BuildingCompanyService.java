@@ -8,4 +8,6 @@ public interface BuildingCompanyService {
     BuildingCompany save(BuildingCompany buildingCompany);
 
     List<BuildingCompany> getAll();
+
+    BuildingCompany getById(Long id);
 }

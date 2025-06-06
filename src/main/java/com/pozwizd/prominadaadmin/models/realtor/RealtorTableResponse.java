@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Builder
 public class RealtorTableResponse implements Serializable {
     Long id;
-    Long code;
+    String code;
     String fullname;
     String phoneNumber;
     String email;

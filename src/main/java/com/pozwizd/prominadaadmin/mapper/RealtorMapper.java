@@ -2,7 +2,6 @@ package com.pozwizd.prominadaadmin.mapper;
 
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
-import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorTableResponse;
@@ -20,7 +19,7 @@ public interface RealtorMapper {
         return RealtorTableResponse
                 .builder()
                 .id(realtor.getId())
-                .code(Long.parseLong(realtor.getCode()))
+                .code(realtor.getCode())
                 .fullname(realtor.getLastName() + " " + realtor.getName() + " " + realtor.getSurname())
                 .email(realtor.getEmail())
                 .dateOfBirthday(DateUtil.toFormatDateFromDB(realtor.getDateOfBirthday(),"dd.MM.yyyy"))
@@ -42,7 +41,7 @@ public interface RealtorMapper {
     Realtor toEntity(RealtorResponse realtorResponse);
 
     default Realtor toUpdateEntityFromRealtorRequest(Realtor oldRealtor,
-                                                     PersonalRequest realtorRequest) {
+                                                     RealtorRequest realtorRequest) {
         Realtor realtor = new Realtor();
         realtor.setId(oldRealtor.getId());
         realtor.setName(realtorRequest.getName());
@@ -50,7 +49,6 @@ public interface RealtorMapper {
         realtor.setLastName(realtorRequest.getLastName());
         realtor.setEmail(realtorRequest.getEmail());
         realtor.setPassword(realtorRequest.getPassword());
-
         return realtor;
     }
 
