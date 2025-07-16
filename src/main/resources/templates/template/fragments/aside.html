@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+    <div class="app-brand demo">
+        <a th:href="@{/}" class="app-brand-link">
+              <span class="app-brand-logo demo">
+                    <span class="text-primary">
+                      <svg layout:replace="~{template/fragments/svgLogo}">
+
+
+                      </svg>
+
+                    </span>
+              </span>
+            <span class="app-brand-text demo menu-text fw-bold" th:text="${appName}">appName</span>
+        </a>
+
+        <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+            <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>
+            <i class="ti tabler-x d-block d-xl-none tabler-sm align-middle"></i>
+        </a>
+    </div>
+
+    <div class="menu-inner-shadow"></div>
+
+    <ul class="menu-inner py-1">
+        <li th:classappend="${pageActive == 'objects-builder' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/builder}" class="menu-link">
+                <i class="menu-icon icon-base ti tabler-building-skyscraper"></i>
+                <div data-i18n="builderObjects"></div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'objects-investor' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/static}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-building-bank"></i>
+                <div data-i18n="investorObjects">Объекты от инвесторов</div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'objects-secondary' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/static}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-home-2"></i>
+                <div data-i18n="secondaryRealEstate">Вторичная недвижимость</div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'housesAndLots' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/residentialLand}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-home"></i>
+                <div data-i18n="housesAndLots">Дома и участки</div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'commercial' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/secondaryProperty}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-building-store"></i>
+                <div data-i18n="commercial">Коммерческая</div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'buyers' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/cleaning}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-users"></i>
+                <div data-i18n="buyers">Покупатели</div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'applications' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/specifications}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-file-text"></i>
+                <div data-i18n="applications">Заявки</div>
+            </a>
+        </li>
+        <li th:classappend="${pageActive == 'branch' ? 'active' : ''}" class="menu-item">
+            <a th:href="@{/branch}" class="menu-link"> <!-- Placeholder Link -->
+                <i class="menu-icon tf-icons ti tabler-map-pin"></i>
+                <div data-i18n="branches">Филиалы</div>
+            </a>
+        </li>
+        <li class="menu-item"
+            th:classappend="${pageActive == 'realtors' ? 'active ' : ''}">
+            <a th:href="@{/static}" class="menu-link ">
+                <i class="menu-icon tf-icons ti tabler-user-check"></i>
+                <div data-i18n="realtors">Риелторы</div>
+            </a>
+        </li>
+
+        <!--                th:classappend="${#strings.startsWith(pageActive, 'site-') ? 'active open' : ''}"-->
+        <li class="menu-item"
+            th:classappend="${opened == true ? 'open' : ''}">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti tabler-settings"></i>
+                <div data-i18n="websiteManagement">Управление сайтом</div>
+            </a>
+            <ul class="menu-sub">
+                <li th:classappend="${pageActive == 'banners' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/banner}" class="menu-link"> <!-- Placeholder Link -->
+                        <div data-i18n="banners.name">Баннеры</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'personal' ? 'active' : ''}" class="menu-item">
+                    <a th:href="@{/personal}" class="menu-link"> <!-- Placeholder Link -->
+                        <div data-i18n="systemUsers">Пользователи системы</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'site-pages' ? 'active' : ''}" class="menu-item">
+                    <a href="sales.html" class="menu-link"> <!-- Placeholder Link -->
+                        <div data-i18n="pages">Страницы</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'site-changes' ? 'active' : ''}" class="menu-item">
+                    <a href="sales.html" class="menu-link"> <!-- Placeholder Link -->
+                        <div data-i18n="changes">Изменения</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'site-requests' ? 'active' : ''}" class="menu-item">
+                    <a href="crm.html" class="menu-link"> <!-- Placeholder Link -->
+                        <div data-i18n="websiteRequests">Заявки с сайта</div>
+                    </a>
+                </li>
+                <li th:classappend="${pageActive == 'site-questions' ? 'active' : ''}" class="menu-item">
+                    <a href="crm.html" class="menu-link"> <!-- Placeholder Link -->
+                        <div data-i18n="questions">Вопросы</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</aside>
+<!-- / Menu -->
+
+</html>

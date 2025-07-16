@@ -4,15 +4,17 @@ import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropert
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyLayouts;
 import com.pozwizd.prominadaadmin.mapper.BuilderPropertyMapper;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyLayoutDto;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDto;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDtoForTable;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyLayoutDto;
 import com.pozwizd.prominadaadmin.models.media.MediaDtoDrop;
-import com.pozwizd.prominadaadmin.repository.BuilderPropertyRepository;
+import com.pozwizd.prominadaadmin.repository.primary.BuilderPropertyRepository;
+import com.pozwizd.prominadaadmin.repository.secondary.RegionRepository;
 import com.pozwizd.prominadaadmin.service.BuilderPropertyService;
 import com.pozwizd.prominadaadmin.service.ImageService;
-import com.pozwizd.prominadaadmin.service.RegDistrictService;
-import com.pozwizd.prominadaadmin.service.TopozoneService;
+import com.pozwizd.prominadaadmin.service.location.TopozoneService;
+import com.pozwizd.prominadaadmin.service.location.serviceImp.CityServiceImp;
+import com.pozwizd.prominadaadmin.service.location.serviceImp.DistrictServiceImp;
 import com.pozwizd.prominadaadmin.specification.BuilderPropertySpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +32,10 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
     private final BuilderPropertyRepository builderPropertyRepository;
     private final BuilderPropertyMapper builderPropertyMapper;
     private final ImageService imageService;
-    private final RegDistrictService regDistrictService;
     private final DistrictServiceImp districtServiceImp;
     private final CityServiceImp cityServiceImp;
     private final TopozoneService topozoneService;
+    private final RegionRepository regionRepository;
 
     @Value("${file.upload.dir}")
     private String contextPath;
@@ -155,9 +157,9 @@ public class BuilderPropertyServiceImp implements BuilderPropertyService {
 //        LogUtil.logInfo("Images saved successfully for category.");
 
         BuilderProperty builderProperty = builderPropertyMapper.toEntityFromRequest(dto);
-        builderProperty.setRegDistrict(regDistrictService.getById(Long.parseLong(dto.getRegDistrictId())));
+        builderProperty.setRegion(regionRepository.findById(Long.parseLong(dto.getRegDistrictId())).orElseThrow());
         builderProperty.setCity(cityServiceImp.getById(Long.parseLong(dto.getCityId())));
-        builderProperty.setDistinct(districtServiceImp.getById(Long.parseLong(dto.getDistrictId())));
+        builderProperty.setDistrict(districtServiceImp.getById(Long.parseLong(dto.getDistrictId())));
         builderProperty.setTopozone(topozoneService.getById(Long.parseLong(dto.getTopozoneId())));
 
         if (dto.getLayoutDto() != null) {

@@ -5,19 +5,25 @@ import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public interface PersonalService {
+
     List<Personal> findAll();
 
     Optional<Personal> findById(Long id);
 
     Optional<Personal> findByEmail(String email);
 
+    @Transactional
     Personal save(Personal personal);
 
+    @Transactional
     void deleteById(Long id);
 
     Page<PersonalTableResponse> getPageablePersonal(int page, Integer size,
@@ -28,11 +34,13 @@ public interface PersonalService {
                                                     String email,
                                                     String role);
 
-    void deletePersonal(Long id);
+    @Transactional
+    void saveFromRequest(PersonalRequest personalRequest);
 
-    Personal getPersonalById(Long id);
-
-    void saveFromRequest(PersonalRequest request);
 
     void updatePersonal(@Valid PersonalRequest personalRequest);
+
+    @Async
+    @Transactional
+    CompletableFuture<Personal> updatePersonalAsync(PersonalRequest personalRequest);
 }

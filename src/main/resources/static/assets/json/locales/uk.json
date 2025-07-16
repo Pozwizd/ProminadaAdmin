@@ -62,7 +62,22 @@
   "branches": "Філії",
   "realtors": "Ріелтори",
   "websiteManagement": "Управління сайтом",
-  "banners": "Банери",
+  "Information": "Информация",
+  "banners": {
+    "edit": "Редагування банера",
+    "toast": {
+      "update": {
+        "successful": "Банер оновлено успішно",
+        "error": "Помилка оновлення банера"
+      }
+    },
+    "name": "Банери",
+    "Form": {
+      "name": {
+        "size": "Довжина назви банера має становити від 5 до 50 символів"
+      }
+    }
+  },
   "systemUsers": "Користувачі системи",
   "pages": "Сторінки",
   "changes": "Зміни",
@@ -285,5 +300,19 @@
   },
   "main": "Головна",
   "gallery": "Галерея",
-  "planning": "Планіровка"
+  "planning": "Планіровка",
+  "personalCard": {
+    "editButton": "Редагувати",
+    "informationHeader": "Інформація",
+    "role": "Роль",
+    "fullName": "ПІБ",
+    "phone": "Телефон",
+    "email": "Email",
+    "branch": "Філія"
+  },
+  "banner": {
+    "name": "Назва",
+    "status": "Статус",
+    "actions": "Дії"
+  }
 }

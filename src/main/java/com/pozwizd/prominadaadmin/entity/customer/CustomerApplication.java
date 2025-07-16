@@ -1,8 +1,8 @@
 package com.pozwizd.prominadaadmin.entity.customer;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
-import com.pozwizd.prominadaadmin.entity.other.District;
-import com.pozwizd.prominadaadmin.entity.other.Topozone;
+import com.pozwizd.prominadaadmin.entity.location.District;
+import com.pozwizd.prominadaadmin.entity.location.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.HousingState;
 import com.pozwizd.prominadaadmin.entity.property.enums.ConditionInterior;
 import jakarta.persistence.*;
@@ -18,8 +18,8 @@ public class CustomerApplication {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "distinct_id")
-    private District distinct;
+    @JoinColumn(name = "district_id")
+    private District district;
 
     @ManyToOne
     @JoinColumn(name = "topozone_id")

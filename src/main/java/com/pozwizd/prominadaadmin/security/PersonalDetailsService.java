@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.security;
 
 import com.pozwizd.prominadaadmin.entity.Personal;
-import com.pozwizd.prominadaadmin.repository.PersonalRepository;
+import com.pozwizd.prominadaadmin.repository.primary.PersonalRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

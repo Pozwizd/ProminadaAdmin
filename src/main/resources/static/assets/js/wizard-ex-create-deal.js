@@ -63,7 +63,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-sm-6'
+          rowSelector: '.form-control-validation'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -82,7 +82,7 @@
           placeholder: 'Select an region',
           dropdownParent: dealRegion.parent()
         })
-        .on('change.select2', function () {
+        .on('change', function () {
           // Revalidate the region field when an option is chosen
           FormValidation1.revalidateField('dealRegion');
         });
@@ -122,7 +122,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-sm-6'
+          rowSelector: '.form-control-validation'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -141,7 +141,7 @@
           placeholder: 'Select an offered item',
           dropdownParent: dealOfferedItem.parent()
         })
-        .on('change.select2', function () {
+        .on('change', function () {
           // Revalidate the field if needed when an option is chosen
           // FormValidation2.revalidateField('dealOfferedItem');
         });
@@ -158,7 +158,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-sm-6'
+          rowSelector: '.form-control-validation'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()
@@ -178,7 +178,7 @@
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-md-12'
+          rowSelector: '.form-control-validation'
         }),
         autoFocus: new FormValidation.plugins.AutoFocus(),
         submitButton: new FormValidation.plugins.SubmitButton()

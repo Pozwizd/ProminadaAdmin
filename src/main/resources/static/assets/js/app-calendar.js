@@ -11,53 +11,54 @@
 
 'use strict';
 
-let direction = 'ltr';
-
-if (isRtl) {
-  direction = 'rtl';
-}
-
 document.addEventListener('DOMContentLoaded', function () {
+  const direction = isRtl ? 'rtl' : 'ltr';
   (function () {
-    const calendarEl = document.getElementById('calendar'),
-      appCalendarSidebar = document.querySelector('.app-calendar-sidebar'),
-      addEventSidebar = document.getElementById('addEventSidebar'),
-      appOverlay = document.querySelector('.app-overlay'),
-      calendarsColor = {
-        Business: 'primary',
-        Holiday: 'success',
-        Personal: 'danger',
-        Family: 'warning',
-        ETC: 'info'
-      },
-      offcanvasTitle = document.querySelector('.offcanvas-title'),
-      btnToggleSidebar = document.querySelector('.btn-toggle-sidebar'),
-      btnSubmit = document.querySelector('button[type="submit"]'),
-      btnDeleteEvent = document.querySelector('.btn-delete-event'),
-      btnCancel = document.querySelector('.btn-cancel'),
-      eventTitle = document.querySelector('#eventTitle'),
-      eventStartDate = document.querySelector('#eventStartDate'),
-      eventEndDate = document.querySelector('#eventEndDate'),
-      eventUrl = document.querySelector('#eventURL'),
-      eventLabel = $('#eventLabel'), // ! Using jquery vars due to select2 jQuery dependency
-      eventGuests = $('#eventGuests'), // ! Using jquery vars due to select2 jQuery dependency
-      eventLocation = document.querySelector('#eventLocation'),
-      eventDescription = document.querySelector('#eventDescription'),
-      allDaySwitch = document.querySelector('.allDay-switch'),
-      selectAll = document.querySelector('.select-all'),
-      filterInput = [].slice.call(document.querySelectorAll('.input-filter')),
-      inlineCalendar = document.querySelector('.inline-calendar');
+    // DOM Elements
+    const calendarEl = document.getElementById('calendar');
+    const appCalendarSidebar = document.querySelector('.app-calendar-sidebar');
+    const addEventSidebar = document.getElementById('addEventSidebar');
+    const appOverlay = document.querySelector('.app-overlay');
+    const offcanvasTitle = document.querySelector('.offcanvas-title');
+    const btnToggleSidebar = document.querySelector('.btn-toggle-sidebar');
+    const btnSubmit = document.getElementById('addEventBtn');
+    const btnDeleteEvent = document.querySelector('.btn-delete-event');
+    const btnCancel = document.querySelector('.btn-cancel');
+    const eventTitle = document.getElementById('eventTitle');
+    const eventStartDate = document.getElementById('eventStartDate');
+    const eventEndDate = document.getElementById('eventEndDate');
+    const eventUrl = document.getElementById('eventURL');
+    const eventLocation = document.getElementById('eventLocation');
+    const eventDescription = document.getElementById('eventDescription');
+    const allDaySwitch = document.querySelector('.allDay-switch');
+    const selectAll = document.querySelector('.select-all');
+    const filterInputs = Array.from(document.querySelectorAll('.input-filter'));
+    const inlineCalendar = document.querySelector('.inline-calendar');
 
-    let eventToUpdate,
-      currentEvents = events, // Assign app-calendar-events.js file events (assume events from API) to currentEvents (browser store/object) to manage and update calender events
-      isFormValid = false,
-      inlineCalInstance;
+    // Calendar settings
+    const calendarColors = {
+      Business: 'primary',
+      Holiday: 'success',
+      Personal: 'danger',
+      Family: 'warning',
+      ETC: 'info'
+    };
 
-    // Init event Offcanvas
+    // External jQuery Elements
+    const eventLabel = $('#eventLabel'); // ! Using jQuery vars due to select2 jQuery dependency
+    const eventGuests = $('#eventGuests'); // ! Using jQuery vars due to select2 jQuery dependency
+
+    // Event Data
+    let currentEvents = events; // Assuming events are imported from app-calendar-events.js
+    let isFormValid = false;
+    let eventToUpdate = null;
+    let inlineCalInstance = null;
+
+    // Offcanvas Instance
     const bsAddEventSidebar = new bootstrap.Offcanvas(addEventSidebar);
 
     //! TODO: Update Event label and guest code to JS once select removes jQuery dependency
-    // Event Label (select2)
+    // Initialize Select2 with custom templates
     if (eventLabel.length) {
       function renderBadges(option) {
         if (!option.id) {
@@ -80,25 +81,18 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    // Event Guests (select2)
+    // Render guest avatars
     if (eventGuests.length) {
       function renderGuestAvatar(option) {
-        if (!option.id) {
-          return option.text;
-        }
-        var $avatar =
-          "<div class='d-flex flex-wrap align-items-center'>" +
-          "<div class='avatar avatar-xs me-2'>" +
-          "<img src='" +
-          assetsPath +
-          'img/avatars/' +
-          $(option.element).data('avatar') +
-          "' alt='avatar' class='rounded-circle' />" +
-          '</div>' +
-          option.text +
-          '</div>';
-
-        return $avatar;
+        if (!option.id) return option.text;
+        return `
+    <div class='d-flex flex-wrap align-items-center'>
+      <div class='avatar avatar-xs me-2'>
+        <img src='${assetsPath}img/avatars/${$(option.element).data('avatar')}'
+          alt='avatar' class='rounded-circle' />
+      </div>
+      ${option.text}
+    </div>`;
       }
       eventGuests.wrap('<div class="position-relative"></div>').select2({
         placeholder: 'Select value',
@@ -115,6 +109,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event start (flatpicker)
     if (eventStartDate) {
       var start = eventStartDate.flatpickr({
+        monthSelectorType: 'static',
+        static: true,
         enableTime: true,
         altFormat: 'Y-m-dTH:i:S',
         onReady: function (selectedDates, dateStr, instance) {
@@ -128,6 +124,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Event end (flatpicker)
     if (eventEndDate) {
       var end = eventEndDate.flatpickr({
+        monthSelectorType: 'static',
+        static: true,
         enableTime: true,
         altFormat: 'Y-m-dTH:i:S',
         onReady: function (selectedDates, dateStr, instance) {
@@ -142,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (inlineCalendar) {
       inlineCalInstance = inlineCalendar.flatpickr({
         monthSelectorType: 'static',
+        static: true,
         inline: true
       });
     }
@@ -179,13 +178,6 @@ document.addEventListener('DOMContentLoaded', function () {
       eventToUpdate.extendedProps.description !== undefined
         ? (eventDescription.value = eventToUpdate.extendedProps.description)
         : null;
-
-      // // Call removeEvent function
-      // btnDeleteEvent.addEventListener('click', e => {
-      //   removeEvent(parseInt(eventToUpdate.id));
-      //   // eventToUpdate.remove();
-      //   bsAddEventSidebar.hide();
-      // });
     }
 
     // Modify sidebar toggler
@@ -199,7 +191,10 @@ document.addEventListener('DOMContentLoaded', function () {
       fcSidebarToggleButton.setAttribute('data-bs-toggle', 'sidebar');
       fcSidebarToggleButton.setAttribute('data-overlay', '');
       fcSidebarToggleButton.setAttribute('data-target', '#app-calendar-sidebar');
-      fcSidebarToggleButton.insertAdjacentHTML('beforeend', '<i class="ti ti-menu-2 ti-sm"></i>');
+      fcSidebarToggleButton.insertAdjacentHTML(
+        'beforeend',
+        '<i class="icon-base ti tabler-menu-2 icon-lg text-heading"></i>'
+      );
     }
 
     // Filter events by calender
@@ -219,28 +214,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // * This will be called by fullCalendar to fetch events. Also this can be used to refetch events.
     // --------------------------------------------------------------------------------------------------
     function fetchEvents(info, successCallback) {
-      // Fetch Events from API endpoint reference
-      /* $.ajax(
-        {
-          url: '../../../app-assets/data/app-calendar-events.js',
-          type: 'GET',
-          success: function (result) {
-            // Get requested calendars as Array
-            var calendars = selectedCalendars();
-
-            return [result.events.filter(event => calendars.includes(event.extendedProps.calendar))];
-          },
-          error: function (error) {
-            console.log(error);
-          }
-        }
-      ); */
-
       let calendars = selectedCalendars();
       // We are reading event object from app-calendar-events.js file directly by including that file above app-calendar file.
       // You should make an API call, look into above commented API call for reference
       let selectedEvents = currentEvents.filter(function (event) {
-        // console.log(event.extendedProps.calendar.toLowerCase());
         return calendars.includes(event.extendedProps.calendar.toLowerCase());
       });
       // if (selectedEvents.length > 0) {
@@ -271,9 +248,9 @@ document.addEventListener('DOMContentLoaded', function () {
       initialDate: new Date(),
       navLinks: true, // can click day/week names to navigate views
       eventClassNames: function ({ event: calendarEvent }) {
-        const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar];
+        const colorName = calendarColors[calendarEvent._def.extendedProps.calendar];
         // Background Color
-        return ['fc-event-' + colorName];
+        return ['bg-label-' + colorName];
       },
       dateClick: function (info) {
         let date = moment(info.date).format('YYYY-MM-DD');
@@ -339,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
           eleValidClass: '',
           rowSelector: function (field, ele) {
             // field is the field name & ele is the field element
-            return '.mb-3';
+            return '.form-control-validation';
           }
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
@@ -549,8 +526,8 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
 
-    if (filterInput) {
-      filterInput.forEach(item => {
+    if (filterInputs) {
+      filterInputs.forEach(item => {
         item.addEventListener('click', () => {
           document.querySelectorAll('.input-filter:checked').length < document.querySelectorAll('.input-filter').length
             ? (selectAll.checked = false)

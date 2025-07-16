@@ -6,6 +6,12 @@ server:
   port: 8082
 
 spring:
+  task:
+    execution:
+      pool:
+        core-size: 8
+        keep-alive: 60s
+
   application:
     name: Prominada
 
@@ -40,7 +46,7 @@ logging:
 
 file:
   upload:
-    dir: "${user.dir}/uploads"
+    dir: "${user.dir}"
   temp:
     dir: "${user.dir}/temp-uploads"
 

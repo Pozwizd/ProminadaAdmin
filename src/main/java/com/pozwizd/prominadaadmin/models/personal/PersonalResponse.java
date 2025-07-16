@@ -1,7 +1,6 @@
 package com.pozwizd.prominadaadmin.models.personal;
 
 import com.pozwizd.prominadaadmin.entity.Personal;
-import com.pozwizd.prominadaadmin.models.branch.BranchResponse;
 import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackResponse;
 import com.pozwizd.prominadaadmin.models.feedback.FeedbackResponse;
 import lombok.Data;
@@ -22,7 +21,7 @@ public class PersonalResponse {
     private String pathAvatar;
     private String role;
     
-    private List<FeedbackResponse> feedBacks;
-    private List<DocumentFeedbackResponse> documentFeedbacks;
-    private List<BranchResponse> branches;
+    private List<FeedbackResponse> feedbackResponses;
+    private List<DocumentFeedbackResponse> documentFeedbackResponses;
+    private List<Long> idsBranches;
 }

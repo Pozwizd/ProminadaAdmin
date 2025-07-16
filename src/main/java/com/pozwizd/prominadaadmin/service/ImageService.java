@@ -1,5 +1,6 @@
 package com.pozwizd.prominadaadmin.service;
 
+import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -13,4 +14,6 @@ public interface ImageService {
     void deleteByPath(String path) throws IOException;
 
     String generateFileName(MultipartFile file);
+
+    void saveResidentialLandGalleryImage(MultipartFile file, ResidentialLand residentialLand);
 }

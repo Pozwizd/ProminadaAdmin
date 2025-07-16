@@ -1,3 +1,4 @@
+/* (C) */
 /* Config */
 :root {
   --sk-size: 40px;
@@ -811,25 +812,10 @@
 }
 :root {
   --sk-size: 30px;
-  --sk-color: #fff;
+  --sk-color: var(--bs-primary);
 }
 
 .sk-wave {
-  width: 40px;
+  inline-size: 40px;
   white-space: nowrap;
-}
-
-.sk-fading-circle .sk-circle {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.sk-wave {
-  width: 40px;
-  white-space: nowrap;
-}
-
-.sk-fading-circle .sk-circle {
-  margin-top: 0;
-  margin-bottom: 0;
 }

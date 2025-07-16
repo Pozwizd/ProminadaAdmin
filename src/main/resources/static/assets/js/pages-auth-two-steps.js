@@ -1,77 +1,88 @@
 /**
- *  Page auth two steps
+ * Page auth two steps
  */
-
 'use strict';
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  (function () {
-    let maskWrapper = document.querySelector('.numeral-mask-wrapper');
-
-    for (let pin of maskWrapper.children) {
-      pin.onkeyup = function (e) {
-        // While entering value, go to next
-        if (pin.nextElementSibling) {
-          if (this.value.length === parseInt(this.attributes['maxlength'].value)) {
-            pin.nextElementSibling.focus();
-          }
-        }
-
-        // While deleting entered value, go to previous
-        // Delete using backspace and delete
-        if (pin.previousElementSibling) {
-          if (e.keyCode === 8 || e.keyCode === 46) {
-            pin.previousElementSibling.focus();
-          }
-        }
-      };
-    }
-
+document.addEventListener('DOMContentLoaded', function () {
+  // Self-executing function to initialize event listeners and form validation
+  (() => {
+    const maskWrapper = document.querySelector('.numeral-mask-wrapper');
     const twoStepsForm = document.querySelector('#twoStepsForm');
 
-    // Form validation for Add new record
-    if (twoStepsForm) {
-      const fv = FormValidation.formValidation(twoStepsForm, {
-        fields: {
-          otp: {
-            validators: {
-              notEmpty: {
-                message: 'Please enter otp'
-              }
+    if (maskWrapper) {
+      // Loop through each child of the mask wrapper
+      Array.from(maskWrapper.children).forEach(pin => {
+        pin.addEventListener('keyup', e => {
+          // Only handle numeric keys or backspace
+          if (/^\d$/.test(e.key)) {
+            // Move focus to the next field if maxlength is reached
+            if (pin.nextElementSibling && pin.value.length === parseInt(pin.getAttribute('maxlength'))) {
+              pin.nextElementSibling.focus();
+            }
+          } else if (e.key === 'Backspace') {
+            // Move focus to the previous field on backspace
+            if (pin.previousElementSibling) {
+              pin.previousElementSibling.focus();
             }
           }
-        },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap5: new FormValidation.plugins.Bootstrap5({
-            eleValidClass: '',
-            rowSelector: '.mb-3'
-          }),
-          submitButton: new FormValidation.plugins.SubmitButton(),
-
-          defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-          autoFocus: new FormValidation.plugins.AutoFocus()
-        }
-      });
-
-      const numeralMaskList = twoStepsForm.querySelectorAll('.numeral-mask');
-      const keyupHandler = function () {
-        let otpFlag = true,
-          otpVal = '';
-        numeralMaskList.forEach(numeralMaskEl => {
-          if (numeralMaskEl.value === '') {
-            otpFlag = false;
-            twoStepsForm.querySelector('[name="otp"]').value = '';
-          }
-          otpVal = otpVal + numeralMaskEl.value;
         });
-        if (otpFlag) {
-          twoStepsForm.querySelector('[name="otp"]').value = otpVal;
-        }
-      };
-      numeralMaskList.forEach(numeralMaskEle => {
-        numeralMaskEle.addEventListener('keyup', keyupHandler);
+
+        pin.addEventListener('keypress', e => {
+          // Prevent entering the minus key
+          if (e.key === '-') {
+            e.preventDefault();
+          }
+        });
       });
+    }
+
+    // Form validation for OTP
+    if (twoStepsForm) {
+      const numeralMaskList = twoStepsForm.querySelectorAll('.numeral-mask');
+
+      // Keyup handler to update OTP value
+      const keyupHandler = () => {
+        let otpComplete = true;
+        let otpValue = '';
+
+        numeralMaskList.forEach(maskElement => {
+          if (maskElement.value === '') {
+            otpComplete = false;
+          }
+          otpValue += maskElement.value;
+        });
+
+        twoStepsForm.querySelector('[name="otp"]').value = otpComplete ? otpValue : '';
+      };
+
+      numeralMaskList.forEach(maskElement => {
+        maskElement.addEventListener('keyup', keyupHandler);
+      });
+
+      // Initialize form validation if FormValidation is defined
+      if (typeof FormValidation !== 'undefined') {
+        FormValidation.formValidation(twoStepsForm, {
+          fields: {
+            otp: {
+              validators: {
+                notEmpty: {
+                  message: 'Please enter OTP'
+                }
+              }
+            }
+          },
+          plugins: {
+            trigger: new FormValidation.plugins.Trigger(),
+            bootstrap5: new FormValidation.plugins.Bootstrap5({
+              eleValidClass: '',
+              rowSelector: '.form-control-validation'
+            }),
+            submitButton: new FormValidation.plugins.SubmitButton(),
+            defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+            autoFocus: new FormValidation.plugins.AutoFocus()
+          }
+        });
+      }
     }
   })();
 });

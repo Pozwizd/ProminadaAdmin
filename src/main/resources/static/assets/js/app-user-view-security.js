@@ -4,8 +4,9 @@
 
 'use strict';
 
-(function () {
-  const formChangePass = document.querySelector('#formChangePassword');
+document.addEventListener('DOMContentLoaded', function (e) {
+  const formChangePass = document.querySelector('#formChangePassword'),
+    phoneMask = document.querySelector('.phone-number-mask');
 
   // Form validation for Change password
   if (formChangePass) {
@@ -44,7 +45,7 @@
         trigger: new FormValidation.plugins.Trigger(),
         bootstrap5: new FormValidation.plugins.Bootstrap5({
           eleValidClass: '',
-          rowSelector: '.form-password-toggle'
+          rowSelector: '.form-control-validation'
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid
@@ -60,4 +61,19 @@
       }
     });
   }
-})();
+
+  // phone number formatting
+  if (phoneMask) {
+    phoneMask.addEventListener('input', event => {
+      const cleanValue = event.target.value.replace(/\D/g, '');
+      phoneMask.value = formatGeneral(cleanValue, {
+        blocks: [3, 3, 4],
+        delimiters: [' ', ' ']
+      });
+    });
+    registerCursorTracker({
+      input: phoneMask,
+      delimiter: ' '
+    });
+  }
+});

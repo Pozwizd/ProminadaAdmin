@@ -4,7 +4,7 @@
 
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   const invoiceItemPriceList = document.querySelectorAll('.invoice-item-price'),
     invoiceItemQtyList = document.querySelectorAll('.invoice-item-qty'),
     date = new Date(),
@@ -14,20 +14,28 @@
   // Price
   if (invoiceItemPriceList) {
     invoiceItemPriceList.forEach(function (invoiceItemPrice) {
-      new Cleave(invoiceItemPrice, {
-        delimiter: '',
-        numeral: true
-      });
+      if (invoiceItemPrice) {
+        invoiceItemPrice.addEventListener('input', event => {
+          invoiceItemPrice.value = formatNumeral(event.target.value, {
+            delimiter: '',
+            numeral: true
+          });
+        });
+      }
     });
   }
 
   // Qty
   if (invoiceItemQtyList) {
     invoiceItemQtyList.forEach(function (invoiceItemQty) {
-      new Cleave(invoiceItemQty, {
-        delimiter: '',
-        numeral: true
-      });
+      if (invoiceItemQty) {
+        invoiceItemQty.addEventListener('input', event => {
+          invoiceItemQty.value = formatNumeral(event.target.value, {
+            delimiter: '',
+            numeral: true
+          });
+        });
+      }
     });
   }
 
@@ -44,10 +52,8 @@
       defaultDate: new Date(date.getFullYear(), date.getMonth(), date.getDate() + 5)
     });
   }
-})();
 
-// repeater (jquery)
-$(function () {
+  // repeater (jquery)
   var applyChangesBtn = $('.btn-apply-changes'),
     discount,
     tax1,

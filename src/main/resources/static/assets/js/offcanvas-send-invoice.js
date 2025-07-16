@@ -4,11 +4,11 @@
 
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Send invoice textarea
   const invoiceMsg = document.querySelector('#invoice-message');
 
   const trimMsg = invoiceMsg.textContent.replace(/^\s+|\s+$/gm, '');
 
   invoiceMsg.value = trimMsg;
-})();
+});

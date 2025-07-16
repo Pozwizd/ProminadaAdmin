@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.service.serviceImp;
 
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
-import com.pozwizd.prominadaadmin.repository.BuildingCompanyRepository;
+import com.pozwizd.prominadaadmin.repository.primary.BuildingCompanyRepository;
 import com.pozwizd.prominadaadmin.service.BuildingCompanyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

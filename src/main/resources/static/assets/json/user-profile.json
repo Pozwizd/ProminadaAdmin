@@ -5,7 +5,11 @@
       "project_img": "xd-label.png",
       "project_leader": "Fred",
       "project_name": "App Design",
-      "team": ["1.png", "3.png", "4.png"],
+      "team": [
+        "1.png",
+        "3.png",
+        "4.png"
+      ],
       "date": "09 Feb 2021",
       "status": "89%"
     },
@@ -14,7 +18,14 @@
       "project_img": "react-label.png",
       "project_leader": "Georgie",
       "project_name": "Create Website",
-      "team": ["2.png", "6.png", "5.png", "3.png"],
+      "team": [
+        "2.png",
+        "6.png",
+        "5.png",
+        "3.png",
+        "5.png",
+        "3.png"
+      ],
       "date": "20 Mar 2021",
       "status": "72%"
     },
@@ -23,7 +34,13 @@
       "project_img": "social-label.png",
       "project_leader": "Owen",
       "project_name": "Social Banners",
-      "team": ["11.png", "10.png"],
+      "team": [
+        "11.png",
+        "10.png",
+        "7.png",
+        "12.png",
+        "4.png"
+      ],
       "date": "03 Jan 2021",
       "status": "45%"
     },
@@ -32,7 +49,12 @@
       "project_img": "sketch-label.png",
       "project_leader": "Keith",
       "project_name": "Logo Designs",
-      "team": ["5.png", "7.png", "12.png", "4.png"],
+      "team": [
+        "5.png",
+        "7.png",
+        "12.png",
+        "4.png"
+      ],
       "date": "12 Aug 2021",
       "status": "92%"
     },
@@ -41,7 +63,11 @@
       "project_img": "figma-label.png",
       "project_leader": "Harmonia",
       "project_name": "Figma Dashboards",
-      "team": ["9.png", "2.png", "4.png"],
+      "team": [
+        "9.png",
+        "2.png",
+        "4.png"
+      ],
       "date": "08 Apr 2021",
       "status": "25%"
     },
@@ -50,7 +76,12 @@
       "project_img": "vue-label.png",
       "project_leader": "Genevra",
       "project_name": "Admin Template",
-      "team": ["11.png", "13.png", "7.png", "6.png"],
+      "team": [
+        "11.png",
+        "13.png",
+        "7.png",
+        "6.png"
+      ],
       "date": "06 Oct 2021",
       "status": "100%"
     },
@@ -59,7 +90,15 @@
       "project_img": "",
       "project_leader": "Eileen",
       "project_name": "Website SEO",
-      "team": ["10.png", "3.png", "2.png", "8.png"],
+      "team": [
+        "10.png",
+        "3.png",
+        "2.png",
+        "8.png",
+        "13.png",
+        "10.png",
+        "3.png"
+      ],
       "date": "10 May 2021",
       "status": "38%"
     },
@@ -68,7 +107,12 @@
       "project_img": "xd-label.png",
       "project_leader": "Richardo",
       "project_name": "Angular APIs",
-      "team": ["4.png", "13.png", "10.png", "3.png"],
+      "team": [
+        "4.png",
+        "13.png",
+        "10.png",
+        "3.png"
+      ],
       "date": "17 June 2021",
       "status": "77%"
     },
@@ -77,7 +121,12 @@
       "project_img": "html-label.png",
       "project_leader": "Allyson",
       "project_name": "Crypto Admin",
-      "team": ["7.png", "3.png", "7.png", "2.png"],
+      "team": [
+        "7.png",
+        "3.png",
+        "7.png",
+        "2.png"
+      ],
       "date": "29 Sept 2021",
       "status": "36%"
     },
@@ -86,7 +135,12 @@
       "project_img": "sketch-label.png",
       "project_leader": "Merline",
       "project_name": "IOS App Design",
-      "team": ["2.png", "8.png", "5.png", "1.png"],
+      "team": [
+        "2.png",
+        "8.png",
+        "5.png",
+        "1.png"
+      ],
       "date": "19 Apr 2021",
       "status": "56%"
     }

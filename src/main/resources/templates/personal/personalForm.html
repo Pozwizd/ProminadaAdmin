@@ -2,6 +2,20 @@
 
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template/layout.html}">
 
+<head>
+    <th:block layout:fragment="page_css">
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/animate-css/animate.css}" />
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}" />
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/tagify/tagify.css}" />
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-select/bootstrap-select.css}" />
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/notyf/notyf.css}" />
+    </th:block>
+</head>
+
 <body>
 <div layout:fragment="content">
     <div class="d-flex justify-content-between align-items-center py-3 mb-4">
@@ -15,6 +29,7 @@
                 <ul class="nav nav-pills mb-3" role="tablist">
                     <li class="nav-item">
                         <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                id="informationPersonal-tab"
                                 data-bs-target="#informationPersonal" aria-controls="informationPersonal"
                                 aria-selected="true" data-i18n="personal.informationTab">
                             Информация
@@ -22,6 +37,7 @@
                     </li>
                     <li class="nav-item">
                         <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                id="testimonialsPersonal-tab"
                                 data-bs-target="#testimonialsPersonal" aria-controls="testimonialsPersonal"
                                 aria-selected="false" data-i18n="personal.testimonialsTab">
                             Отзывы
@@ -38,12 +54,12 @@
                                 <div class="button-wrapper">
                                     <label for="upload" class="btn btn-primary me-2 mb-3" tabindex="0">
                                         <span class="d-none d-sm-block" data-i18n="personal.uploadAvatar">Загрузите аватар</span>
-                                        <i class="ti ti-upload d-block d-sm-none"></i>
+                                        <i class="ti tabler-upload d-block d-sm-none"></i>
                                         <input type="file" id="upload" class="account-file-input" hidden
                                                accept="image/png, image/jpeg"/>
                                     </label>
                                     <button type="button" class="btn btn-label-secondary account-image-reset mb-3">
-                                        <i class="ti ti-refresh-dot d-block d-sm-none"></i>
+                                        <i class="ti tabler-refresh-dot d-block d-sm-none"></i>
                                         <span class="d-none d-sm-block" data-i18n="personal.reset">Сбросить</span>
                                     </button>
                                     <div class="text-muted" data-i18n="personal.allowedFormats">Allowed JPG, GIF or PNG.
@@ -58,7 +74,7 @@
                             <form id="formAdminUserProfile" method="POST" onsubmit="return false">
                                 <input type="hidden" id="userId" name="userId"/>
                                 <div class="row">
-                                    <div class="col-md-6 mb-4">
+                                    <div class="mb-3 col-md-6">
                                         <label for="branchesSelect" class="form-label" data-i18n="personal.branches">Филиалы</label>
                                         <div class="select2-primary">
                                             <select id="branchesSelect" class="select2 form-select" multiple>
@@ -98,6 +114,15 @@
                                         <input class="form-control" type="email" id="email" name="email" required
                                                pattern="^(.+)@(.+)$" placeholder="example@example.com"/>
                                     </div>
+                                    <div class="mb-3 col-md-6">
+                                        <label for="city-select" class="form-label" data-i18n="personal.branches">Филиалы</label>
+                                        <div class="select2-primary">
+                                            <select id="city-select" class="select2 form-select">
+
+                                            </select>
+                                        </div>
+                                    </div>
+
 
                                     <hr class="my-0"/>
                                     <div class="mb-3 col-md-6">
@@ -180,36 +205,44 @@
             </div>
         </div>
     </div>
+
+
+
+</div>
+
+
+<th:block layout:fragment="page_js">
+
+
+    <script th:src="@{/assets/vendor/libs/bootstrap-select/bootstrap-select.js}"></script>
+    <script th:src="@{/assets/vendor/libs/chartjs/chartjs.js}"></script>
+
+    <script th:src="@{/assets/vendor/libs/notyf/notyf.js}"></script>
+
+    <script th:src="@{/assets/vendor/libs/cleave-zen/cleave-zen.js}"></script>
+    <script th:src="@{/assets/vendor/libs/jquery-repeater/jquery-repeater.js}"></script>
+    <script th:src="@{/assets/vendor/libs/moment/moment.js}"></script>
+
+
+    <script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
+    <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+    <script th:src="@{/assets/vendor/libs/tagify/tagify.js}"></script>
+
+
     <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
     <script th:src="@{/assets/js/forms-selects.js}"></script>
-    <script th:src="@{/assets/axios.min.js}"></script>
+
+
+    <script th:src="@{/customAssets/js/toast.js}"></script>
 
     <script th:inline="javascript">
         window.contextPath = '[[@{/}]]'.replaceAll('"', '');
         window.defaultAvatarPath = '[[@{/assets/img/avatars/14.png}]]';
+        console.log(window.defaultAvatarPath);
     </script>
     <script th:src="@{/customAssets/js/personal/formPersonal.js}"></script>
 
-        <script>
-        function localize() {
-            let i18nList = document.querySelectorAll('[data-i18n]');
-
-            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
-
-            if (currentLanguageEle) {
-                currentLanguageEle.click();
-            }
-
-            i18nList.forEach(function (item) {
-                item.innerHTML = i18next.t(item.dataset.i18n);
-            });
-        }
-
-        localize();
-    </script>
-
-</div>
+</th:block>
 
 </body>
-
 </html>

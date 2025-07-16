@@ -3,7 +3,7 @@ package com.pozwizd.prominadaadmin.service.serviceImp;
 import com.pozwizd.prominadaadmin.entity.DocumentFeedback;
 import com.pozwizd.prominadaadmin.mapper.DocumentFeedbackMapper;
 import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackResponse;
-import com.pozwizd.prominadaadmin.repository.DocumentFeedbackRepository;
+import com.pozwizd.prominadaadmin.repository.primary.DocumentFeedbackRepository;
 import com.pozwizd.prominadaadmin.service.DocumentFeedbackService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

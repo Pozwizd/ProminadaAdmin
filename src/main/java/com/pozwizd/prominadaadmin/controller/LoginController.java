@@ -12,8 +12,8 @@ public class LoginController {
 
     @GetMapping("/login")
     public ModelAndView login(Model model) {
-        model.addAttribute("title", "Вход в систему");
-        return new ModelAndView("/login/login");
+        model.addAttribute("title", "Login");
+        return new ModelAndView("/auth/auth-login-cover");
     }
 
 }

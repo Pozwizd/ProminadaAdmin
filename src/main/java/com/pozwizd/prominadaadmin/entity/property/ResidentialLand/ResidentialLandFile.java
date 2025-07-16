@@ -16,7 +16,7 @@ public class ResidentialLandFile {
 
     private String name;
 
-    private String path;
+    private String filePath; // Changed from 'path' to 'filePath'
 
     @ManyToOne
     @JoinColumn(name = "residential_land_id")

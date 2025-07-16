@@ -6,49 +6,43 @@
  */
 
 'use strict';
-
-// JS global variables
-let config = {
+/* JS global variables
+ !Please use the hex color code (#000) here. Don't use rgba(), hsl(), etc
+*/
+window.config = {
+  // global color variables for charts except chartjs
   colors: {
-    primary: '#7367f0',
-    secondary: '#a8aaae',
-    success: '#28c76f',
-    info: '#00cfe8',
-    warning: '#ff9f43',
-    danger: '#ea5455',
-    dark: '#4b4b4b',
-    black: '#000',
-    white: '#fff',
-    cardColor: '#fff',
-    bodyBg: '#f8f7fa',
-    bodyColor: '#6f6b7d',
-    headingColor: '#5d596c',
-    textMuted: '#a5a3ae',
-    borderColor: '#dbdade'
+    primary: window.Helpers.getCssVar('primary'),
+    secondary: window.Helpers.getCssVar('secondary'),
+    success: window.Helpers.getCssVar('success'),
+    info: window.Helpers.getCssVar('info'),
+    warning: window.Helpers.getCssVar('warning'),
+    danger: window.Helpers.getCssVar('danger'),
+    dark: window.Helpers.getCssVar('dark'),
+    black: window.Helpers.getCssVar('pure-black'),
+    white: window.Helpers.getCssVar('white'),
+    cardColor: window.Helpers.getCssVar('paper-bg'),
+    bodyBg: window.Helpers.getCssVar('body-bg'),
+    bodyColor: window.Helpers.getCssVar('body-color'),
+    headingColor: window.Helpers.getCssVar('heading-color'),
+    textMuted: window.Helpers.getCssVar('secondary-color'),
+    borderColor: window.Helpers.getCssVar('border-color')
   },
   colors_label: {
-    primary: '#7367f029',
-    secondary: '#a8aaae29',
-    success: '#28c76f29',
-    info: '#00cfe829',
-    warning: '#ff9f4329',
-    danger: '#ea545529',
-    dark: '#4b4b4b29'
+    primary: window.Helpers.getCssVar('primary-bg-subtle'),
+    secondary: window.Helpers.getCssVar('secondary-bg-subtle'),
+    success: window.Helpers.getCssVar('success-bg-subtle'),
+    info: window.Helpers.getCssVar('info-bg-subtle'),
+    warning: window.Helpers.getCssVar('warning-bg-subtle'),
+    danger: window.Helpers.getCssVar('danger-bg-subtle'),
+    dark: window.Helpers.getCssVar('dark-bg-subtle')
   },
-  colors_dark: {
-    cardColor: '#2f3349',
-    bodyBg: '#25293c',
-    bodyColor: '#b6bee3',
-    headingColor: '#cfd3ec',
-    textMuted: '#7983bb',
-    borderColor: '#434968'
-  },
+  fontFamily: window.Helpers.getCssVar('font-family-base'),
   enableMenuLocalStorage: true // Enable menu state with local storage support
 };
 
-let assetsPath = document.documentElement.getAttribute('data-assets-path'),
-  templateName = document.documentElement.getAttribute('data-template'),
-  rtlSupport = true; // set true for rtl support (rtl + ltr), false for ltr only.
+window.assetsPath = document.documentElement.getAttribute('data-assets-path');
+window.templateName = document.documentElement.getAttribute('data-template');
 
 /**
  * TemplateCustomizer
@@ -56,58 +50,50 @@ let assetsPath = document.documentElement.getAttribute('data-assets-path'),
  * -----------------------------------------------------------------------------------------------
  */
 
-// To use more themes, just push it to THEMES object.
-
-/* TemplateCustomizer.THEMES.push({
-  name: 'theme-raspberry',
-  title: 'Raspberry'
-}); */
-
-// To add more languages, just push it to LANGUAGES object.
-/*
-TemplateCustomizer.LANGUAGES.fr = { ... };
-*/
-
 /**
  * TemplateCustomizer settings
  * -------------------------------------------------------------------------------------
- * cssPath: Core CSS file path
- * themesPath: Theme CSS file path
  * displayCustomizer: true(Show customizer), false(Hide customizer)
- * lang: To set default language, Add more langues and set default. Fallback language is 'en'
- * controls: [ 'rtl','style','layoutType','showDropdownOnHover','layoutNavbarFixed','layoutFooterFixed','themes'] | Show/Hide customizer controls
- * defaultTheme: 0(Default), 1(Semi Dark), 2(Bordered)
- * defaultStyle: 'light', 'dark' (Mode)
- * defaultTextDir: 'ltr', 'rtl' (rtlSupport must be true for rtl mode)
- * defaultLayoutType: 'static', 'fixed'
- * defaultMenuCollapsed: true, false
- * defaultNavbarFixed: true, false
- * defaultFooterFixed: true, false
+ * lang: To set default language, Add more languages and set default. Fallback language is 'en'
+ * defaultPrimaryColor: '#7367F0' | Set default primary color
+ * defaultSkin: 0(Default), 1(Bordered)
+ * defaultTheme: 'light', 'dark', 'system'
+ * defaultSemiDark: true, false (For dark menu only)
+ * defaultContentLayout: 'compact', 'wide' (compact=container-xxl, wide=container-fluid)
+ * defaultHeaderType: 'static', 'fixed' (for horizontal layout only)
+ * defaultMenuCollapsed: true, false (For vertical layout only)
+ * defaultNavbarType: 'sticky', 'static', 'hidden' (For vertical layout only)
+ * defaultTextDir: 'ltr', 'rtl' (Direction)
+ * defaultFooterFixed: true, false (For vertical layout only)
  * defaultShowDropdownOnHover : true, false (for horizontal layout only)
+ * controls: [ 'color', 'theme', 'skins', 'semiDark', 'layoutCollapsed', 'layoutNavbarOptions', 'headerType', 'contentLayout', 'rtl' ] | Show/Hide customizer controls
  */
 
 if (typeof TemplateCustomizer !== 'undefined') {
   window.templateCustomizer = new TemplateCustomizer({
-    cssPath: assetsPath + 'vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
-    themesPath: assetsPath + 'vendor/css' + (rtlSupport ? '/rtl' : '') + '/',
     displayCustomizer: false,
-    // lang: 'fr',
-    // defaultTheme: 2,
-    // defaultStyle: 'light',
-    // defaultTextDir: 'ltr',
-    // defaultLayoutType: 'fixed',
+    lang: localStorage.getItem('templateCustomizer-' + templateName + '--Lang') || 'en', // Set default language here
+    defaultPrimaryColor: '#1ab600',
+    // defaultSkin: 1,
+    defaultTheme: 'dark',
+    // defaultSemiDark: true,
+    // defaultContentLayout: 'wide',
+    // defaultHeaderType: 'static',
     // defaultMenuCollapsed: true,
-    // defaultNavbarFixed: true,
-    // defaultFooterFixed: false
-    defaultShowDropdownOnHover: true
-    // controls: [
-    //   'rtl',
-    //   'style',
-    //   'layoutType',
-    //   'showDropdownOnHover',
-    //   'layoutNavbarFixed',
-    //   'layoutFooterFixed',
-    //   'themes'
-    // ],
+    // defaultNavbarType: 'static',
+    // defaultTextDir: 'rtl',
+    // defaultFooterFixed: false,
+    // defaultShowDropdownOnHover: false,
+    controls: [
+      'color',
+      'theme',
+      'skins',
+      'semiDark',
+      'layoutCollapsed',
+      'layoutNavbarOptions',
+      'headerType',
+      'contentLayout',
+      'rtl'
+    ]
   });
 }

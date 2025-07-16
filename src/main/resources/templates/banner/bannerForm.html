@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/layout.html}" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.ultraq.net.nz/thymeleaf/layout ">
+<body>
+<div layout:fragment="content">
+
+
+<!--    <div class="d-flex justify-content-between align-items-center py-3 mb-4">-->
+<!--        <h4 class="fw-bold m-0" data-i18n="">Баннер</h4>-->
+<!--    </div>-->
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card p-4">
+                <h3 data-i18n="Information">Информация</h3>
+                <div class="mb-3">
+                    <label for="bannerName" class="form-label">Название</label>
+                    <input type="text" class="form-control" id="bannerName" value="">
+                </div>
+                <div class="mb-3">
+                    <label for="status" class="form-label">Статус</label>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="status" checked>
+                        <label class="form-check-label" for="status">Активен</label>
+                    </div>
+                </div>
+
+                <h4>Слайды</h4>
+                <div id="image-banners-container">
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-secondary mb-3 px-4" onclick="BannerManager.addSlide()">Добавить слайд</button>
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="button" class="btn btn-light" id="cancelButton">Отменить</button>
+                    <button type="submit" class="btn btn-success" id="saveButton">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+    <script th:src="@{/assets/js/forms-selects.js}"></script>
+    <script th:src="@{/assets/axios.min.js}"></script>
+
+
+    <script th:inline="javascript">
+        (function() {
+            const contextPath = '[[@{/}]]'.replaceAll('"', '');
+            let removedSlideIds = [];
+            let nextSlideIndex = 0;
+            let bannerId = null;
+
+            /**
+             * Очищает все существующие сообщения об ошибках валидации и убирает классы 'is-invalid'.
+             */
+            function clearValidationErrors() {
+                document.querySelectorAll('.error-message').forEach(el => el.remove());
+
+                document.querySelectorAll('.is-invalid').forEach(el => {
+                    el.classList.remove('is-invalid');
+                });
+            }
+
+            /**
+             * Отображает ошибки валидации на форме.
+             * @param {object} errors - Объект, где ключи - это пути полей (например, "name", "imageBannersRequest[0].name"),
+             *                          а значения - это ключи для i18next.
+             */
+            function displayValidationErrors(errors) {
+                clearValidationErrors();
+
+
+                for (const fieldPath in errors) {
+                    if (errors.hasOwnProperty(fieldPath)) {
+                        const errorMessageKey = errors[fieldPath];
+                        console.log(errorMessageKey)
+                        let fieldElement = null;
+                        if (fieldPath === 'name') {
+                            fieldElement = document.getElementById('bannerName');
+                        } else if (fieldPath === 'status') {
+                            fieldElement = document.getElementById('status');
+                        }
+
+                        else if (fieldPath.startsWith('imageBannersRequest[')) {
+                            const match = fieldPath.match(/imageBannersRequest\[(\d+)\]\.(\w+)/);
+                            if (match) {
+                                const indexInArray = parseInt(match[1]);
+                                const fieldName = match[2];
+
+                                const slideDivs = document.querySelectorAll('#image-banners-container .slide');
+                                if (indexInArray < slideDivs.length) {
+                                    const targetSlideDiv = slideDivs[indexInArray];
+                                    const tempIndex = targetSlideDiv.dataset.tempIndex;
+
+                                    if (fieldName === 'name') {
+                                        fieldElement = document.getElementById(`slide-name-${tempIndex}`);
+                                    } else if (fieldName === 'priority') {
+                                        fieldElement = document.getElementById(`slide-order-${tempIndex}`);
+                                    } else if (fieldName === 'pathImage') {
+                                        fieldElement = document.getElementById(`slide-file-${tempIndex}`);
+                                    }
+                                } else {
+                                    console.warn(`Валидационная ошибка для слайда с индексом ${indexInArray}, но такого слайда не найдено в DOM.`);
+                                }
+                            }
+                        }
+
+                        if (fieldElement) {
+                            fieldElement.classList.add('is-invalid');
+                            const errorDiv = document.createElement('div');
+                            errorDiv.className = 'error-message invalid-feedback';
+                            errorDiv.setAttribute('data-i18n', errorMessageKey);
+                            console.log("banners.Form."+ {errorMessageKey})
+                            let fullErrorMessageKey = "banners.Form." + errorMessageKey;
+                            errorDiv.textContent = i18next.t(fullErrorMessageKey);
+                            fieldElement.parentNode.appendChild(errorDiv);
+                        } else {
+                            console.warn('Не удалось найти элемент DOM для ошибки:', fieldPath, 'Сообщение:', errorMessageKey);
+                        }
+                    }
+                }
+            }
+
+
+            // --- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ---
+
+            /**
+             * Извлекает ID баннера из URL (параметра 'id' или последнего сегмента пути).
+             * @returns {string|null} ID баннера или null, если не найден.
+             */
+            function getBannerIdFromUrl() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('id') || window.location.pathname.split('/').filter(Boolean).pop();
+            }
+
+            /**
+             * Генерирует HTML-строку для одного слайда.
+             * @param {object} slideData - Данные слайда (id, name, priority, pathImage).
+             * @param {number} tempIndex - Временный индекс для генерации уникальных ID элементов.
+             * @returns {string} HTML-строка, представляющая слайд.
+             */
+            function createSlideElement(slideData = {}, tempIndex) {
+                const slideIdAttr = slideData.id ? `data-slide-id="${slideData.id}"` : '';
+                const name = slideData.name || '';
+                const priority = slideData.priority !== undefined ? slideData.priority : (tempIndex + 1);
+                const imagePath = slideData.pathImage ? `${contextPath}${slideData.pathImage}` : 'https://placehold.co/150x150?text=No+Image';
+                const fileName = slideData.pathImage ? slideData.pathImage.split('/').pop() : 'Файл не выбран';
+
+                return `
+            <div class="slide mb-3 p-3 border rounded" ${slideIdAttr} data-temp-index="${tempIndex}">
+                <input type="hidden" class="banner-image-id" value="${slideData.id || ''}">
+                <div class="row g-3">
+                    <div class="col-md-3 col-sm-12 d-flex align-items-center justify-content-center">
+                        <img src="${imagePath}" class="img-fluid rounded" style="max-width: 150px; max-height: 150px; object-fit: contain;" alt="Image Preview" id="image-preview-${tempIndex}">
+                    </div>
+                    <div class="col-md-9 col-sm-12">
+                        <div class="mb-3">
+                            <label for="slide-name-${tempIndex}" class="form-label">Название</label>
+                            <input type="text" class="form-control" id="slide-name-${tempIndex}" value="${name}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="slide-order-${tempIndex}" class="form-label">Порядок</label>
+                            <input type="number" class="form-control" id="slide-order-${tempIndex}" value="${priority}" min="1">
+                        </div>
+                        <div class="mb-3">
+                            <label for="slide-file-${tempIndex}" class="form-label">Выберите файл</label>
+                            <input class="form-control" type="file" id="slide-file-${tempIndex}" accept="image/*">
+                            <small class="form-text text-muted" id="file-info-${tempIndex}">${fileName}</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="BannerManager.removeSlide(this)">
+                        <i class="bi bi-trash"></i> Удалить
+                    </button>
+                </div>
+            </div>`;
+            }
+
+            /**
+             * Обработчик изменения файла для предпросмотра изображения.
+             * @param {Event} event - Событие изменения файла.
+             */
+            function handleFileChange(event) {
+                const fileInput = event.target;
+                const tempIndex = fileInput.id.split('-').pop();
+                const imagePreview = document.getElementById(`image-preview-${tempIndex}`);
+                const fileInfo = document.getElementById(`file-info-${tempIndex}`);
+
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                    fileInfo.textContent = fileInput.files[0].name;
+                } else {
+                    imagePreview.src = 'https://placehold.co/150x150?text=No+Image';
+                    fileInfo.textContent = 'Файл не выбран';
+                }
+            }
+
+            /**
+             * Прикрепляет обработчики `change` ко всем файловым полям слайдов,
+             * которые в данный момент находятся в DOM.
+             */
+            function attachFileChangeListeners() {
+                document.querySelectorAll('[id^="slide-file-"]').forEach(input => {
+                    input.removeEventListener('change', handleFileChange);
+                    input.addEventListener('change', handleFileChange);
+                });
+            }
+
+            /**
+             * Загружает данные баннера с сервера.
+             * @param {string} id - ID баннера для загрузки.
+             */
+            async function loadBanner(id) {
+                try {
+                    const response = await axios.get(`${contextPath}banner/${id}`);
+                    console.log("Загруженные данные баннера:", response.data);
+                    fillFormData(response.data);
+                } catch (error) {
+                    console.error('Ошибка при загрузке данных баннера:', error);
+                    alert('Не удалось загрузить данные баннера. Пожалуйста, проверьте консоль.');
+                }
+            }
+
+            /**
+             * Заполняет поля формы данными полученного баннера.
+             * @param {object} data - Объект данных баннера.
+             */
+            function fillFormData(data) {
+                document.getElementById('bannerName').value = data.name || '';
+                document.getElementById('status').checked = data.status || false;
+
+                const imageBannersContainer = document.getElementById('image-banners-container');
+                imageBannersContainer.innerHTML = '';
+                removedSlideIds = [];
+
+                if (data.imageBanners && data.imageBanners.length > 0) {
+                    data.imageBanners.sort((a, b) => a.priority - b.priority);
+
+                    data.imageBanners.forEach((imageBanner) => {
+                        imageBannersContainer.insertAdjacentHTML('beforeend', createSlideElement(imageBanner, nextSlideIndex));
+                        nextSlideIndex++;
+                    });
+                }
+                if (data.imageBanners && data.imageBanners.length > nextSlideIndex) {
+                    nextSlideIndex = data.imageBanners.length;
+                }
+
+                attachFileChangeListeners();
+            }
+
+            /**
+             * Добавляет новый пустой слайд в контейнер.
+             */
+            function addSlide() {
+                const imageBannersContainer = document.getElementById('image-banners-container');
+                const newSlideHtml = createSlideElement({}, nextSlideIndex);
+                imageBannersContainer.insertAdjacentHTML('beforeend', newSlideHtml);
+
+                const newFileInput = document.getElementById(`slide-file-${nextSlideIndex}`);
+                if (newFileInput) {
+                    newFileInput.addEventListener('change', handleFileChange);
+                }
+                nextSlideIndex++;
+            }
+
+            /**
+             * Удаляет слайд из DOM и добавляет его ID в список удаленных.
+             * @param {HTMLButtonElement} button - Кнопка "Удалить", которая была нажата.
+             */
+            function removeSlide(button) {
+                const slideDiv = button.closest('.slide');
+                if (slideDiv) {
+                    const hiddenIdInput = slideDiv.querySelector('.banner-image-id');
+                    const slideId = hiddenIdInput ? hiddenIdInput.value : null;
+
+                    if (slideId) {
+                        removedSlideIds.push(parseInt(slideId));
+                    }
+                    slideDiv.remove();
+                }
+            }
+
+
+            /**
+             * Настраивает отправку формы при нажатии на кнопку "Сохранить".
+             */
+            function setupFormSubmission() {
+                const saveButton = document.getElementById('saveButton');
+                const cancelButton = document.getElementById('cancelButton');
+
+                saveButton.addEventListener('click', async function (event) {
+                    event.preventDefault();
+                    clearValidationErrors();
+
+                    const formData = new FormData();
+
+                    formData.append('id', bannerId ? parseInt(bannerId) : '');
+                    formData.append('name', document.getElementById('bannerName').value);
+                    formData.append('status', document.getElementById('status').checked);
+
+                    removedSlideIds.forEach((id) => {
+                        formData.append('deletedImageBannerIds', id);
+                    });
+
+                    document.querySelectorAll('#image-banners-container .slide').forEach((slideDiv, index) => {
+                        const tempIndex = slideDiv.dataset.tempIndex;
+
+                        const hiddenIdInput = slideDiv.querySelector('.banner-image-id');
+                        const slideId = hiddenIdInput && hiddenIdInput.value ? parseInt(hiddenIdInput.value) : '';
+
+                        const nameInput = document.getElementById(`slide-name-${tempIndex}`);
+                        const orderInput = document.getElementById(`slide-order-${tempIndex}`);
+                        const fileInput = document.getElementById(`slide-file-${tempIndex}`);
+
+                        formData.append(`imageBannersRequest[${index}].id`, slideId);
+                        formData.append(`imageBannersRequest[${index}].name`, nameInput ? nameInput.value : '');
+                        formData.append(`imageBannersRequest[${index}].priority`, orderInput ? parseInt(orderInput.value) : (index + 1));
+
+                        if (fileInput && fileInput.files && fileInput.files[0]) {
+                            formData.append(`imageBannersRequest[${index}].pathImage`, fileInput.files[0]);
+                        }
+                    });
+
+                    try {
+                        let response;
+                        if (bannerId) {
+                            response = await axios.put(`${contextPath}banner/${bannerId}`, formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                            showI18nToast('success',
+                                'system.toast.title.success',
+                                'banners.toast.update.successful');
+                            setTimeout(() => {
+                                window.location.href = `${contextPath}banner`;
+                            }, 1500);
+                        } else {
+                            response = await axios.post(`${contextPath}banner`, formData, {
+                                headers: {
+                                    'Content-Type': 'multipart/form-data'
+                                }
+                            });
+                            alert('Баннер успешно создан!');
+                            if (response.data && response.data.id) {
+                                window.location.href = `${contextPath}banner/edit/${response.data.id}`;
+                            } else {
+                                window.location.href = `${contextPath}banner`;
+                            }
+                        }
+                        console.log('Ответ сервера:', response.data);
+
+                    } catch (error) {
+                        console.error('Ошибка при сохранении баннера:', error);
+                        if (error.response && error.response.data) {
+                            displayValidationErrors(error.response.data);
+                            console.error('Ошибки валидации:', error.response.data);
+                            showI18nToast('error', 'system.toast.title.error', 'banners.toast.update.error');
+                        } else {
+                        }
+                    }
+                });
+
+                cancelButton.addEventListener('click', function () {
+                    window.location.href = `${contextPath}banner`;
+                });
+            }
+
+
+            /**
+             * Главная функция инициализации модуля "BannerManager".
+             */
+            function init() {
+                bannerId = getBannerIdFromUrl();
+                const isEditMode = Boolean(bannerId && !isNaN(bannerId));
+
+                if (isEditMode) {
+                    loadBanner(bannerId);
+                } else {
+                    nextSlideIndex = 0;
+                }
+
+                setupFormSubmission();
+            }
+
+            window.BannerManager = {
+                addSlide: addSlide,
+                removeSlide: removeSlide
+            };
+
+            document.addEventListener('DOMContentLoaded', init);
+
+        })();
+    </script>
+
+    <script th:src="@{/assets/js/main.js}"></script>
+
+    <script>
+        function localize() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+
+            if (typeof i18next !== 'undefined' && typeof i18next.t === 'function') {
+                let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+
+                if (currentLanguageEle) {
+                    // currentLanguageEle.click(); // Это может вызвать неожиданное поведение, лучше просто обновить
+                }
+
+                i18nList.forEach(function (item) {
+                    item.innerHTML = i18next.t(item.dataset.i18n);
+                });
+            } else {
+                console.warn('i18next или его функция t не найдены. Локализация не будет выполнена.');
+            }
+        }
+
+        // Вызываем localize после загрузки DOM
+        document.addEventListener('DOMContentLoaded', localize);
+    </script>
+
+</div>
+</body>
+</html>

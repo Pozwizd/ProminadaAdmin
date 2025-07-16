@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template/layout.html}">
+
+<head>
+    <th:block layout:fragment="page_css">
+
+
+        <!-- Подключение стилей для Select2 - плагина для создания кастомных выпадающих списков с расширенными возможностями -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}" />
+
+        <!-- Подключение стилей для Tagify - плагина для создания тегов в поле ввода (например, для добавления меток) -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/tagify/tagify.css}" />
+
+        <!-- Подключение стилей для Bootstrap-Select - плагина для улучшения стандартных выпадающих списков с поддержкой поиска, группировки и других функций -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-select/bootstrap-select.css}" />
+
+        <!-- Подключение стилей для Notyf - библиотеки для отображения уведомлений (например, успех или ошибка) -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/notyf/notyf.css}" />
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/dropzone/dropzone.css}" />
+
+    </th:block>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-between align-items-center py-3 mb-4">
+        <h4 class="fw-bold m-0" th:data-i18n="${pageTitle}">Новый объект</h4>
+        <div class="d-flex">
+            <span class="me-3">Главная</span>
+            <span class="me-3">Дома и участки</span>
+            <span class="text-muted">Новый объект</span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="nav-align-top mb-4">
+                <ul class="nav nav-pills mb-3" role="tablist">
+                    <li class="nav-item">
+                        <button type="button" class="nav-link active" role="tab" data-bs-toggle="tab"
+                                id="residentialLand-tab"
+                                data-bs-target="#residentialLand" aria-controls="residentialLand"
+                                aria-selected="true">
+                            Адресная часть
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                id="residentialLandMain-tab"
+                                data-bs-target="#residentialLandMain" aria-controls="residentialLandMain"
+                                aria-selected="false">
+                            Основное
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="nav-link" role="tab" data-bs-toggle="tab"
+                                id="residentialLandGallery-tab"
+                                data-bs-target="#residentialLandGallery" aria-controls="residentialLandGallery"
+                                aria-selected="false">
+                            Галерея
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="residentialLand" role="tabpanel">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Адресная информация -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label for="region" class="form-label">Область</label>
+                                        <select class="form-select" id="region" name="region">
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label for="city" class="form-label">Нас. пункт</label>
+                                        <select class="form-select" id="city" name="city">
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label for="district" class="form-label">Район</label>
+                                        <select class="form-select" id="district" name="district">
+                                            <option selected>Приморский</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label for="street" class="form-label">Улица</label>
+                                        <input type="text" class="form-control" id="street" name="street" placeholder="Выберите адрес">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label for="houseNumber" class="form-label">Номер дома</label>
+                                        <select class="form-select" id="houseNumber" name="houseNumber">
+
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label class="form-label">Топоним</label>
+                                        <select class="form-select">
+                                            <option selected>Аркадия</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Кнопки проверки -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-outline-primary">Проверить адрес</button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-outline-primary">Проверить телефон</button>
+                                    </div>
+                                </div>
+
+                                <!-- Информация о владельце -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">ФИО владельца <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" placeholder="Александр">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Телефон <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" placeholder="+380961234567">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Дата приобретения</label>
+                                        <input type="date" class="form-control" value="2018-11-18">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Право собственности</label>
+                                        <select class="form-select">
+                                            <option selected>Договор купли-продажи</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Важное замечание -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Важное замечание</label>
+                                        <textarea class="form-control" rows="3"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Кадастровый номер -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6">
+                                        <label class="form-label">Кадастровый номер участка</label>
+                                        <input type="text" class="form-control" placeholder="000-111-222">
+                                    </div>
+                                </div>
+
+                                <!-- Назначение участка -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Назначение участка</label>
+                                        <input type="text" class="form-control" placeholder="описание назначения участка">
+                                    </div>
+                                </div>
+
+                                <!-- Прикрепить файлы -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Прикрепить файлы</label>
+                                        <div class="d-flex gap-2 mb-2">
+                                            <button type="button" class="btn btn-primary btn-sm">Выбрать файл</button>
+                                            <span class="text-muted">Файл не выбран</span>
+                                        </div>
+                                        <div class="d-flex gap-3">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a href="#" class="text-primary">Файл 1 скачать</a>
+                                                <a href="#" class="text-danger">x удалить</a>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a href="#" class="text-primary">Файл 2 скачать</a>
+                                                <a href="#" class="text-danger">x удалить</a>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <a href="#" class="text-primary">Файл 3 скачать</a>
+                                                <a href="#" class="text-danger">x удалить</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Комментарий администратора -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Комментарий администратора</label>
+                                        <textarea class="form-control" rows="5" placeholder="Тут будет заполняться комментарий от администрации риелтору"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="residentialLandMain" role="tabpanel">
+                        <div class="row">
+                            <div class="col-12">
+                                <!-- Публикация и коды -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Статус публикации</label>
+                                        <select class="form-select">
+                                            <option selected>Опубликован</option>
+                                            <option>Не опубликован</option>
+                                            <option>На модерации</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Код объекта</label>
+                                        <input type="text" class="form-control" value="01-1400-143">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Код филиала - код сотрудника</label>
+                                        <input type="text" class="form-control" value="012 - 123">
+                                    </div>
+                                </div>
+
+                                <!-- Операция -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Операция</label>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="shachtovsky" checked>
+                                            <label class="form-check-label" for="shachtovsky">
+                                                пгт Шахтовский
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Цена -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Цена <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" value="420000">
+                                    </div>
+                                </div>
+
+                                <!-- Характеристики участка -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-2_4">
+                                        <label class="form-label">Тип недвижимости</label>
+                                        <select class="form-select">
+                                            <option selected>дом с участком</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label class="form-label">S участка (кв.м)</label>
+                                        <input type="number" class="form-control" value="36">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2">
+                                        <label class="form-label">S участка свободная (кв.м)</label>
+                                        <input type="number" class="form-control" value="21">
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2_4">
+                                        <label class="form-label">Собственность на землю</label>
+                                        <select class="form-select">
+                                            <option selected>есть</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-2_4">
+                                        <label class="form-label">Целевое назначение земли</label>
+                                        <select class="form-select">
+                                            <option selected>под огород</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Характеристики дома -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">Кол. домов</label>
+                                        <input type="number" class="form-control" value="1">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">Этажей</label>
+                                        <input type="number" class="form-control" value="2">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">Комнат</label>
+                                        <input type="number" class="form-control" value="5">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">Спален</label>
+                                        <input type="number" class="form-control" value="2">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">Высота потолка (м)</label>
+                                        <input type="number" step="0.1" class="form-control" value="2.7">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">S общая дома (кв.м)</label>
+                                        <input type="number" class="form-control" value="36">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">S жилых (кв.м)</label>
+                                        <input type="number" class="form-control" value="">
+                                    </div>
+                                    <div class="col-6 col-sm-3 col-lg-1_5">
+                                        <label class="form-label">S кухни (кв.м)</label>
+                                        <input type="number" class="form-control" value="">
+                                    </div>
+                                </div>
+
+                                <!-- Состояние и материалы -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label class="form-label">Материал стен</label>
+                                        <select class="form-select">
+                                            <option selected>Кирпич</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label class="form-label">Состояние интерьера</label>
+                                        <select class="form-select">
+                                            <option selected>От строителей</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label class="form-label">Состояние дома</label>
+                                        <select class="form-select">
+                                            <option selected>Новый дом</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Дополнительные характеристики -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label class="form-label">Кухня</label>
+                                        <select class="form-select">
+                                            <option selected>Стандартная</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label class="form-label">Санузел</label>
+                                        <select class="form-select">
+                                            <option selected>2 отдельный</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label class="form-label">Балкон</label>
+                                        <select class="form-select">
+                                            <option selected></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Коммуникации -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Газ</label>
+                                        <select class="form-select">
+                                            <option selected>Природный</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Вода</label>
+                                        <select class="form-select">
+                                            <option selected>Автономная</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Канализация</label>
+                                        <select class="form-select">
+                                            <option selected>Гор. канализация</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Отопление</label>
+                                        <select class="form-select">
+                                            <option selected>Автономное</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Дополнительные элементы -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Лоджия</label>
+                                        <select class="form-select">
+                                            <option selected>Бетонная</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Кровля</label>
+                                        <select class="form-select">
+                                            <option selected></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Пол</label>
+                                        <select class="form-select">
+                                            <option selected>Стяжка</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-3">
+                                        <label class="form-label">Металлопластика</label>
+                                        <select class="form-select">
+                                            <option selected></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Стоянка и входная дверь -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6 col-lg-6">
+                                        <label class="form-label">Стоянка</label>
+                                        <select class="form-select">
+                                            <option selected>Новая</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-6 col-lg-6">
+                                        <label class="form-label">Входная дверь</label>
+                                        <select class="form-select">
+                                            <option selected>Бронированная</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Дата последнего контакта -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Дата последнего контакта</label>
+                                        <div class="row g-2 align-items-center">
+                                            <div class="col-auto">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="vnt">
+                                                    <label class="form-check-label" for="vnt">ВНТ</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <span>дата ВНТ до:</span>
+                                                <input type="date" class="form-control d-inline-block ms-2" style="width: auto;" value="2016-11-16">
+                                            </div>
+                                        </div>
+                                        <div class="row g-2 mt-1">
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="tel">
+                                                    <label class="form-check-label" for="tel">Тел</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="obyezd">
+                                                    <label class="form-check-label" for="obyezd">Объезд</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="sms">
+                                                    <label class="form-check-label" for="sms">СМС</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="selfcall">
+                                                    <label class="form-check-label" for="selfcall">Самвызов</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="pokazal">
+                                                    <label class="form-check-label" for="pokazal">Показал</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="netz">
+                                                    <label class="form-check-label" for="netz">Нет в наличии</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="otposlden">
+                                                    <label class="form-check-label" for="otposlden">От последен</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Источник информации -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12 col-sm-6">
+                                        <label class="form-label">Источник информации</label>
+                                        <input type="text" class="form-control" placeholder="Интернет">
+                                    </div>
+                                </div>
+
+                                <!-- Описание -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Описание</label>
+                                        <textarea class="form-control" rows="6" placeholder="Описание объекта"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Рекламный заголовок -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Рекламный заголовок</label>
+                                        <input type="text" class="form-control" placeholder="Заголовок для рекламы">
+                                    </div>
+                                </div>
+
+                                <!-- Рекламный текст -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <label class="form-label">Рекламный текст</label>
+                                        <textarea class="form-control" rows="6" placeholder="Текст для рекламного объявления"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Чекбокс рекомендовать -->
+                                <div class="row g-3 mb-4">
+                                    <div class="col-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="recommend">
+                                            <label class="form-check-label" for="recommend">
+                                                Рекомендовать
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="residentialLandGallery" role="tabpanel">
+                        <div class="row gy-6">
+
+                            <!-- Multi  -->
+                            <div class="col-12">
+                                <div class="card">
+                                    <h5 class="card-header">Multiple</h5>
+                                    <div class="card-body">
+                                        <form action="/upload" class="dropzone needsclick" id="dropzone-multi">
+                                            <div class="dz-message needsclick">
+                                                Drop files here or click to upload
+                                                <span class="note needsclick"
+                                                >(This is just a demo dropzone. Selected files are
+                            <span class="fw-medium">not</span> actually uploaded.)</span
+                                                >
+                                            </div>
+                                            <div class="fallback">
+                                                <input name="file" type="file" />
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Multi  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="mt-4 d-flex justify-content-end">
+            <button type="reset" class="btn btn-label-secondary me-2">Отменить</button>
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+
+<th:block layout:fragment="page_js">
+    <script th:src="@{/assets/vendor/libs/dropzone/dropzone.js}"></script>
+
+
+    <script th:src="@{/assets/vendor/libs/bootstrap-select/bootstrap-select.js}"></script>
+    <script th:src="@{/assets/vendor/libs/chartjs/chartjs.js}"></script>
+
+    <script th:src="@{/assets/vendor/libs/notyf/notyf.js}"></script>
+
+    <script th:src="@{/assets/vendor/libs/cleave-zen/cleave-zen.js}"></script>
+    <script th:src="@{/assets/vendor/libs/jquery-repeater/jquery-repeater.js}"></script>
+    <script th:src="@{/assets/vendor/libs/moment/moment.js}"></script>
+
+
+    <script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
+    <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+    <script th:src="@{/assets/vendor/libs/tagify/tagify.js}"></script>
+
+
+    <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+    <script th:src="@{/assets/js/forms-selects.js}"></script>
+
+
+    <script th:src="@{/customAssets/js/toast.js}"></script>
+
+<!--    Location-->
+    <script>
+        $(document).ready(function() {
+            // Инициализация Select2 для регионов
+            $('#region').select2({
+                ajax: {
+                    url: contextPath + 'region/getAllByName',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return { filter_region: params.term };
+                    },
+                    processResults: function (data) {
+                        console.log(data);
+                        return {
+                            results: $.map(data, region => ({
+                                id: region.id,
+                                text: region.name
+                            })),
+                            pagination: { more: false }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: 'Выберите область...',
+                minimumInputLength: 2,
+                language: "ru",
+                allowClear: true
+            });
+
+            // Инициализация Select2 для городов (изначально заблокирован)
+            $('#city').select2({
+                ajax: {
+                    url: contextPath + 'city/getAllByName',
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        const regionId = $('#region').val();
+                        return {
+                            filter_city: params.term,
+                            filter_region: regionId
+                        };
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, city => ({
+                                id: city.id,
+                                text: city.name
+                            })),
+                            pagination: { more: false }
+                        };
+                    },
+                    cache: true
+                },
+                placeholder: 'Сначала выберите область...',
+                minimumInputLength: 1,
+                language: "ru",
+                allowClear: true,
+                disabled: true // изначально заблокирован
+            });
+
+            // Обработчик изменения региона
+            $('#region').on('change', function() {
+                const regionId = $(this).val();
+                const citySelect = $('#city');
+
+                if (regionId) {
+                    // Разблокируем селект городов
+                    citySelect.prop('disabled', false);
+                    citySelect.select2('destroy');
+
+                    // Переинициализируем с новым placeholder
+                    citySelect.select2({
+                        ajax: {
+                            url: contextPath + 'city/getAllByName',
+                            dataType: 'json',
+                            delay: 250,
+                            data: function (params) {
+                                return {
+                                    filter_city: params.term,
+                                    filter_region: regionId
+                                };
+                            },
+                            processResults: function (data) {
+                                return {
+                                    results: $.map(data, city => ({
+                                        id: city.id,
+                                        text: city.name
+                                    })),
+                                    pagination: { more: false }
+                                };
+                            },
+                            cache: true
+                        },
+                        placeholder: 'Введите название города...',
+                        minimumInputLength: 1,
+                        language: "ru",
+                        allowClear: true
+                    });
+                } else {
+                    // Блокируем и очищаем селект городов
+                    citySelect.val(null).trigger('change');
+                    citySelect.prop('disabled', true);
+                    citySelect.select2('destroy');
+
+                    citySelect.select2({
+                        placeholder: 'Сначала выберите область...',
+                        language: "ru",
+                        disabled: true
+                    });
+                }
+            });
+
+            // Обработчик очистки региона
+            $('#region').on('select2:clear', function() {
+                const citySelect = $('#city');
+                citySelect.val(null).trigger('change');
+                citySelect.prop('disabled', true);
+
+                citySelect.select2('destroy');
+                citySelect.select2({
+                    placeholder: 'Сначала выберите область...',
+                    language: "ru",
+                    disabled: true
+                });
+            });
+        });
+
+    </script>
+
+
+    <!-- Dropzone -->
+    <script>
+        const previewTemplate = `<div class="dz-preview dz-file-preview">
+                                    <div class="dz-details">
+                                      <div class="dz-thumbnail">
+                                        <img data-dz-thumbnail>
+                                        <span class="dz-nopreview">No preview</span>
+                                        <div class="dz-success-mark"></div>
+                                        <div class="dz-error-mark"></div>
+                                        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+                                        <div class="progress">
+                                          <div class="progress-bar progress-bar-primary" role="progressbar" aria-valuemin="0" aria-valuemax="100" data-dz-uploadprogress></div>
+                                        </div>
+                                      </div>
+                                      <div class="dz-filename" data-dz-name></div>
+                                      <div class="dz-size" data-dz-size></div>
+                                    </div>
+                                    </div>`;
+
+
+
+        Dropzone.autoDiscover = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const galleryTab = document.querySelector('#residentialLandGallery-tab');
+
+            if (galleryTab) {
+                galleryTab.addEventListener('shown.bs.tab', function() {
+                    const dropzoneMulti = document.querySelector('#dropzone-multi');
+
+                    if (dropzoneMulti && !dropzoneMulti.dropzone) {
+                        const myDropzoneMulti = new Dropzone(dropzoneMulti, {
+                            url: '/upload',
+                            previewTemplate: previewTemplate,
+                            parallelUploads: 1,
+                            maxFilesize: 5,
+                            addRemoveLinks: false, // Отключаем стандартные ссылки
+                            autoProcessQueue: true,
+                            acceptedFiles: "image/*,.pdf,.doc,.docx",
+
+                            init: function() {
+                                this.on("addedfile", function(file) {
+                                    // Создаем контейнер для кнопок
+                                    const buttonContainer = document.createElement("div");
+                                    buttonContainer.className = "dz-button-container mt-2";
+
+// Кнопка просмотра
+                                    const viewButton = document.createElement("button");
+                                    viewButton.className = "btn btn-info btn-sm me-2";
+                                    viewButton.innerHTML = '<i class="fa fa-eye"></i>';
+                                    viewButton.title = "Просмотр файла";
+                                    viewButton.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        // Функция просмотра файла
+                                        viewFile(file);
+                                    });
+
+// Кнопка скачивания
+                                    const downloadButton = document.createElement("button");
+                                    downloadButton.className = "btn btn-success btn-sm me-2";
+                                    downloadButton.innerHTML = '<i class="fa fa-download"></i>';
+                                    downloadButton.title = "Скачать файл";
+                                    downloadButton.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        // Функция скачивания файла
+                                        downloadFile(file);
+                                    });
+
+// Кнопка удаления
+                                    const removeButton = document.createElement("button");
+                                    removeButton.className = "btn btn-danger btn-sm";
+                                    removeButton.innerHTML = '<i class="fa fa-trash"></i>';
+                                    removeButton.title = "Удалить файл";
+                                    removeButton.addEventListener("click", function(e) {
+                                        e.preventDefault();
+                                        if (confirm("Вы уверены, что хотите удалить этот файл?")) {
+                                            myDropzoneMulti.removeFile(file);
+                                            // Дополнительно отправить запрос на сервер для удаления
+                                            deleteFileFromServer(file);
+                                        }
+                                    });
+ 
+
+                                    // Добавляем кнопки в контейнер
+                                    buttonContainer.appendChild(viewButton);
+                                    buttonContainer.appendChild(downloadButton);
+                                    buttonContainer.appendChild(removeButton);
+
+                                    // Добавляем контейнер к превью файла
+                                    file.previewElement.appendChild(buttonContainer);
+                                });
+
+                                // Обработка успешной загрузки
+                                this.on("success", function(file, response) {
+                                    // Сохраняем информацию о файле с сервера
+                                    file.serverResponse = response;
+                                    console.log("Файл успешно загружен:", response);
+                                });
+
+                                // Обработка ошибок
+                                this.on("error", function(file, message) {
+                                    console.error("Ошибка загрузки файла:", message);
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+
+
+        // Функция просмотра файла
+        function viewFile(file) {
+            if (file.type.startsWith('image/')) {
+                // Для изображений - открываем в модальном окне
+                const modal = document.createElement('div');
+                modal.className = 'modal fade';
+                modal.innerHTML = `
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${file.name}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img src="${URL.createObjectURL(file)}" class="img-fluid" alt="${file.name}">
+                    </div>
+                </div>
+            </div>
+        `;
+                document.body.appendChild(modal);
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+
+                // Удаляем модальное окно после закрытия
+                modal.addEventListener('hidden.bs.modal', function() {
+                    document.body.removeChild(modal);
+                });
+            } else {
+                // Для других типов файлов
+                alert(`Просмотр файла: ${file.name}\nТип: ${file.type}\nРазмер: ${(file.size / 1024).toFixed(2)} KB`);
+            }
+        }
+
+        // Функция скачивания файла
+        function downloadFile(file) {
+            if (file.serverResponse && file.serverResponse.downloadUrl) {
+                // Если файл уже загружен на сервер
+                const link = document.createElement('a');
+                link.href = file.serverResponse.downloadUrl;
+                link.download = file.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                // Если файл еще не загружен - скачиваем локальную версию
+                const url = URL.createObjectURL(file);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = file.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        // Функция удаления файла с сервера
+        function deleteFileFromServer(file) {
+            if (file.serverResponse && file.serverResponse.fileId) {
+                fetch('/delete-file', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fileId: file.serverResponse.fileId
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Файл удален с сервера:', data);
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при удалении файла:', error);
+                    });
+            }
+        }
+
+
+
+    </script>
+
+    <script th:inline="javascript">
+        window.contextPath = '[[@{/}]]'.replaceAll('"', '');
+        window.defaultAvatarPath = '[[@{/assets/img/avatars/14.png}]]';
+        console.log(window.defaultAvatarPath);
+    </script>
+
+</th:block>
+
+</body>
+</html>

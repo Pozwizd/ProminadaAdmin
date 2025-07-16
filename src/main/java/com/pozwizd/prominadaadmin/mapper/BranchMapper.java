@@ -10,6 +10,8 @@ import java.util.List;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
 public interface BranchMapper {
+
+    // to Entity
     Branch toEntity(BranchResponse branchResponse);
 
     default Branch toEntity(BranchRequest branchRequest, String imagePath) {
@@ -28,8 +30,6 @@ public interface BranchMapper {
     };
 
     BranchResponse toBranchResponse(Branch branch);
-
-
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     Branch partialUpdate(BranchResponse branchResponse, @MappingTarget Branch branch);

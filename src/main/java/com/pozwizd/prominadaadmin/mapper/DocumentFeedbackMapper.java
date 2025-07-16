@@ -1,21 +1,22 @@
 package com.pozwizd.prominadaadmin.mapper;
 
 import com.pozwizd.prominadaadmin.entity.DocumentFeedback;
+import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackRequest;
 import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackResponse;
-import org.mapstruct.*;
-import org.springframework.data.domain.Page;
+import com.pozwizd.prominadaadmin.service.serviceImp.FileServiceImp;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {FileServiceImp.class},
+        componentModel = MappingConstants.ComponentModel.SPRING)
 public interface DocumentFeedbackMapper {
-    DocumentFeedback toEntity(DocumentFeedbackResponse documentFeedbackResponse);
+
+    @Mapping(target = "pathImage", source = "file", qualifiedByName = "uploadFile")
+    DocumentFeedback toEntity(DocumentFeedbackRequest documentFeedbackRequest);
 
     DocumentFeedbackResponse toDocumentFeedbackResponse(DocumentFeedback documentFeedback);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    DocumentFeedback partialUpdate(DocumentFeedbackResponse documentFeedbackResponse, @MappingTarget DocumentFeedback documentFeedback);
-
-    default Page<DocumentFeedbackResponse> toDocumentFeedbackResponse(Page<DocumentFeedback> documentFeedbackPage) {
-        return documentFeedbackPage.map(this::toDocumentFeedbackResponse);
-    }
 
 }

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Color Variables
   const purpleColor = '#836AF9',
     yellowColor = '#ffe800',
@@ -14,22 +14,30 @@
     greyColor = '#4F5D70',
     greyLightColor = '#EDF1F4',
     blueColor = '#2B9AFF',
-    blueLightColor = '#84D0FF';
+    blueLightColor = '#84D0FF',
+    blueDarkColor = '#1D9FF2';
 
-  let cardColor, headingColor, labelColor, borderColor, legendColor;
+  // overriding color variables for chartjs
+  let cardColor, headingColor, labelColor, borderColor, legendColor, info, danger, primary;
 
   if (isDarkStyle) {
-    cardColor = config.colors_dark.cardColor;
-    headingColor = config.colors_dark.headingColor;
-    labelColor = config.colors_dark.textMuted;
-    legendColor = config.colors_dark.bodyColor;
-    borderColor = config.colors_dark.borderColor;
+    cardColor = window.Helpers.getCssVar('paper-bg', true);
+    headingColor = window.Helpers.getCssVar('heading-color', true);
+    labelColor = window.Helpers.getCssVar('secondary-color', true);
+    legendColor = window.Helpers.getCssVar('body-color', true);
+    borderColor = window.Helpers.getCssVar('border-color', true);
+    primary = window.Helpers.getCssVar('primary', true);
+    info = window.Helpers.getCssVar('info', true);
+    danger = window.Helpers.getCssVar('danger', true);
   } else {
-    cardColor = config.colors.cardColor;
-    headingColor = config.colors.headingColor;
-    labelColor = config.colors.textMuted;
-    legendColor = config.colors.bodyColor;
-    borderColor = config.colors.borderColor;
+    cardColor = window.Helpers.getCssVar('paper-bg', true);
+    headingColor = window.Helpers.getCssVar('heading-color', true);
+    labelColor = window.Helpers.getCssVar('secondary-color', true);
+    legendColor = window.Helpers.getCssVar('body-color', true);
+    borderColor = window.Helpers.getCssVar('border-color', true);
+    primary = window.Helpers.getCssVar('primary', true);
+    info = window.Helpers.getCssVar('info', true);
+    danger = window.Helpers.getCssVar('danger', true);
   }
 
   // Set height according to their data-height
@@ -134,7 +142,7 @@
         datasets: [
           {
             data: [710, 350, 470, 580, 230, 460, 120],
-            backgroundColor: config.colors.info,
+            backgroundColor: info,
             borderColor: 'transparent',
             maxBarThickness: 15
           }
@@ -207,32 +215,32 @@
           {
             data: [80, 150, 180, 270, 210, 160, 160, 202, 265, 210, 270, 255, 290, 360, 375],
             label: 'Europe',
-            borderColor: config.colors.danger,
+            borderColor: danger,
             tension: 0.5,
             pointStyle: 'circle',
-            backgroundColor: config.colors.danger,
+            backgroundColor: danger,
             fill: false,
             pointRadius: 1,
             pointHoverRadius: 5,
             pointHoverBorderWidth: 5,
             pointBorderColor: 'transparent',
             pointHoverBorderColor: cardColor,
-            pointHoverBackgroundColor: config.colors.danger
+            pointHoverBackgroundColor: danger
           },
           {
             data: [80, 125, 105, 130, 215, 195, 140, 160, 230, 300, 220, 170, 210, 200, 280],
             label: 'Asia',
-            borderColor: config.colors.primary,
+            borderColor: primary,
             tension: 0.5,
             pointStyle: 'circle',
-            backgroundColor: config.colors.primary,
+            backgroundColor: primary,
             fill: false,
             pointRadius: 1,
             pointHoverRadius: 5,
             pointHoverBorderWidth: 5,
             pointBorderColor: 'transparent',
             pointHoverBorderColor: cardColor,
-            pointHoverBackgroundColor: config.colors.primary
+            pointHoverBackgroundColor: primary
           },
           {
             data: [80, 99, 82, 90, 115, 115, 74, 75, 130, 155, 125, 90, 140, 130, 180],
@@ -292,20 +300,15 @@
             borderWidth: 1,
             borderColor: borderColor
           },
+          htmlLegend: {
+            containerID: 'legendContainer'
+          },
           legend: {
-            position: 'top',
-            align: 'start',
-            rtl: isRtl,
-            labels: {
-              usePointStyle: true,
-              padding: 35,
-              boxWidth: 6,
-              boxHeight: 6,
-              color: legendColor
-            }
+            display: false
           }
         }
-      }
+      },
+      plugins: [LegendUtils.htmlLegendPlugin]
     });
   }
 
@@ -440,7 +443,10 @@
           },
           legend: {
             rtl: isRtl,
-            position: 'right',
+            position: 'bottom',
+            markers: {
+              size: '5px'
+            },
             labels: {
               usePointStyle: true,
               padding: 25,
@@ -739,17 +745,11 @@
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
+          htmlLegend: {
+            containerID: 'legendContainer1'
+          },
           legend: {
-            position: 'top',
-            rtl: isRtl,
-            align: 'start',
-            labels: {
-              usePointStyle: true,
-              padding: 35,
-              boxWidth: 6,
-              boxHeight: 6,
-              color: legendColor
-            }
+            display: false
           },
           tooltip: {
             // Updated default tooltip UI
@@ -784,7 +784,8 @@
             }
           }
         }
-      }
+      },
+      plugins: [LegendUtils.htmlLegendPlugin]
     });
   }
 
@@ -800,7 +801,7 @@
         datasets: [
           {
             data: [10, 10, 80],
-            backgroundColor: [cyanColor, orangeLightColor, config.colors.primary],
+            backgroundColor: [cyanColor, orangeLightColor, primary],
             borderWidth: 0,
             pointStyle: 'rectRounded'
           }
@@ -915,7 +916,7 @@
                 y: 330
               }
             ],
-            backgroundColor: config.colors.primary,
+            backgroundColor: primary,
             borderColor: 'transparent',
             pointBorderWidth: 2,
             pointHoverBorderWidth: 2,
@@ -1065,16 +1066,10 @@
         },
         plugins: {
           legend: {
-            position: 'top',
-            rtl: isRtl,
-            align: 'start',
-            labels: {
-              usePointStyle: true,
-              padding: 25,
-              boxWidth: 6,
-              boxHeight: 6,
-              color: legendColor
-            }
+            display: false
+          },
+          htmlLegend: {
+            containerID: 'legendContainer2'
           },
           tooltip: {
             // Updated default tooltip UI
@@ -1116,7 +1111,8 @@
             }
           }
         }
-      }
+      },
+      plugins: [LegendUtils.htmlLegendPlugin]
     });
   }
-})();
+});

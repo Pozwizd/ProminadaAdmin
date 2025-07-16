@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{template/layout.html}">
+
+<body>
+<div layout:fragment="content">
+    <div class="d-flex justify-content-end py-3 mb-3">
+        <a href="#" class="btn btn-outline-primary" data-i18n="personalCard.editButton">Редактировать</a>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                            <img th:src="@{/assets/img/avatars/14.png}" alt="user-avatar"
+                                 class="d-block w-px-200 h-px-200 rounded" id="uploadedAvatar"/>
+                        </div>
+                </div>
+                <div class="col-md-9">
+                    <!-- Content next to avatar can be placed here if needed -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header" data-i18n="personalCard.informationHeader">Информация</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-striped">
+                <tbody>
+                <tr>
+                    <td class="fw-semibold" data-i18n="personalCard.role">Роль</td>
+                    <td id="user-role"></td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold" data-i18n="personalCard.fullName">ФИО</td>
+                    <td id="user-fullName"></td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold" data-i18n="personalCard.phone">Телефон</td>
+                    <td id="user-phoneNumber"></td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold" data-i18n="personalCard.email">Email</td>
+                    <td id="user-email"></td>
+                </tr>
+                <tr>
+                    <td class="fw-semibold" data-i18n="personalCard.branch">Филиал</td>
+                    <td id="user-branchName"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script th:src="@{/assets/axios.min.js}"></script>
+    <script>
+        function getUserIdFromPath() {
+            const pathParts = window.location.pathname.split('/');
+            return pathParts[pathParts.length - 1];
+        }
+
+        async function loadUserData() {
+            const userId = getUserIdFromPath();
+            let baseUrl = '[[@{/}]]'.replaceAll("\"", "");
+            console.log(baseUrl + `personal/card/${userId}`);
+
+            if (!userId || isNaN(userId)) {
+                console.error('Invalid User ID in URL');
+                // Optionally display an error message to the user
+                document.getElementById('user-role').textContent = 'Ошибка';
+                document.getElementById('user-fullName').textContent = 'Не удалось загрузить данные';
+                document.getElementById('user-phoneNumber').textContent = '-';
+                document.getElementById('user-email').textContent = '-';
+                document.getElementById('user-branchName').textContent = '-';
+                return;
+            }
+
+            try {
+
+                const response = await axios.get(baseUrl + `personal/card/${userId}`);
+
+                const user = response.data;
+
+                document.getElementById('user-role').textContent = user.role || 'Директор';
+                document.getElementById('user-role').setAttribute("data-i18n", "" + user.role);
+                let fieldFullName = document.getElementById('user-fullName');
+                fieldFullName.textContent = user.name + ' ' + user.surname + ' ' + user.lastName || 'Пушкин Игорь Андреевич';
+                document.getElementById('user-phoneNumber').textContent = user.phoneNumber || '+380991112233';
+                document.getElementById('user-email').textContent = user.email || 'user@mail.test';
+                document.getElementById('user-branchName').textContent = user.branches[0].name || 'Филиал 1';
+
+                console.log(user);
+                if (user.pathAvatar) {
+                    console.log('[[@{/}]]'.replaceAll('"', '') + user.pathAvatar);
+                    document.getElementById('uploadedAvatar').src = '[[@{/}]]'.replaceAll('"', '') + user.pathAvatar;
+                }
+                // Update edit button link
+                const editButton = document.querySelector('a[data-i18n="personalCard.editButton"]');
+                if (editButton) {
+                    editButton.href = baseUrl + `personal/edit/${userId}`;
+                }
+
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                // Display error messages in the UI
+                document.getElementById('user-role').textContent = 'Ошибка';
+                document.getElementById('user-fullName').textContent = 'Не удалось загрузить данные';
+                document.getElementById('user-phoneNumber').textContent = '-';
+                document.getElementById('user-email').textContent = '-';
+                document.getElementById('user-branchName').textContent = '-';
+            }
+        }
+    </script>
+    <script>
+        function localizePersonalCard() {
+            let i18nList = document.querySelectorAll('[data-i18n]');
+            if (typeof i18next !== 'undefined' && i18next.isInitialized) {
+                let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
+                if (currentLanguageEle) {
+                }
+                i18nList.forEach(function (item) {
+                    item.innerHTML = i18next.t(item.dataset.i18n);
+                });
+            } else {
+                console.warn('i18next not initialized, localization may not work as expected.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function () {
+            await loadUserData();
+            localizePersonalCard();
+        });
+    </script>
+
+</div>
+</body>
+
+</html>

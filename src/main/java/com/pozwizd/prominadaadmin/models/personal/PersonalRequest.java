@@ -3,9 +3,8 @@ package com.pozwizd.prominadaadmin.models.personal;
 
 import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackRequest;
-import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackResponse;
 import com.pozwizd.prominadaadmin.models.feedback.FeedbackRequest;
-import com.pozwizd.prominadaadmin.validation.PasswordMatch;
+import com.pozwizd.prominadaadmin.validator.personal.PasswordMatch;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -19,7 +18,10 @@ import java.util.List;
 @Data
 @PasswordMatch(message = "password.match")
 public class PersonalRequest {
+
     private Long id;
+
+    private Long version;
 
     @NotBlank(message = "surname.required")
     private String surname;

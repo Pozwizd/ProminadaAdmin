@@ -5,21 +5,14 @@
 'use strict';
 
 (function () {
-  let cardColor, headingColor, labelColor, borderColor, legendColor;
+  let cardColor, headingColor, labelColor, borderColor, legendColor, fontFamily;
 
-  if (isDarkStyle) {
-    cardColor = config.colors_dark.cardColor;
-    headingColor = config.colors_dark.headingColor;
-    labelColor = config.colors_dark.textMuted;
-    legendColor = config.colors_dark.bodyColor;
-    borderColor = config.colors_dark.borderColor;
-  } else {
-    cardColor = config.colors.cardColor;
-    headingColor = config.colors.headingColor;
-    labelColor = config.colors.textMuted;
-    legendColor = config.colors.bodyColor;
-    borderColor = config.colors.borderColor;
-  }
+  cardColor = config.colors.cardColor;
+  headingColor = config.colors.headingColor;
+  labelColor = config.colors.textMuted;
+  legendColor = config.colors.bodyColor;
+  borderColor = config.colors.borderColor;
+  fontFamily = config.fontFamily;
 
   // Color constant
   const chartColors = {
@@ -38,6 +31,9 @@
       series1: '#29dac7',
       series2: '#60f2ca',
       series3: '#a5f8cd'
+    },
+    bar: {
+      bg: '#1D9FF2'
     }
   };
 
@@ -81,6 +77,9 @@
         show: true,
         position: 'top',
         horizontalAlign: 'start',
+        markers: {
+          size: '5px'
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -140,6 +139,7 @@
         }
       },
       yaxis: {
+        tickAmount: 4,
         labels: {
           style: {
             colors: labelColor,
@@ -239,6 +239,9 @@
         }
       },
       yaxis: {
+        min: 0,
+        max: 240,
+        tickAmount: 4,
         labels: {
           style: {
             colors: labelColor,
@@ -283,6 +286,9 @@
         show: true,
         position: 'top',
         horizontalAlign: 'start',
+        markers: {
+          size: '5px'
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -364,6 +370,7 @@
         }
       },
       yaxis: {
+        tickAmount: 4,
         labels: {
           style: {
             colors: labelColor,
@@ -458,6 +465,9 @@
         }
       },
       yaxis: {
+        min: 0,
+        max: 300,
+        tickAmount: 5,
         labels: {
           style: {
             colors: labelColor,
@@ -486,8 +496,9 @@
         bar: {
           horizontal: true,
           barHeight: '30%',
-          startingShape: 'rounded',
-          borderRadius: 8
+          borderRadius: 8,
+          borderRadiusApplication: 'end',
+          borderRadiusWhenStacked: 'last'
         }
       },
       grid: {
@@ -502,7 +513,7 @@
           bottom: -12
         }
       },
-      colors: config.colors.info,
+      colors: [config.colors.info],
       dataLabels: {
         enabled: false
       },
@@ -512,6 +523,9 @@
         }
       ],
       xaxis: {
+        min: 0,
+        max: 800,
+        tickAmount: 4,
         categories: ['MON, 11', 'THU, 14', 'FRI, 15', 'MON, 18', 'WED, 20', 'FRI, 21', 'MON, 23'],
         axisBorder: {
           show: false
@@ -630,6 +644,7 @@
         }
       },
       yaxis: {
+        tickAmount: 5,
         tooltip: {
           enabled: true
         },
@@ -741,8 +756,10 @@
           useSeriesColors: false
         },
         markers: {
+          size: '5px',
           offsetY: 0,
-          offsetX: -3
+          offsetX: -3,
+          shape: 'circle'
         },
         itemMargin: {
           vertical: 3,
@@ -822,6 +839,7 @@
         }
       },
       yaxis: {
+        tickAmount: 5,
         labels: {
           style: {
             colors: labelColor,
@@ -840,7 +858,7 @@
   const radialBarChartEl = document.querySelector('#radialBarChart'),
     radialBarChartConfig = {
       chart: {
-        height: 380,
+        height: 348,
         type: 'radialBar'
       },
       colors: [chartColors.donut.series1, chartColors.donut.series2, chartColors.donut.series4],
@@ -857,12 +875,12 @@
           dataLabels: {
             name: {
               fontSize: '2rem',
-              fontFamily: 'Open Sans'
+              fontFamily: fontFamily
             },
             value: {
               fontSize: '1.2rem',
               color: legendColor,
-              fontFamily: 'Open Sans'
+              fontFamily: fontFamily
             },
             total: {
               show: true,
@@ -881,12 +899,16 @@
         borderColor: borderColor,
         padding: {
           top: -25,
-          bottom: -20
+          bottom: 20
         }
       },
       legend: {
         show: true,
         position: 'bottom',
+        offsetY: -30,
+        markers: {
+          size: '5px'
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -924,6 +946,9 @@
       legend: {
         show: true,
         position: 'bottom',
+        markers: {
+          size: '5px'
+        },
         labels: {
           colors: legendColor,
           useSeriesColors: false
@@ -938,6 +963,7 @@
         }
       },
       yaxis: {
+        tickAmount: 5,
         show: false
       },
       series: [
@@ -958,7 +984,7 @@
           style: {
             colors: [labelColor, labelColor, labelColor, labelColor, labelColor, labelColor, labelColor, labelColor],
             fontSize: '13px',
-            fontFamily: 'Open Sans'
+            fontFamily: fontFamily
           }
         }
       },
@@ -990,7 +1016,7 @@
   const donutChartEl = document.querySelector('#donutChart'),
     donutChartConfig = {
       chart: {
-        height: 390,
+        height: 357.8,
         type: 'donut'
       },
       labels: ['Operational', 'Networking', 'Hiring', 'R&D'],
@@ -1011,10 +1037,19 @@
           return parseInt(val, 10) + '%';
         }
       },
+      grid: {
+        padding: {
+          bottom: 20
+        }
+      },
       legend: {
         show: true,
         position: 'bottom',
-        markers: { offsetX: -3 },
+        offsetY: -10,
+        markers: {
+          size: '5px',
+          offsetX: -3
+        },
         itemMargin: {
           vertical: 3,
           horizontal: 10
@@ -1031,12 +1066,12 @@
               show: true,
               name: {
                 fontSize: '2rem',
-                fontFamily: 'Open Sans'
+                fontFamily: fontFamily
               },
               value: {
                 fontSize: '1.2rem',
                 color: legendColor,
-                fontFamily: 'Open Sans',
+                fontFamily: fontFamily,
                 formatter: function (val) {
                   return parseInt(val, 10) + '%';
                 }
@@ -1108,9 +1143,6 @@
           options: {
             chart: {
               height: 280
-            },
-            legend: {
-              show: false
             }
           }
         },

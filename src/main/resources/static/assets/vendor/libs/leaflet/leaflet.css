@@ -1,3 +1,4 @@
+/* (C) */
 /* required styles */
 .leaflet-pane,
 .leaflet-tile,
@@ -65,6 +66,11 @@
   max-height: none !important;
   width: auto;
   padding: 0;
+}
+
+.leaflet-container img.leaflet-tile {
+  /* See: https://bugs.chromium.org/p/chromium/issues/detail?id=600120 */
+  mix-blend-mode: plus-lighter;
 }
 
 .leaflet-container.leaflet-touch-zoom {
@@ -740,32 +746,24 @@ svg.leaflet-image-layer.leaflet-interactive path {
   }
 }
 .leaflet-map {
-  height: 400px;
-}
-
-.leaflet-pane {
   z-index: 1;
+  block-size: 400px;
+  /* Map tooltip border radius */
 }
-
-[dir=rtl] .leaflet-map .leaflet-control-container .leaflet-left {
-  right: 0;
-  left: unset;
-}
-[dir=rtl] .leaflet-map .leaflet-control-container .leaflet-left .leaflet-control-zoom,
-[dir=rtl] .leaflet-map .leaflet-control-container .leaflet-left .leaflet-control-layers {
-  margin-left: 0;
-  margin-right: 10px;
-}
-[dir=rtl] .leaflet-map .leaflet-control-container .leaflet-right {
-  left: 0;
-  right: unset;
-}
-[dir=rtl] .leaflet-map .leaflet-control-container .leaflet-right .leaflet-control-zoom,
-[dir=rtl] .leaflet-map .leaflet-control-container .leaflet-right .leaflet-control-layers {
-  margin-left: 10px;
-  margin-right: 0px;
-}
-
-.leaflet-popup .leaflet-popup-content-wrapper {
+.leaflet-map .leaflet-popup .leaflet-popup-content-wrapper {
   border-radius: 0.375rem;
+}
+.leaflet-map .leaflet-control-container .leaflet-left {
+  inset-inline: 0 auto;
+}
+.leaflet-map .leaflet-control-container .leaflet-left .leaflet-control-zoom,
+.leaflet-map .leaflet-control-container .leaflet-left .leaflet-control-layers {
+  margin-inline: 0.625rem 0;
+}
+.leaflet-map .leaflet-control-container .leaflet-right {
+  inset-inline: auto 0;
+}
+.leaflet-map .leaflet-control-container .leaflet-right .leaflet-control-zoom,
+.leaflet-map .leaflet-control-container .leaflet-right .leaflet-control-layers {
+  margin-inline: 0 0.625rem;
 }

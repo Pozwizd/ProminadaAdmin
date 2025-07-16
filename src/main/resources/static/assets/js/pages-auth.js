@@ -1,113 +1,117 @@
 /**
- *  Pages Authentication
+ *  Страница аутентификации
  */
-
 'use strict';
-const formAuthentication = document.querySelector('#formAuthentication');
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  (function () {
-    // Form validation for Add new record
-    if (formAuthentication) {
-      const fv = FormValidation.formValidation(formAuthentication, {
-        fields: {
-          username: {
-            validators: {
-              notEmpty: {
-                message: 'Please enter username'
-              },
-              stringLength: {
-                min: 6,
-                message: 'Username must be more than 6 characters'
-              }
-            }
-          },
-          email: {
-            validators: {
-              notEmpty: {
-                message: 'Please enter your email'
-              },
-              emailAddress: {
-                message: 'Please enter valid email address'
-              }
-            }
-          },
-          'email-username': {
-            validators: {
-              notEmpty: {
-                message: 'Please enter email / username'
-              },
-              stringLength: {
-                min: 6,
-                message: 'Username must be more than 6 characters'
-              }
-            }
-          },
-          password: {
-            validators: {
-              notEmpty: {
-                message: 'Please enter your password'
-              },
-              stringLength: {
-                min: 6,
-                message: 'Password must be more than 6 characters'
-              }
-            }
-          },
-          'confirm-password': {
-            validators: {
-              notEmpty: {
-                message: 'Please confirm password'
-              },
-              identical: {
-                compare: function () {
-                  return formAuthentication.querySelector('[name="password"]').value;
-                },
-                message: 'The password and its confirm are not the same'
-              },
-              stringLength: {
-                min: 6,
-                message: 'Password must be more than 6 characters'
-              }
-            }
-          },
-          terms: {
-            validators: {
-              notEmpty: {
-                message: 'Please agree terms & conditions'
-              }
-            }
-          }
-        },
-        plugins: {
-          trigger: new FormValidation.plugins.Trigger(),
-          bootstrap5: new FormValidation.plugins.Bootstrap5({
-            eleValidClass: '',
-            rowSelector: '.mb-3'
-          }),
-          submitButton: new FormValidation.plugins.SubmitButton(),
+document.addEventListener('DOMContentLoaded', function () {
+  (() => {
+    // Получаем форму аутентификации по ID
+    const formAuthentication = document.querySelector('#formAuthentication');
 
-          defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
-          autoFocus: new FormValidation.plugins.AutoFocus()
-        },
-        init: instance => {
-          instance.on('plugins.message.placed', function (e) {
-            if (e.element.parentElement.classList.contains('input-group')) {
-              e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
-            }
-          });
-        }
-      });
-    }
+    // // Валидация формы для добавления нового пользователя
+    // if (formAuthentication && typeof FormValidation !== 'undefined') {
+    //   // Инициализация валидации формы с помощью FormValidation
+    //   FormValidation.formValidation(formAuthentication, {
+    //     fields: {
+    //       username: {
+    //         validators: {
+    //           notEmpty: {
+    //             message: 'Пожалуйста, введите имя пользователя'
+    //           },
+    //           stringLength: {
+    //             min: 6,
+    //             message: 'Имя пользователя должно быть больше 6 символов'
+    //           }
+    //         }
+    //       },
+    //       email: {
+    //         validators: {
+    //           notEmpty: {
+    //             message: 'Пожалуйста, введите ваш email'
+    //           },
+    //           emailAddress: {
+    //             message: 'Пожалуйста, введите правильный email адрес'
+    //           }
+    //         }
+    //       },
+    //       'email-username': {
+    //         validators: {
+    //           notEmpty: {
+    //             message: 'Пожалуйста, введите email или имя пользователя'
+    //           },
+    //           stringLength: {
+    //             min: 6,
+    //             message: 'Имя пользователя должно быть больше 6 символов'
+    //           }
+    //         }
+    //       },
+    //       password: {
+    //         validators: {
+    //           notEmpty: {
+    //             message: 'Пожалуйста, введите ваш пароль'
+    //           },
+    //           stringLength: {
+    //             min: 6,
+    //             message: 'Пароль должен быть длиннее 6 символов'
+    //           }
+    //         }
+    //       },
+    //       'confirm-password': {
+    //         validators: {
+    //           notEmpty: {
+    //             message: 'Пожалуйста, подтвердите пароль'
+    //           },
+    //           identical: {
+    //             // Проверка совпадения пароля и его подтверждения
+    //             compare: () => formAuthentication.querySelector('[name="password"]').value,
+    //             message: 'Пароль и его подтверждение не совпадают'
+    //           },
+    //           stringLength: {
+    //             min: 6,
+    //             message: 'Пароль должен быть длиннее 6 символов'
+    //           }
+    //         }
+    //       },
+    //       terms: {
+    //         validators: {
+    //           notEmpty: {
+    //             message: 'Пожалуйста, согласитесь с условиями'
+    //           }
+    //         }
+    //       }
+    //     },
+    //     plugins: {
+    //       trigger: new FormValidation.plugins.Trigger(),
+    //       bootstrap5: new FormValidation.plugins.Bootstrap5({
+    //         eleValidClass: '',
+    //         rowSelector: '.form-control-validation'
+    //       }),
+    //       submitButton: new FormValidation.plugins.SubmitButton(),
+    //       defaultSubmit: new FormValidation.plugins.DefaultSubmit(),
+    //       autoFocus: new FormValidation.plugins.AutoFocus()
+    //     },
+    //     init: instance => {
+    //       // Перемещаем сообщения о ошибках в соответствующее место в форме
+    //       instance.on('plugins.message.placed', e => {
+    //         if (e.element.parentElement.classList.contains('input-group')) {
+    //           e.element.parentElement.insertAdjacentElement('afterend', e.messageElement);
+    //         }
+    //       });
+    //     }
+    //   });
+    // }
 
-    //  Two Steps Verification
-    const numeralMask = document.querySelectorAll('.numeral-mask');
+    // Валидация для маски ввода числовых значений
+    const numeralMaskElements = document.querySelectorAll('.numeral-mask');
 
-    // Verification masking
-    if (numeralMask.length) {
-      numeralMask.forEach(e => {
-        new Cleave(e, {
-          numeral: true
+    // Функция форматирования для числовой маски (оставляем только цифры)
+    const formatNumeral = value => value.replace(/\D/g, ''); // Оставляем только цифры
+
+    if (numeralMaskElements.length > 0) {
+      // Применяем маску к каждому элементу
+      numeralMaskElements.forEach(numeralMaskEl => {
+        numeralMaskEl.addEventListener('input', event => {
+          numeralMaskEl.value = formatNumeral(event.target.value);
         });
       });
     }

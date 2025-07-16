@@ -4,7 +4,7 @@
 
 'use strict';
 
-$(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Modal id
   const appModal = document.getElementById('createApp');
 
@@ -15,36 +15,49 @@ $(function () {
   let cleave;
 
   // Cleave JS card Mask
-  function initCleave() {
+  setTimeout(() => {
     if (creditCardMask1) {
-      cleave = new Cleave(creditCardMask1, {
-        creditCard: true,
-        onCreditCardTypeChanged: function (type) {
-          if (type != '' && type != 'unknown') {
-            document.querySelector('.app-card-type').innerHTML =
-              '<img src="' + assetsPath + 'img/icons/payments/' + type + '-cc.png" class="cc-icon-image" height="28"/>';
-          } else {
-            document.querySelector('.app-card-type').innerHTML = '';
-          }
+      creditCardMask1.addEventListener('input', event => {
+        let cleanValue = event.target.value.replace(/\D/g, '');
+        let cardType = getCreditCardType(cleanValue);
+        creditCardMask1.value = formatCreditCard(cleanValue);
+        if (cardType && cardType !== 'unknown' && cardType !== 'general') {
+          document.querySelector('.app-card-type').innerHTML =
+            `<img src="${assetsPath}img/icons/payments/${cardType}-cc.png" height="26"/>`;
+        } else {
+          document.querySelector('.app-card-type').innerHTML = '';
         }
       });
+
+      registerCursorTracker({
+        input: creditCardMask1,
+        delimiter: ' '
+      });
     }
-  }
+  }, 200);
 
   // Expiry Date Mask
   if (expiryDateMask1) {
-    new Cleave(expiryDateMask1, {
-      date: true,
-      delimiter: '/',
-      datePattern: ['m', 'y']
+    expiryDateMask1.addEventListener('input', event => {
+      expiryDateMask1.value = formatDate(event.target.value, {
+        delimiter: '/',
+        datePattern: ['m', 'y']
+      });
+    });
+    registerCursorTracker({
+      input: expiryDateMask1,
+      delimiter: '/'
     });
   }
 
   // CVV
   if (cvvMask1) {
-    new Cleave(cvvMask1, {
-      numeral: true,
-      numeralPositiveOnly: true
+    cvvMask1.addEventListener('input', event => {
+      const cleanValue = event.target.value.replace(/\D/g, '');
+      cvvMask1.value = formatNumeral(cleanValue, {
+        numeral: true,
+        numeralPositiveOnly: true
+      });
     });
   }
   appModal.addEventListener('show.bs.modal', function (event) {
@@ -63,7 +76,6 @@ $(function () {
         wizardCreateAppNextList.forEach(wizardCreateAppNext => {
           wizardCreateAppNext.addEventListener('click', event => {
             createAppStepper.next();
-            initCleave();
           });
         });
       }
@@ -71,7 +83,6 @@ $(function () {
         wizardCreateAppPrevList.forEach(wizardCreateAppPrev => {
           wizardCreateAppPrev.addEventListener('click', event => {
             createAppStepper.previous();
-            initCleave();
           });
         });
       }

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,9 +39,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize) -> authorize
-//                        .requestMatchers("/assets/**", "/forgotPassword", "/confirmation", "/resetPassword", "/changePassword", "/success").permitAll()
-//                        .requestMatchers("/login").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/login", "/assets/**", "/forgotPassword", "/confirmation").permitAll()
+                        .requestMatchers("/**").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
@@ -48,6 +49,7 @@ public class SecurityConfig {
                         .defaultSuccessUrl("/", true)
                         .permitAll()
                 )
+                .httpBasic(Customizer.withDefaults())
                 .rememberMe((rm) -> rm.tokenRepository(persistentTokenRepository(dataSource)))
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
@@ -56,6 +58,7 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 
     @Bean
     public PersistentTokenRepository persistentTokenRepository(DataSource dataSource) {

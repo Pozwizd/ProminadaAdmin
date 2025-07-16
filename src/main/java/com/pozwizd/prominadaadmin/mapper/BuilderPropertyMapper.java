@@ -3,10 +3,10 @@ package com.pozwizd.prominadaadmin.mapper;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyLayouts;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyLayoutDto;
 import com.pozwizd.prominadaadmin.models.media.MediaDtoDrop;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDto;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDtoForTable;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyLayoutDto;
 import org.mapstruct.Mapper;
 import org.springframework.data.domain.Page;
 
@@ -14,9 +14,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BuilderPropertyMapper {
-//    @Mapping(source = "distinct.name", target = "nameDistinct")
-//    @Mapping(source = "topozone.name", target = "nameTopozone")
-//    BuilderProperty toResponseForTable(BuilderPropertyDto dto);
+
 
     default Page<BuilderPropertyDtoForTable> toDto(Page<BuilderProperty> page) {
         return page.map(this::toResponseForTable);
@@ -34,8 +32,8 @@ public interface BuilderPropertyMapper {
                 .pathToMortgageConditionsFile(entity.getPathToMortgageConditionsFile())
                 .pathToPriceFile(entity.getPathToPriceFile())
                 .cityId(entity.getCity() != null ? entity.getCity().getId().toString() : null)
-                .regDistrictId(entity.getRegDistrict() != null ? entity.getRegDistrict().getId().toString() : null)
-                .districtId(entity.getDistinct() != null ? entity.getDistinct().getId().toString() : null)
+                .regDistrictId(entity.getRegion() != null ? entity.getRegion().getId().toString() : null)
+                .districtId(entity.getDistrict() != null ? entity.getDistrict().getId().toString() : null)
                 .topozoneId(entity.getTopozone() != null ? entity.getTopozone().getId().toString() : null)
                 .buildingCompanyId(entity.getBuildingCompany() != null ? entity.getBuildingCompany().getId().toString() : null)
                 .deliveryDateId(entity.getDeliveryDate()!=null?entity.getDeliveryDate().toString():null)
@@ -55,7 +53,7 @@ public interface BuilderPropertyMapper {
                 .builder()
                 .id(entity.getId())
                 .name(entity.getName())
-                .nameDistinct(entity.getDistinct() != null ? entity.getDistinct().getName() : null)
+                .nameDistrict(entity.getDistrict() != null ? entity.getDistrict().getName() : null)
                 .nameTopozone(entity.getTopozone() != null ? entity.getTopozone().getName() : null)
                 .street(entity.getStreet())
                 .totalFloor(entity.getPathToChessPlanFile())

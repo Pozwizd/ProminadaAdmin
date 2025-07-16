@@ -4,35 +4,36 @@
 
 'use strict';
 
-(function () {
-  let cardColor, headingColor, legendColor, labelColor;
-  if (isDarkStyle) {
-    cardColor = config.colors_dark.cardColor;
-    labelColor = config.colors_dark.textMuted;
-    legendColor = config.colors_dark.bodyColor;
-    headingColor = config.colors_dark.headingColor;
-  } else {
-    cardColor = config.colors.cardColor;
-    labelColor = config.colors.textMuted;
-    legendColor = config.colors.bodyColor;
-    headingColor = config.colors.headingColor;
-  }
+document.addEventListener('DOMContentLoaded', function (e) {
+  let cardColor, headingColor, legendColor, labelColor, fontFamily;
+  cardColor = config.colors.cardColor;
+  labelColor = config.colors.textMuted;
+  legendColor = config.colors.bodyColor;
+  headingColor = config.colors.headingColor;
+  fontFamily = config.fontFamily;
 
   // Radial bar chart functions
-  function radialBarChart(color, value) {
+  function radialBarChart(color, value, show) {
     const radialBarChartOpt = {
       chart: {
-        height: 53,
-        width: 43,
+        height: show == 'true' ? 60 : 48,
+        width: show == 'true' ? 58 : 38,
         type: 'radialBar'
       },
       plotOptions: {
         radialBar: {
           hollow: {
-            size: '33%'
+            size: show == 'true' ? '50%' : '25%'
           },
           dataLabels: {
-            show: false
+            show: show == 'true' ? true : false,
+            value: {
+              offsetY: -10,
+              fontSize: '15px',
+              fontWeight: 500,
+              fontFamily: fontFamily,
+              color: headingColor
+            }
           },
           track: {
             background: config.colors_label.secondary
@@ -45,14 +46,14 @@
       colors: [color],
       grid: {
         padding: {
-          top: -15,
-          bottom: -15,
-          left: -5,
+          top: show == 'true' ? -12 : -15,
+          bottom: show == 'true' ? -17 : -15,
+          left: show == 'true' ? -17 : -5,
           right: -15
         }
       },
       series: [value],
-      labels: ['Progress']
+      labels: show == 'true' ? [''] : ['Progress']
     };
     return radialBarChartOpt;
   }
@@ -65,7 +66,10 @@
     chartProgressList.forEach(function (chartProgressEl) {
       const color = config.colors[chartProgressEl.dataset.color],
         series = chartProgressEl.dataset.series;
-      const optionsBundle = radialBarChart(color, series);
+      const progress_variant = chartProgressEl.dataset.progress_variant
+        ? chartProgressEl.dataset.progress_variant
+        : 'false';
+      const optionsBundle = radialBarChart(color, series, progress_variant);
       const chart = new ApexCharts(chartProgressEl, optionsBundle);
       chart.render();
     });
@@ -163,4 +167,4 @@
       }
     });
   }
-})();
+});

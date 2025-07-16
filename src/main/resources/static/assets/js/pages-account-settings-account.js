@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
           trigger: new FormValidation.plugins.Trigger(),
           bootstrap5: new FormValidation.plugins.Bootstrap5({
             eleValidClass: '',
-            rowSelector: '.col-md-6'
+            rowSelector: '.form-control-validation'
           }),
           submitButton: new FormValidation.plugins.SubmitButton(),
           // Submit the form when all fields are valid
@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function (e) {
             showCancelButton: true,
             confirmButtonText: 'Yes',
             customClass: {
-              confirmButton: 'btn btn-primary me-2',
-              cancelButton: 'btn btn-label-secondary'
+              confirmButton: 'btn btn-primary me-2 waves-effect waves-light',
+              cancelButton: 'btn btn-label-secondary waves-effect waves-light'
             },
             buttonsStyling: false
           }).then(function (result) {
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 title: 'Deleted!',
                 text: 'Your file has been deleted.',
                 customClass: {
-                  confirmButton: 'btn btn-success'
+                  confirmButton: 'btn btn-success waves-effect waves-light'
                 }
               });
             } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function (e) {
                 text: 'Deactivation Cancelled!!',
                 icon: 'error',
                 customClass: {
-                  confirmButton: 'btn btn-success'
+                  confirmButton: 'btn btn-success waves-effect waves-light'
                 }
               });
             }
@@ -133,23 +133,32 @@ document.addEventListener('DOMContentLoaded', function (e) {
       };
     }
 
-    // CleaveJS validation
+    // CleaveJ-zen validation
 
     const phoneNumber = document.querySelector('#phoneNumber'),
       zipCode = document.querySelector('#zipCode');
     // Phone Mask
     if (phoneNumber) {
-      new Cleave(phoneNumber, {
-        phone: true,
-        phoneRegionCode: 'US'
+      phoneNumber.addEventListener('input', event => {
+        const cleanValue = event.target.value.replace(/\D/g, '');
+        phoneNumber.value = formatGeneral(cleanValue, {
+          blocks: [3, 3, 4],
+          delimiters: [' ', ' ']
+        });
+      });
+      registerCursorTracker({
+        input: phoneNumber,
+        delimiter: ' '
       });
     }
 
     // Pincode
     if (zipCode) {
-      new Cleave(zipCode, {
-        delimiter: '',
-        numeral: true
+      zipCode.addEventListener('input', event => {
+        zipCode.value = formatNumeral(event.target.value, {
+          delimiter: '',
+          numeral: true
+        });
       });
     }
 

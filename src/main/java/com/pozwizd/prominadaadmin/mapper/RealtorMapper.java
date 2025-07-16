@@ -1,19 +1,25 @@
 package com.pozwizd.prominadaadmin.mapper;
 
+import com.pozwizd.prominadaadmin.entity.Realtor;
+import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
+import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
+import com.pozwizd.prominadaadmin.service.serviceImp.FileServiceImp;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingConstants;
+import org.mapstruct.ReportingPolicy;
 
-import org.mapstruct.*;
-import org.springframework.data.domain.Page;
-
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {FileServiceImp.class, DocumentFeedbackMapper.class},
+        componentModel = MappingConstants.ComponentModel.SPRING)
 public interface RealtorMapper {
-//    Realtor toEntity(RealtorDtoTable realtorDtoTable);
-//
-//    RealtorDtoTable toDto(Realtor realtor);
-//
-//    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-//    Realtor partialUpdate(RealtorDtoTable realtorDtoTable, @MappingTarget Realtor realtor);
-//
-//    default Page<RealtorDtoTable> toDto(Page<Realtor> realtorPage) {
-//        return realtorPage.map(this::toDto);
-//    }
+
+    @Mapping(target = "pathAvatar", source = "pathAvatar", qualifiedByName = "uploadFile")
+    @Mapping(target = "phoneNumbers", source = "phoneNumbers")
+    @Mapping(target = "documentFeedbacks", source = "documentFeedbackRequests")
+    Realtor toEntity(RealtorRequest realtorRequest);
+
+
+    @Mapping(target = "documentFeedbackResponses", source = "documentFeedbacks")
+    RealtorResponse toRealtorResponse(Realtor realtor);
 }

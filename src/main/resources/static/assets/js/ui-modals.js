@@ -44,14 +44,30 @@
   // Onboarding modal carousel height animation
   document.querySelectorAll('.carousel').forEach(carousel => {
     carousel.addEventListener('slide.bs.carousel', event => {
-      // ! Todo: Convert to JS (animation) (jquery)
-      var nextH = $(event.relatedTarget).height();
-      $(carousel).find('.active.carousel-item').parent().animate(
-        {
-          height: nextH
-        },
-        500
-      );
+      // Ensure next slide exists
+      if (!event.relatedTarget) {
+        console.error('Next slide not found');
+        return;
+      }
+      // Use requestAnimationFrame to wait for render
+      requestAnimationFrame(() => {
+        // Force reflow
+        void event.relatedTarget.offsetHeight;
+        const nextHeight = Math.max(
+          event.relatedTarget.offsetHeight,
+          event.relatedTarget.scrollHeight,
+          event.relatedTarget.getBoundingClientRect().height
+        );
+        const carouselParent = carousel.querySelector('.active.carousel-item').parentElement;
+        // Animate only if we have valid heights
+        if (nextHeight > 0 && carouselParent) {
+          carouselParent.animate([{ height: carouselParent.offsetHeight + 'px' }, { height: nextHeight + 'px' }], {
+            duration: 500,
+            easing: 'ease',
+            fill: 'forwards'
+          });
+        }
+      });
     });
   });
 })();

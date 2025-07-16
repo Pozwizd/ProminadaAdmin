@@ -12,7 +12,7 @@ class GenericAPIService {
             const response = await fetch(url, options);
             if (!response.ok) {
                 const errorData = await this._parseErrorResponse(response);
-                throw { status: response.status, data: errorData };
+                throw {status: response.status, data: errorData};
             }
             return await this._parseResponse(response);
         } catch (error) {
@@ -32,7 +32,7 @@ class GenericAPIService {
         try {
             return await response.json();
         } catch {
-            return { message: 'Failed to parse error response' };
+            return {message: 'Failed to parse error response'};
         }
     }
 
@@ -66,13 +66,13 @@ class GenericAPIService {
 
     delete(id) {
         const endpoint = this.endpoints.delete.replace('{id}', id);
-        return this.request(endpoint, { method: 'DELETE' });
+        return this.request(endpoint, {method: 'DELETE'});
     }
 
     _prepareBody(method, data, entityType) {
         let options = {
             method: method,
-            headers: { 'Accept': 'application/json' }
+            headers: {'Accept': 'application/json'}
         };
 
         if (entityType === 'formdata') {
@@ -132,11 +132,11 @@ class Pagination {
         }
 
         let paginationItems = '';
-        paginationItems += this._createNavItem(0, '<i class="ti ti-chevrons-left ti-xs"></i>', 'first', this.currentPage > 0);
-        paginationItems += this._createNavItem(this.currentPage - 1, '<i class="ti ti-chevron-left ti-xs"></i>', 'prev', this.currentPage > 0);
+        paginationItems += this._createNavItem(0, '<i class="ti tabler-chevrons-left tabler-xs"></i>', 'first', this.currentPage > 0);
+        paginationItems += this._createNavItem(this.currentPage - 1, '<i class="ti tabler-chevron-left tabler-xs"></i>', 'prev', this.currentPage > 0);
         paginationItems += this._renderPageNumbers();
-        paginationItems += this._createNavItem(this.currentPage + 1, '<i class="ti ti-chevron-right ti-xs"></i>', 'next', this.currentPage < this.totalPages - 1);
-        paginationItems += this._createNavItem(this.totalPages - 1, '<i class="ti ti-chevrons-right ti-xs"></i>', 'last', this.currentPage < this.totalPages - 1);
+        paginationItems += this._createNavItem(this.currentPage + 1, '<i class="ti tabler-chevron-right tabler-xs"></i>', 'next', this.currentPage < this.totalPages - 1);
+        paginationItems += this._createNavItem(this.totalPages - 1, '<i class="ti tabler-chevrons-right tabler-xs"></i>', 'last', this.currentPage < this.totalPages - 1);
 
         this.container.innerHTML = paginationItems;
     }
@@ -193,13 +193,14 @@ class Pagination {
 
 
 class GenericTable {
-    constructor({ tableBodyId, columns, onEdit, onDelete, noDataText = 'No data', editUrl = '/edit/' }) {
+    constructor({tableBodyId, columns, onEdit, onDelete, noDataText = 'No data', editUrl = '/edit/', cardUrl = null}) { // Добавлен cardUrl
         this.tableBody = document.getElementById(tableBodyId);
         this.columns = columns;
         this.onEdit = onEdit;
         this.onDelete = onDelete;
         this.noDataText = noDataText;
         this.editUrl = editUrl;
+        this.cardUrl = cardUrl; // Сохраняем cardUrl
 
         if (!this.tableBody) {
             console.error(`Table body with ID "${tableBodyId}" not found.`);
@@ -224,12 +225,15 @@ class GenericTable {
         this.tableBody.appendChild(fragment);
     }
 
-    _createActionButton(action, id, iconClass, className) {
-        if (action === 'edit') {
-            return `<a href="${this.editUrl}${id}" class="btn btn-sm ${className}"><i class="${iconClass}"></i></a>`;
+    _createActionButton(action, id, iconClass, className, isLink = false, url = '#') {
+        if (isLink) {
+            // Для ссылок (редактирование, просмотр)
+            return `<a href="${url}" class="btn btn-sm ${className}"><i class="${iconClass}"></i></a>`;
         }
+        // Для кнопок (удаление)
         return `<button class="btn btn-sm ${className}" data-action="${action}" data-id="${id}"><i class="${iconClass}"></i></button>`;
     }
+
 
     _createRow(item) {
         const row = document.createElement('tr');
@@ -246,10 +250,48 @@ class GenericTable {
             cells += `<td class="text-center">${cellValue}</td>`;
         });
 
+        let viewButtonHtml = '';
+        if (this.cardUrl) {
+            // Предполагаем, что cardUrl заканчивается на / или содержит {id}
+            // Если cardUrl просто базовый путь, то `${this.cardUrl}${item.id}`
+            // Если cardUrl содержит плейсхолдер, например 'entity/card/{id}', то его нужно заменить
+            let finalCardUrl = this.cardUrl.includes('{id}')
+                ? this.cardUrl.replace('{id}', item.id)
+                : `${this.cardUrl}${item.id}`;
+
+            viewButtonHtml = this._createActionButton(
+                'view',
+                item.id,
+                'ti tabler-eye',      // Иконка глаза (ThemeForest Icons)
+                'btn-info me-2',  // Класс для синей кнопки с отступом
+                true,             // Это ссылка
+                finalCardUrl
+            );
+        }
+
+        const editButtonHtml = this._createActionButton(
+            'edit',
+            item.id,
+            'ti tabler-pencil',
+            'btn-warning me-2',
+            true, // Это ссылка
+            `${this.editUrl}${item.id}`
+        );
+
+        const deleteButtonHtml = this._createActionButton(
+            'delete',
+            item.id,
+            'ti tabler-trash',
+            'btn-danger'
+            // false - это кнопка, URL не нужен
+        );
+
+
         const actionCell = `
             <td class="text-center action-buttons">
-                ${this._createActionButton('edit', item.id, 'ti ti-pencil', 'btn-warning me-2')}
-                ${this._createActionButton('delete', item.id, 'ti ti-trash', 'btn-danger')}
+                ${viewButtonHtml} 
+                ${editButtonHtml} 
+                ${deleteButtonHtml} 
             </td>
         `;
 
@@ -267,9 +309,9 @@ class GenericTable {
         if (deleteButton) {
             const id = deleteButton.getAttribute('data-id');
             deleteButton.addEventListener('click', () => {
-                 if (this.onDelete) {
-                     this.onDelete(id);
-                 }
+                if (this.onDelete) {
+                    this.onDelete(id);
+                }
             });
         }
 
@@ -343,7 +385,8 @@ class GenericCRUDApp {
             tableBodyId: config.tableBodyId,
             columns: config.columns,
             onDelete: this.handleDelete.bind(this),
-            editUrl: config.editUrl || '/edit/'
+            editUrl: config.editUrl || '/edit/',
+            cardUrl: config.cardUrl || null // <--- Передаем cardUrl
         });
         this.pagination = new Pagination(config.paginationId, this.handlePageChange.bind(this));
         this.deleteConfirmModal = new GenericDeleteConfirmModal(
@@ -468,7 +511,7 @@ class GenericCRUDApp {
                 this.pagination.setup(adjustedData.totalPages, this.currentPage);
             } else {
                 if (data.totalPages === 0) {
-                   this.currentPage = 0;
+                    this.currentPage = 0;
                 }
                 this.table.populate(data.content);
                 this.pagination.setup(data.totalPages, this.currentPage);
@@ -476,7 +519,7 @@ class GenericCRUDApp {
         } catch (error) {
             console.error('Error fetching or rendering data:', error);
             if (error && error.data && error.data[this.notificationKeyword]) {
-                this.showToast('error', this.i18nKeys.fetchErrorApi, null, { message: error.data[this.notificationKeyword] });
+                this.showToast('error', this.i18nKeys.fetchErrorApi, null, {message: error.data[this.notificationKeyword]});
             } else {
                 this.showToast('error', this.i18nKeys.fetchErrorGeneric);
             }
@@ -516,9 +559,9 @@ class GenericCRUDApp {
         } catch (error) {
             console.error('Error during deletion:', error);
             if (error && error.data && error.data[this.notificationKeyword]) {
-                this.showToast('error', this.i18nKeys.deleteErrorApi, 'personal.personal', { message: error.data[this.notificationKeyword] });
+                this.showToast('error', this.i18nKeys.deleteErrorApi, 'personal.personal', {message: error.data[this.notificationKeyword]});
             } else if (error && error.status) {
-                this.showToast('error', this.i18nKeys.deleteErrorStatus, 'personal.personal', { status: error.status });
+                this.showToast('error', this.i18nKeys.deleteErrorStatus, 'personal.personal', {status: error.status});
             } else {
                 this.showToast('error', this.i18nKeys.deleteErrorGeneric, 'personal.personal');
             }
@@ -532,7 +575,7 @@ class GenericCRUDApp {
         }
 
         // Получаем локализованное сообщение для toast
-        const title = i18next.t(this.i18nKeys[type + 'Title'], { defaultValue: 'Error' });
+        const title = i18next.t(this.i18nKeys[type + 'Title'], {defaultValue: 'Error'});
         const message = i18next.t(messageKey, {
             ...extraParams,
             entity: i18next.t(entityNameKey || this.entityName)

@@ -35,7 +35,6 @@ public class ResidentialLandMain {
 
     private TypeProperty typeProperty;
 
-    // Площадь участка
     private Double landAreaAcres;
 
     private Double FreePlotAreaAcres;
@@ -44,21 +43,21 @@ public class ResidentialLandMain {
 
     private DesignatedUseOfLand designatedUseOfLand;
 
-    private int houseCount;
+    private Integer houseCount;
 
-    private int floors;
+    private Integer floors;
 
-    private int rooms;
+    private Integer rooms;
 
-    private int bedrooms;
+    private Integer bedrooms;
 
-    private double ceilingHeight;
+    private Double ceilingHeight;
 
-    private double totalArea;
+    private Double totalArea;
 
-    private double livingArea;
+    private Double livingArea;
 
-    private double kitchenArea;
+    private Double kitchenArea;
 
     private String wallMaterial;
 
@@ -71,7 +70,7 @@ public class ResidentialLandMain {
     private Integer bathroom;
 
     private Gas gas;
-// Водоснабжение
+
     private WaterSupply waterSupply;
 
     private Sewage sewage;

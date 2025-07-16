@@ -4,10 +4,11 @@ import com.pozwizd.prominadaadmin.entity.Branch;
 import com.pozwizd.prominadaadmin.mapper.BranchMapper;
 import com.pozwizd.prominadaadmin.models.branch.BranchRequest;
 import com.pozwizd.prominadaadmin.models.branch.BranchResponse;
-import com.pozwizd.prominadaadmin.repository.BranchRepository;
+import com.pozwizd.prominadaadmin.repository.primary.BranchRepository;
 import com.pozwizd.prominadaadmin.service.BranchService;
 import com.pozwizd.prominadaadmin.service.FileService;
 import com.pozwizd.prominadaadmin.specification.BranchSpecification;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -121,6 +122,16 @@ public class BranchServiceImp implements BranchService {
         branchRepository.deleteById(id);
     }
 
+    @Transactional
+    public void deleteBranch(Long branchId) {
+        Branch branch = branchRepository.findById(branchId)
+                .orElseThrow(() -> new EntityNotFoundException("Branch not found"));
+
+        branch.removeAllPersonals();
+
+        branchRepository.delete(branch);
+    }
+
     /**
      * Получает постраничный список филиалов с возможностью фильтрации.
      *
@@ -197,7 +208,7 @@ public class BranchServiceImp implements BranchService {
         }
         
         Branch updatedBranch = branchMapper.toEntity(branchRequest, pathImage);
-        updatedBranch.setId(existingBranch.getId()); // Сохраняем ID существующего филиала
+        updatedBranch.setId(existingBranch.getId());
         branchRepository.save(updatedBranch);
     }
 
@@ -222,7 +233,7 @@ public class BranchServiceImp implements BranchService {
         }
         
         Branch updatedBranch = branchMapper.toEntity(branchRequest, pathImage);
-        updatedBranch.setId(id); // Устанавливаем ID из параметра
+        updatedBranch.setId(id);
         branchRepository.save(updatedBranch);
     }
 }

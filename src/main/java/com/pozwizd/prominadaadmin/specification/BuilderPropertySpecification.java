@@ -1,9 +1,7 @@
 package com.pozwizd.prominadaadmin.specification;
 
-import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDto;
-import com.pozwizd.prominadaadmin.models.builderProperty.BuilderPropertyDtoForTable;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDtoForTable;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
@@ -23,8 +21,8 @@ public interface BuilderPropertySpecification {
             if (StringUtils.hasText(dto.getNameTopozone())) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("topozone").get("name")), "%" + dto.getNameTopozone().toLowerCase() + "%"));
             }
-            if (StringUtils.hasText(dto.getNameDistinct())) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("distinct").get("name")), "%" + dto.getNameDistinct().toLowerCase() + "%"));
+            if (StringUtils.hasText(dto.getNameDistrict())) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("distinct").get("name")), "%" + dto.getNameDistrict().toLowerCase() + "%"));
             }
 
             if (StringUtils.hasText(dto.getStreet())) {

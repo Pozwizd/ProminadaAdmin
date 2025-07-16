@@ -1,9 +1,9 @@
 package com.pozwizd.prominadaadmin.entity.property.builderProperty;
 
-import com.pozwizd.prominadaadmin.entity.other.City;
-import com.pozwizd.prominadaadmin.entity.other.District;
-import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
-import com.pozwizd.prominadaadmin.entity.other.Topozone;
+import com.pozwizd.prominadaadmin.entity.location.City;
+import com.pozwizd.prominadaadmin.entity.location.District;
+import com.pozwizd.prominadaadmin.entity.location.Region;
+import com.pozwizd.prominadaadmin.entity.location.Topozone;
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
 import com.pozwizd.prominadaadmin.entity.property.enums.DeliveryDate;
 import jakarta.persistence.*;
@@ -29,15 +29,15 @@ public class BuilderProperty {
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "reg_district_id")
-    private RegDistrict regDistrict;
+    @JoinColumn
+    private Region region;
 
     @ManyToOne
-    @JoinColumn(name = "distinct_id")
-    private District distinct;
+    @JoinColumn
+    private District district;
 
     @ManyToOne
-    @JoinColumn(name = "topozone_id")
+    @JoinColumn
     private Topozone topozone;
 
     private String street;

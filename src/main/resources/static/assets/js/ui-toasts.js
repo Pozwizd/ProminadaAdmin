@@ -4,7 +4,7 @@
 
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Bootstrap toasts example
   // --------------------------------------------------------------------
   const toastAnimationExample = document.querySelector('.toast-ex'),
@@ -58,154 +58,141 @@
       toastPlacement.show();
     };
   }
-})();
 
-//Toastr (jquery)
-// --------------------------------------------------------------------
-$(function () {
-  var i = -1;
-  var toastCount = 0;
-  var $toastlast;
-  var getMessage = function () {
-    var msgs = [
+  //notyf (js)
+  // --------------------------------------------------------------------
+
+  // Initialize message index
+  let i = -1;
+
+  // Function to cycle through messages
+  const getMessage = function () {
+    const msgs = [
       "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart.",
-      '<div class="mb-3"><input class="input-small form-control" value="Textbox"/>&nbsp;<a href="http://johnpapa.net" target="_blank">This is a hyperlink</a></div><div class="d-flex"><button type="button" id="okBtn" class="btn btn-primary btn-sm me-2">Close me</button><button type="button" id="surpriseBtn" class="btn btn-sm btn-secondary">Surprise me</button></div>',
+      '<div class="mb-3"><input class="input-small form-control" value="Textbox"/>&nbsp;<a href="http://example.com" target="_blank" class="text-white">This is a hyperlink</a></div><div class="d-flex"><button type="button" id="okBtn" class="btn btn-primary btn-sm me-2">Close me</button><button type="button" id="surpriseBtn" class="btn btn-sm btn-secondary">Surprise me</button></div>',
       'Live the Life of Your Dreams',
-      'Believe in Your Self!',
+      'Believe in Yourself!',
       'Be mindful. Be grateful. Be positive.',
       'Accept yourself, love yourself!'
     ];
-    i++;
-    if (i === msgs.length) {
-      i = 0;
-    }
+    i = (i + 1) % msgs.length;
     return msgs[i];
   };
-  var getMessageWithClearButton = function (msg) {
-    msg = msg ? msg : 'Clear itself?';
-    msg += '<br /><br /><button type="button" class="btn btn-secondary clear">Yes</button>';
-    return msg;
-  };
-  $('#closeButton').click(function () {
-    if ($(this).is(':checked')) {
-      $('#addBehaviorOnToastCloseClick').prop('disabled', false);
-    } else {
-      $('#addBehaviorOnToastCloseClick').prop('disabled', true);
-      $('#addBehaviorOnToastCloseClick').prop('checked', false);
+
+  // Custom Notyf class to allow HTML content in messages
+  class CustomNotyf extends Notyf {
+    _renderNotification(options) {
+      const notification = super._renderNotification(options);
+
+      // Replace textContent with innerHTML to render HTML content
+      if (options.message) {
+        notification.message.innerHTML = options.message;
+      }
+
+      return notification;
     }
+  }
+
+  // Initialize CustomNotyf instance with default behaviors
+  const notyf = new CustomNotyf({
+    duration: 3000,
+    ripple: true,
+    dismissible: false,
+    position: { x: 'right', y: 'top' },
+    types: [
+      {
+        type: 'info',
+        background: config.colors.info,
+        className: 'notyf__info',
+        icon: {
+          className: 'icon-base ti tabler-info-circle-filled icon-md text-white',
+          tagName: 'i'
+        }
+      },
+      {
+        type: 'warning',
+        background: config.colors.warning,
+        className: 'notyf__warning',
+        icon: {
+          className: 'icon-base ti tabler-alert-triangle-filled icon-md text-white',
+          tagName: 'i'
+        }
+      },
+      {
+        type: 'success',
+        background: config.colors.success,
+        className: 'notyf__success',
+        icon: {
+          className: 'icon-base ti tabler-circle-check-filled icon-md text-white',
+          tagName: 'i'
+        }
+      },
+      {
+        type: 'error',
+        background: config.colors.danger,
+        className: 'notyf__error',
+        icon: {
+          className: 'icon-base ti tabler-xbox-x-filled icon-md text-white',
+          tagName: 'i'
+        }
+      }
+    ]
   });
-  $('#showtoast').click(function () {
-    var shortCutFunction = $('#toastTypeGroup input:radio:checked').val(),
-      isRtl = $('html').attr('dir') === 'rtl',
-      msg = $('#message').val(),
-      title = $('#title').val() || '',
-      $showDuration = $('#showDuration'),
-      $hideDuration = $('#hideDuration'),
-      $timeOut = $('#timeOut'),
-      $extendedTimeOut = $('#extendedTimeOut'),
-      $showEasing = $('#showEasing'),
-      $hideEasing = $('#hideEasing'),
-      $showMethod = $('#showMethod'),
-      $hideMethod = $('#hideMethod'),
-      toastIndex = toastCount++,
-      addClear = $('#addClear').prop('checked'),
-      prePositionClass = 'toast-top-right';
 
-    prePositionClass =
-      typeof toastr.options.positionClass === 'undefined' ? 'toast-top-right' : toastr.options.positionClass;
+  // Event listener for Show Notification button
+  document.getElementById('showNotification').addEventListener('click', () => {
+    const message = document.getElementById('message').value || getMessage(); // Use getMessage() to get the next message
+    const dismissible = document.getElementById('dismissible').checked;
+    const ripple = document.getElementById('ripple').checked;
+    const durationInput = document.getElementById('duration').value;
+    const duration = durationInput ? parseInt(durationInput) : 3000;
 
-    toastr.options = {
-      maxOpened: 1,
-      autoDismiss: true,
-      closeButton: $('#closeButton').prop('checked'),
-      debug: $('#debugInfo').prop('checked'),
-      newestOnTop: $('#newestOnTop').prop('checked'),
-      progressBar: $('#progressBar').prop('checked'),
-      positionClass: $('#positionGroup input:radio:checked').val() || 'toast-top-right',
-      preventDuplicates: $('#preventDuplicates').prop('checked'),
-      onclick: null,
-      rtl: isRtl
+    // Get selected position
+    const positionYValue = document.querySelector('input[name="positiony"]:checked').value;
+    const positionXValue = document.querySelector('input[name="positionx"]:checked').value;
+    const position = { x: positionXValue, y: positionYValue };
+
+    // Get selected notification type
+    const type = document.querySelector('input[name="notificationType"]:checked').value;
+
+    // Build the notification options
+    const notificationOptions = {
+      type: type,
+      message: message,
+      duration: duration,
+      dismissible: dismissible,
+      ripple: ripple,
+      position: position
     };
 
-    //Add fix for multiple toast open while changing the position
-    if (prePositionClass != toastr.options.positionClass) {
-      toastr.options.hideDuration = 0;
-      toastr.clear();
-    }
+    // Display notification and get the reference
+    attachNotificationEventListeners();
+    notyf.open(notificationOptions);
+  });
 
-    if ($('#addBehaviorOnToastClick').prop('checked')) {
-      toastr.options.onclick = function () {
-        alert('You can perform some custom action after a toast goes away');
-      };
-    }
-    if ($('#addBehaviorOnToastCloseClick').prop('checked')) {
-      toastr.options.onCloseClick = function () {
-        alert('You can perform some custom action when the close button is clicked');
-      };
-    }
-    if ($showDuration.val().length) {
-      toastr.options.showDuration = parseInt($showDuration.val());
-    }
-    if ($hideDuration.val().length) {
-      toastr.options.hideDuration = parseInt($hideDuration.val());
-    }
-    if ($timeOut.val().length) {
-      toastr.options.timeOut = addClear ? 0 : parseInt($timeOut.val());
-    }
-    if ($extendedTimeOut.val().length) {
-      toastr.options.extendedTimeOut = addClear ? 0 : parseInt($extendedTimeOut.val());
-    }
-    if ($showEasing.val().length) {
-      toastr.options.showEasing = $showEasing.val();
-    }
-    if ($hideEasing.val().length) {
-      toastr.options.hideEasing = $hideEasing.val();
-    }
-    if ($showMethod.val().length) {
-      toastr.options.showMethod = $showMethod.val();
-    }
-    if ($hideMethod.val().length) {
-      toastr.options.hideMethod = $hideMethod.val();
-    }
-    if (addClear) {
-      msg = getMessageWithClearButton(msg);
-      toastr.options.tapToDismiss = false;
-    }
-    if (!msg) {
-      msg = getMessage();
-    }
-    var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
-    $toastlast = $toast;
-    if (typeof $toast === 'undefined') {
-      return;
-    }
-    if ($toast.find('#okBtn').length) {
-      $toast.delegate('#okBtn', 'click', function () {
-        alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
-        $toast.remove();
-      });
-    }
-    if ($toast.find('#surpriseBtn').length) {
-      $toast.delegate('#surpriseBtn', 'click', function () {
-        alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
-      });
-    }
-    if ($toast.find('.clear').length) {
-      $toast.delegate('.clear', 'click', function () {
-        toastr.clear($toast, {
-          force: true
+  // Event listener for Clear Notifications button
+  document.getElementById('clearNotifications').addEventListener('click', () => {
+    notyf.dismissAll();
+  });
+
+  // Function to attach event listeners to elements inside the notification
+  function attachNotificationEventListeners() {
+    // Wait for the DOM to update
+    setTimeout(() => {
+      const okBtn = document.getElementById('okBtn');
+      const surpriseBtn = document.getElementById('surpriseBtn');
+
+      if (okBtn) {
+        okBtn.addEventListener('click', () => {
+          notyf.dismissAll(); // Close all notifications
         });
-      });
-    }
-  });
+      }
 
-  function getLastToast() {
-    return $toastlast;
+      if (surpriseBtn) {
+        surpriseBtn.addEventListener('click', () => {
+          notyf.success('Surprise! This is a new message.');
+        });
+      }
+    }, 100);
   }
-  $('#clearlasttoast').click(function () {
-    toastr.clear(getLastToast());
-  });
-  $('#cleartoasts').click(function () {
-    toastr.clear();
-  });
 });

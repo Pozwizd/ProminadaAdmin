@@ -98,7 +98,7 @@
                             </div>
 
                             <div class="col-md-3">
-                                <label for="regDistrictId" class="form-label" data-i18n="builder.regDistrict">Обл.
+                                <label for="regDistrictId" class="form-label" data-i18n="builder.region">Обл.
                                     район</label>
                                 <select class="form-select" id="regDistrictId" required>
                                     <option value="" data-i18n="builder.selectRegDistrict" selected></option>
@@ -500,7 +500,7 @@
         };
 
         function loadRegDistrict() {
-            return fetch(`/admin/regDistrict/getAll`)
+            return fetch(`/admin/region/getAll`)
                 .then(response => response.json())
                 .then(data => {
                     if (containerRegDistrictSelector) {
@@ -675,7 +675,7 @@
                 const layoutHTML = `
     <div class="layout-block col-12 row border rounded p-3 mb-4">
         <div class="col-12 text-end mb-2">
-            <a href="javascript:void(0);" class="ti ti-trash text-danger delete-layout" style="cursor: pointer;"></a>
+            <a href="javascript:void(0);" class="ti tabler-trash text-danger delete-layout" style="cursor: pointer;"></a>
         </div>
         <div class="col-12">
             <label class="form-label">Название</label>

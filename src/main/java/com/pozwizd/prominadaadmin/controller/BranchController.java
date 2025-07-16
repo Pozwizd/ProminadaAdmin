@@ -27,13 +27,12 @@ public class BranchController {
     @GetMapping
     public ModelAndView getBranchPage(Model model) {
 
-        model.addAttribute("pageTitle", "branch");
+        model.addAttribute("pageTitle", "branch.branch");
         model.addAttribute("pageActive", "branch");
 
         return new ModelAndView("branch/branches");
     }
 
-    // Не менять и не удалять, используется в js скриптах на фронт
     @GetMapping("/list")
     public @ResponseBody List<BranchResponse> getBranches() {
         return branchServiceImp.findAllResponse();
@@ -96,7 +95,7 @@ public class BranchController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(java.util.Map.of(
                 "success", false, 
-                "message", "Ошибка при сохранении филиала: " + e.getMessage()));
+                "message", "Error while saving branch: " + e.getMessage()));
         }
     }
 

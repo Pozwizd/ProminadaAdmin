@@ -11,9 +11,16 @@ document.addEventListener('DOMContentLoaded', function (e) {
     // Phone Number
     if (phoneMaskList) {
       phoneMaskList.forEach(function (phoneMask) {
-        new Cleave(phoneMask, {
-          phone: true,
-          phoneRegionCode: 'US'
+        phoneMask.addEventListener('input', event => {
+          const cleanValue = event.target.value.replace(/\D/g, '');
+          phoneMask.value = formatGeneral(cleanValue, {
+            blocks: [3, 3, 4],
+            delimiters: [' ', ' ']
+          });
+        });
+        registerCursorTracker({
+          input: phoneMask,
+          delimiter: ' '
         });
       });
     }

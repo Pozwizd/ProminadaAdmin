@@ -7,6 +7,7 @@
       }
     }
   },
+  "Information": "Information",
   "ADMIN": "Administrator",
   "USER": "User",
   "Personal": "Staff",
@@ -62,7 +63,21 @@
   "branches": "Branches",
   "realtors": "Realtors",
   "websiteManagement": "Website Management",
-  "banners": "Banners",
+  "banners": {
+    "edit": "Edit banner",
+    "toast": {
+      "update": {
+        "successful": "Banner updated successfully",
+        "error": "An error occurred while updating the banner"
+      }
+    },
+    "name": "Banners",
+    "Form": {
+      "name": {
+        "size": "The banner name should be between 5 and 50 characters long"
+      }
+    }
+  },
   "systemUsers": "System Users",
   "pages": "Pages",
   "changes": "Changes",
@@ -286,5 +301,19 @@
   },
   "main": "Main",
   "gallery": "Gallery",
-  "planning": "Planning"
+  "planning": "Planning",
+  "personalCard": {
+    "editButton": "Edit",
+    "informationHeader": "Information",
+    "role": "Role",
+    "fullName": "Full Name",
+    "phone": "Phone",
+    "email": "Email",
+    "branch": "Branch"
+  },
+  "banner": {
+    "name": "Name",
+    "status": "Status",
+    "actions": "Actions"
+  }
 }

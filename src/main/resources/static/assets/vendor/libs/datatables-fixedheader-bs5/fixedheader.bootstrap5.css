@@ -1,12 +1,16 @@
+/* (C) */
 table.dataTable.fixedHeader-floating,
 table.dataTable.fixedHeader-locked {
-  background-color: white;
+  position: relative !important;
+  background-color: var(--bs-body-bg);
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
 
-table.dataTable.fixedHeader-locked {
-  position: absolute !important;
+div.dtfh-floatingparent-foot table {
+  border-top-color: var(--bs-border-color);
+  border-top-width: var(--bs-border-width);
+  border-top-style: solid;
 }
 
 @media print {
@@ -14,30 +18,27 @@ table.dataTable.fixedHeader-locked {
     display: none;
   }
 }
-.dt-fixedheader.fixedHeader-floating.table.dataTable {
-  width: auto !important;
+/* Fixed header Style */
+.dt-fixedheader.table-bordered.table.dataTable.fixedHeader-floating thead > tr > th, .dt-fixedheader.table-bordered.table.dataTable.fixedHeader-locked thead > tr > th {
+  background-color: var(--bs-paper-bg);
+}
+.dt-fixedheader.dataTable.table-bordered thead tr th:nth-child(2) {
+  border-inline-start-width: 0;
+}
+.dt-fixedheader.dataTable.table-bordered thead tr th:last-child {
+  border-inline-end: none;
+}
+:dir(rtl) .dt-fixedheader.dataTable.table-bordered thead tr th:last-child {
+  border-inline-start: none;
 }
 
-.dt-fixedheader.fixedHeader-locked.table.dataTable {
-  display: none;
+.dtfh-floatingparent-head {
+  border-block-end: 1px solid var(--bs-border-color);
 }
-
-.light-style .dtfh-floatingparenthead {
-  border-bottom: 2px solid #f8f7fa;
+.dtfh-floatingparent-head > div {
+  padding: 0 !important;
 }
-.light-style .dt-fixedheader.fixedHeader-floating.table.dataTable thead > tr > th,
-.light-style .dt-fixedheader.fixedHeader-locked.table.dataTable thead > tr > th {
-  background-color: #fff;
-  border-bottom-width: 1px;
-  border-color: #f8f7fa;
-}
-
-.dark-style .dtfh-floatingparenthead {
-  border-bottom: 2px solid #25293c;
-}
-.dark-style .dt-fixedheader.fixedHeader-floating.table.dataTable thead > tr > th,
-.dark-style .dt-fixedheader.fixedHeader-locked.table.dataTable thead > tr > th {
-  background-color: #2f3349;
-  border-bottom-width: 1px;
-  border-color: #25293c;
+.dtfh-floatingparent-head .form-check-input {
+  block-size: 1.125rem;
+  inline-size: 1.125rem;
 }

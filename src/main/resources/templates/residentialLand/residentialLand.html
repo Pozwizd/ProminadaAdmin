@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{template/layout.html}">
+
+<head>
+    <!-- Page specific CSS can be placed here -->
+    <th:block layout:fragment="page_css">
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/fonts/fontawesome.css}"/>
+
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/flatpickr/flatpickr.css}"/>
+        <!-- Row Group CSS -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css}"/>
+        <!-- Form Validation -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/form-validation/form-validation.css}"/>
+
+        <!-- Add Select2 CSS if you use it -->
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/select2/select2.css}"/>
+
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/tagify/tagify.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/bootstrap-select/bootstrap-select.css}"/>
+        <link rel="stylesheet" th:href="@{/assets/vendor/libs/typeahead-js/typeahead.css}"/>
+    </th:block>
+
+
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid p-4">
+        <hr class="my-4"/>
+
+        <!-- DataTable Card -->
+        <div class="card">
+            <h5 class="card-header">Земельные участки (жилой фонд)</h5>
+            <!--Фильтры-->
+            <div class="card-body">
+                <form class="dt_adv_search" method="GET">
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <label class="form-label">Район:</label>
+                            <select class="form-select dt-input"
+                                    data-column="2" data-column-index="2" name="district[]">
+                                <option value="Приморский" selected>Приморский</option>
+                                <option value="Суворовский" selected>Суворовский</option>
+                                <option value="Киевский">Киевский</option>
+                                <option value="Малиновский">Малиновский</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <label class="form-label">Количество комнат</label>
+                            <div class="d-flex align-items-center gap-3 mt-2">
+                                <div class="form-check">
+                                    <input class="form-check-input dt-input" type="checkbox"
+                                           value="1" name="rooms[]" data-column="5" data-column-index="5" checked>
+                                    <label class="form-check-label">1</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input dt-input" type="checkbox"
+                                           value="2" name="rooms[]" data-column="5" data-column-index="5">
+                                    <label class="form-check-label">2</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input dt-input" type="checkbox"
+                                           value="3" name="rooms[]" data-column="5" data-column-index="5">
+                                    <label class="form-check-label">3</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input dt-input" type="checkbox"
+                                           value="4" name="rooms[]" data-column="5" data-column-index="5">
+                                    <label class="form-check-label">4</label>
+                                </div>
+                                <span>&gt;</span>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label class="form-label">Этаж:</label>
+                            <div class="d-flex align-items-center gap-1">
+                                <input type="number" class="form-control dt-input"
+                                       data-column="7" data-column-index="7"
+                                       name="floor_from"/>
+                                <span>—</span>
+                                <input type="number" class="form-control dt-input"
+                                       data-column="7" data-column-index="7"
+                                       name="floor_to"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label class="form-label">Цена ($):</label>
+                            <div class="d-flex align-items-center gap-1">
+                                <input type="number" class="form-control dt-input"
+                                       data-column="10" data-column-index="10"
+                                       name="price_from"/>
+                                <span>—</span>
+                                <input type="number" class="form-control dt-input"
+                                       data-column="10" data-column-index="10"
+                                       name="price_to"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <label class="form-label">Топозона:</label>
+                            <select class="form-select dt-input"
+                                    data-column="3" data-column-index="3" name="topozone[]">
+                                <option value="Аркадия" selected>Аркадия</option>
+                                <option value="Поселок Котовского" selected>Поселок Котовского</option>
+                                <option value="Центр">Центр</option>
+                                <option value="Черемушки">Черемушки</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <label class="form-label">ЖК</label>
+                            <input type="text" class="form-control dt-input"
+                                   data-column="6" data-column-index="6"
+                                   placeholder="Ревьера Сити" name="residential_complex" value="Ревьера Сити"/>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label class="form-label">Этажность:</label>
+                            <div class="d-flex align-items-center gap-1">
+                                <input type="number" class="form-control dt-input"
+                                       data-column="8" data-column-index="8"
+                                       name="floors_from"/>
+                                <span>—</span>
+                                <input type="number" class="form-control dt-input"
+                                       data-column="8" data-column-index="8"
+                                       name="floors_to"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-2">
+                            <label class="form-label">Площадь (кв. м.):</label>
+                            <div class="d-flex align-items-center gap-1">
+                                <input type="number" class="form-control dt-input"
+                                       data-column="9" data-column-index="9"
+                                       name="area_from"/>
+                                <span>—</span>
+                                <input type="number" class="form-control dt-input"
+                                       data-column="9" data-column-index="9"
+                                       name="area_to"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-3 mb-4">
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <label class="form-label">Улица:</label>
+                            <input type="text" class="form-control dt-input"
+                                   data-column="4" data-column-index="4"
+                                   placeholder="Гагаринское Плато" name="street" value="Гагаринское Плато"/>
+                        </div>
+                        <div class="col-12 col-sm-6 col-lg-4">
+                            <label class="form-label">Дата контакта</label>
+                            <select class="form-select dt-input"
+                                    data-column="0" data-column-index="0" name="contact_date">
+                                <option value="">Все</option>
+                                <option value="today">Сегодня</option>
+                                <option value="yesterday">Вчера</option>
+                                <option value="3days" selected>3 дня</option>
+                                <option value="week">Неделя</option>
+                                <option value="month">Месяц</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <!-- Кнопки -->
+                    <div class="d-flex justify-content-end gap-2 mt-4">
+                        <button type="button" class="btn btn-outline-secondary" id="clear-filter">
+                            Очистить фильтр
+                        </button>
+                        <button type="button" class="btn btn-primary" id="apply-filter">
+                            Поиск
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card-datatable table-responsive pt-0">
+                <table class="datatables-backend table">
+                    <thead>
+                    <tr>
+                        <!-- Headers will be generated by DataTables from the columnsConfig -->
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="none">
+        document.addEventListener('DOMContentLoaded', function (e) {
+
+            // Инициализация Select2 для множественного выбора
+            $(document).ready(function () {
+                $('.select2').select2({
+                    placeholder: "Выберите...",
+                    allowClear: true,
+                    tags: true
+                });
+            });
+
+
+            const dt_backend_table_selector = '.datatables-backend';
+            const dt_backend_table_element = document.querySelector(dt_backend_table_selector);
+            let dt_backend;
+
+            const columnsConfig = [
+                {data: 'acquisitionDate', name: 'acquisitionDate', title: 'Дата контакта'},
+                {data: 'residentialLandMain.objectCode', name: 'residentialLandMain.objectCode', title: 'Код'},
+
+                {data: 'districtName', name: 'district.name', title: 'Район', searchable: false},
+                {data: 'topozoneName', name: 'topozone.name', title: 'Топозона', searchable: false},
+                {data: 'street', name: 'street', title: 'Улица'},
+                {data: 'residentialLandMain.rooms', name: 'residentialLandMain.rooms', title: 'Комнат'},
+                {data: 'residentialLandMain.floors', name: 'residentialLandMain.floors', title: 'Этаж'},
+                {data: 'residentialLandMain.floors', name: 'residentialLandMain.floors', title: 'Этажн.'},
+                {data: 'area', name: 'area', title: 'Площадь', orderable: false, searchable: false},
+                {data: 'residentialLandMain.price', name: 'residentialLandMain.price', title: 'Цена'},
+                {
+                    data: 'residentialLandMain.isAdvertising',
+                    name: 'residentialLandMain.isAdvertising',
+                    title: 'Реклама'
+                },
+                {
+                    data: 'residentialLandMain.publicationStatus',
+                    name: 'residentialLandMain.publicationStatus',
+                    title: 'Статус'
+                },
+                {data: 'hasPhotos', name: 'hasPhotos', title: 'Фото', orderable: false, searchable: false}, // Варианты есть или неть
+                {
+                    data: '',
+                    name: 'select',
+                    title: 'Выбор',
+                    orderable: false,
+                    searchable: false,
+                    responsivePriority: 1
+                },
+                {
+                    data: '',
+                    name: 'actions',
+                    title: 'Действия',
+                    orderable: false,
+                    searchable: false,
+                    responsivePriority: 1
+                }
+            ];
+
+            if (dt_backend_table_element) {
+                dt_backend = new DataTable(dt_backend_table_element, {
+                    processing: true,
+                    serverSide: true,
+                    searching: true,
+
+                    ajax: {
+                        url: "/admin/residentialLand/getAllResidentialLandFiltered",
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: function (d) {
+                            return JSON.stringify(d);
+                        },
+                        dataSrc: function (json) {
+                            if (json.error) {
+                                console.error("DataTables Server Error: ", json.error);
+                                return [];
+                            }
+                            return json.data || [];
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.error("AJAX Error: ", textStatus, errorThrown, jqXHR.responseText);
+                            alert('Ошибка при загрузке данных. Подробности в консоли (F12).');
+                        }
+                    },
+
+                    columns: columnsConfig,
+
+                    select: {
+                        style: 'multi',
+                        selector: 'td:nth-child(14)' // 14-я колонка (индекс 13) - ваши чекбоксы
+                    },
+
+                    columnDefs: [
+                        {
+                            targets: 0,
+                            className: 'text-center',
+                            render: function (data, type, full) {
+                                if (!data) return '<i class="ti tabler-circle-filled text-muted" title="Нет данных"></i>';
+
+                                const contactDate = new Date(data);
+                                const currentDate = new Date();
+                                const timeDiff = currentDate - contactDate;
+                                const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+                                let iconClass = '';
+                                let titleText = '';
+                                let colorClass = '';
+
+                                if (daysDiff === 0) {
+                                    // Сегодня - зеленый
+                                    colorClass = 'text-success';
+                                    titleText = `Сегодня (${contactDate.toLocaleDateString('ru-RU')})`;
+                                } else if (daysDiff === 1) {
+                                    // Вчера - зеленый
+                                    colorClass = 'text-success';
+                                    titleText = `Вчера (${contactDate.toLocaleDateString('ru-RU')})`;
+                                } else if (daysDiff <= 7) {
+                                    // На этой неделе - синий
+                                    colorClass = 'text-info';
+                                    titleText = `${daysDiff} дн. назад (${contactDate.toLocaleDateString('ru-RU')})`;
+                                } else if (daysDiff <= 30) {
+                                    // В этом месяце - оранжевый
+                                    colorClass = 'text-warning';
+                                    titleText = `${daysDiff} дн. назад (${contactDate.toLocaleDateString('ru-RU')})`;
+                                } else {
+                                    // Старше месяца - красный
+                                    colorClass = 'text-danger';
+                                    titleText = `${daysDiff} дн. назад (${contactDate.toLocaleDateString('ru-RU')})`;
+                                }
+                                return `<i class="ti tabler-circle-filled ${colorClass}" title="${titleText}" style="font-size: 16px;"></i>`;
+                            }
+                        }
+                        ,
+                        {
+                            targets: 4,
+                            render: function (data, type, full) {
+                                let address = full.street || '';
+                                if (full.houseNumber) {
+                                    address += `, ${full.houseNumber}`;
+                                }
+                                return address || '—';
+                            }
+                        },
+                        {
+                            targets: 8,
+                            render: function (data, type, full) {
+                                let display = '';
+                                if (full.residentialLandMain) {
+                                    if (full.residentialLandMain.landAreaAcres) {
+                                        display += `${full.residentialLandMain.landAreaAcres} сот.`;
+                                    }
+                                    if (full.residentialLandMain.totalArea) {
+                                        display += (display ? ' / ' : '') + `${full.residentialLandMain.totalArea} м²`;
+                                    }
+                                }
+                                return display || '—';
+                            }
+                        },
+                        {
+                            targets: 9, // Price
+                            render: function (data) {
+                                return data ? Number(data).toLocaleString('en-US', {
+                                    style: 'currency',
+                                    currency: 'USD',
+                                    minimumFractionDigits: 0
+                                }).replace('$', '$ ') : '—';
+                            }
+                        },
+                        {
+                            targets: 10,
+                            className: 'text-center',
+                            render: function (data) {
+                                return data ? '<span class="badge bg-label-success">Да</span>' : '<span class="badge bg-label-secondary">Нет</span>';
+                            }
+                        },
+                        {
+                            targets: 11,
+                            render: function (data) {
+                                if (!data) return '—';
+                                switch (data) {
+                                    case 'PUBLISHED':
+                                        return '<span class="badge bg-label-success">Опубликован</span>';
+                                    case 'NOT_PUBLISHED':
+                                        return '<span class="badge bg-label-warning">Не опубликован</span>';
+                                    case 'ARCHIVED':
+                                        return '<span class="badge bg-label-secondary">В архиве</span>';
+                                    default:
+                                        return data;
+                                }
+                            }
+                        },
+                        {
+                            targets: 12,
+                            className: 'text-center',
+                            render: function (data) {
+                                return data ? '<i class="ti tabler-photo tabler-sm text-success"></i>' : '<i class="ti tabler-photo-off tabler-sm text-muted"></i>';
+                            }
+                        },
+                        {
+                            targets: 13,
+                            className: 'text-center',
+                            orderable: false,
+                            searchable: false,
+                            render: function (data, type, full) {
+                                return '<input type="checkbox" class="dt-checkboxes form-check-input">';
+                            },
+                            checkboxes: {
+                                selectAllRender: '<input type="checkbox" class="form-check-input">'
+                            }
+                        },
+                        {
+                            targets: 14,
+                            render: function (data, type, full) {
+                                let url = '/admin/residentialLand/edit/' + full.id;
+                                return (
+                                    '<div class="d-inline-block">' +
+                                    '<a href="javascript:;" class="btn btn-icon btn-text-secondary rounded-pill waves-effect dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>' +
+                                    '<ul class="dropdown-menu dropdown-menu-end m-0">' +
+                                    '<li><a href="javascript:;" class="dropdown-item">Details</a></li>' +
+                                    `<li><a href="/admin/residentialLand/edit/${full.id}" class="dropdown-item">` + '<i class="icon-base ti tabler-pencil"></i>' + 'Edit' +
+                                    '</a></li>' +
+                                    '<div class="dropdown-divider"></div>' +
+                                    '<li><a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a></li>' +
+                                    '</ul>' +
+                                    '</div>'
+                                );
+                            }
+                        }
+
+
+                    ],
+
+
+                    // --- Default Sorting ---
+                    order: [[0, 'desc']],
+
+                    // --- UI Layout ---
+                    layout: {
+                        top2End: {
+                            features: [
+                                {
+                                    buttons: [
+                                        {
+                                            extend: 'collection',
+                                            className: 'btn btn-label-primary dropdown-toggle me-4',
+                                            text: '<span class="d-flex align-items-center gap-2"><i class="icon-base ti tabler-upload icon-xs me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span></span>',
+                                            buttons: [
+                                                {
+                                                    extend: 'print',
+                                                    text: '<span class="d-flex align-items-center"><i class="ti tabler-printer me-1"></i>Печать</span>',
+                                                    className: 'dropdown-item',
+                                                    title: 'Земельные участки (жилой фонд)',
+                                                    exportOptions: {
+                                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                                                        modifier: {
+                                                            selected: null // Будет определяться динамически
+                                                        },
+                                                        format: {
+                                                            body: function (inner, coldex, rowdex) {
+                                                                // Ваша существующая логика форматирования
+                                                                if (!inner || typeof inner !== 'string') {
+                                                                    return inner || '';
+                                                                }
+                                                                if (inner.length <= 0) return inner;
+                                                                if (inner.indexOf('<') > -1) {
+                                                                    const parser = new DOMParser();
+                                                                    const doc = parser.parseFromString(inner, 'text/html');
+                                                                    const badges = doc.querySelectorAll('.badge');
+                                                                    if (badges.length > 0) {
+                                                                        let text = '';
+                                                                        badges.forEach(badge => {
+                                                                            text += badge.textContent.trim() + ' ';
+                                                                        });
+                                                                        return text.trim();
+                                                                    }
+                                                                    return doc.body.textContent || doc.body.innerText || '';
+                                                                }
+                                                                return inner;
+                                                            }
+                                                        }
+                                                    },
+                                                    action: function (e, dt, button, config) {
+                                                        // Проверяем, есть ли выбранные строки
+                                                        const selectedRows = dt.rows({selected: true}).count();
+
+                                                        if (selectedRows > 0) {
+                                                            // Если есть выбранные строки, печатаем только их
+                                                            config.exportOptions.modifier = {selected: true};
+                                                        } else {
+                                                            // Если ничего не выбрано, печатаем все строки
+                                                            config.exportOptions.modifier = {page: 'current'};
+                                                        }
+
+                                                        // Вызываем стандартное действие печати
+                                                        DataTable.ext.buttons.print.action.call(this, e, dt, button, config);
+                                                    },
+                                                    customize: function (win) {
+                                                        win.document.body.style.fontSize = '12px';
+                                                        const table = win.document.body.querySelector('table');
+                                                        table.classList.add('compact');
+                                                        table.style.fontSize = '10px';
+                                                    }
+                                                },
+                                                {
+                                                    extend: 'csv',
+                                                    text: '<span class="d-flex align-items-center"><i class="ti tabler-file-text me-1"></i>CSV</span>',
+                                                    className: 'dropdown-item',
+                                                    filename: 'zemelnye_uchastki_' + new Date().toISOString().split('T')[0],
+                                                    exportOptions: {
+                                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                                                        format: {
+                                                            body: function (inner, coldex, rowdex) {
+                                                                if (inner.length <= 0) return inner;
+
+                                                                if (inner.indexOf('<') > -1) {
+                                                                    const parser = new DOMParser();
+                                                                    const doc = parser.parseFromString(inner, 'text/html');
+                                                                    return doc.body.textContent || doc.body.innerText || '';
+                                                                }
+
+                                                                return inner;
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    extend: 'excel',
+                                                    text: '<span class="d-flex align-items-center"><i class="ti tabler-file-spreadsheet me-1"></i>Excel</span>',
+                                                    className: 'dropdown-item',
+                                                    title: 'Земельные участки (жилой фонд)',
+                                                    filename: 'zemelnye_uchastki_' + new Date().toISOString().split('T')[0],
+                                                    exportOptions: {
+                                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                                                        format: {
+                                                            body: function (inner, coldex, rowdex) {
+                                                                if (inner.length <= 0) return inner;
+
+                                                                if (inner.indexOf('<') > -1) {
+                                                                    const parser = new DOMParser();
+                                                                    const doc = parser.parseFromString(inner, 'text/html');
+                                                                    return doc.body.textContent || doc.body.innerText || '';
+                                                                }
+
+                                                                return inner;
+                                                            }
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    extend: 'pdf',
+                                                    text: '<span class="d-flex align-items-center"><i class="ti tabler-file-description me-1"></i>PDF</span>',
+                                                    className: 'dropdown-item',
+                                                    title: 'Земельные участки (жилой фонд)',
+                                                    filename: 'zemelnye_uchastki_' + new Date().toISOString().split('T')[0],
+                                                    exportOptions: {
+                                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                                                        format: {
+                                                            body: function (inner, coldex, rowdex) {
+                                                                if (inner.length <= 0) return inner;
+
+                                                                if (inner.indexOf('<') > -1) {
+                                                                    const parser = new DOMParser();
+                                                                    const doc = parser.parseFromString(inner, 'text/html');
+                                                                    return doc.body.textContent || doc.body.innerText || '';
+                                                                }
+
+                                                                return inner;
+                                                            }
+                                                        }
+                                                    },
+                                                    customize: function (doc) {
+                                                        doc.defaultStyle.fontSize = 9;
+                                                        doc.styles.tableHeader.fontSize = 10;
+                                                        doc.styles.tableHeader.bold = true;
+                                                    }
+                                                },
+                                                {
+                                                    extend: 'copy',
+                                                    text: '<i class="ti tabler-copy me-1"></i>Копировать',
+                                                    className: 'dropdown-item',
+                                                    exportOptions: {
+                                                        columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+                                                        format: {
+                                                            body: function (inner, coldex, rowdex) {
+                                                                if (inner.length <= 0) return inner;
+
+                                                                if (inner.indexOf('<') > -1) {
+                                                                    const parser = new DOMParser();
+                                                                    const doc = parser.parseFromString(inner, 'text/html');
+                                                                    return doc.body.textContent || doc.body.innerText || '';
+                                                                }
+
+                                                                return inner;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                    ]
+                                },
+                                function () {
+                                    const button = document.createElement('button');
+                                    button.className = 'btn btn-primary create-new ms-3';
+                                    button.textContent = 'Добавить объект';
+                                    button.addEventListener('click', function () {
+                                        window.location.href = '/admin/residentialLand/create';
+                                    });
+                                    return button;
+                                }
+                            ]
+                        },
+                        topStart: {
+                            // Убираем стандартный поиск, оставляем пусто
+                            features: []
+                        },
+                        topEnd: {
+                            // Убираем стандартный поиск, оставляем пусто
+                            features: []
+                        },
+                        bottomStart: {
+                            rowClass: 'row align-items-center justify-content-between mt-3',
+                            features: {
+                                pageLength: {}
+                            }
+                        },
+                        bottomEnd: {
+                            paging: {type: 'simple_numbers'}
+                        }
+                    },
+
+                    // --- Language/Localization ---
+                    language: {
+                        url: "https://cdn.datatables.net/plug-ins/2.0.8/i18n/ru.json"
+                    },
+
+                    // --- Responsiveness ---
+                    responsive: {
+                        details: {
+                            display: DataTable.Responsive.display.modal({
+                                header: function (row) {
+                                    const data = row.data();
+                                    let title = data.residentialLandMain?.objectCode
+                                        ? `Детали: ${data.residentialLandMain.objectCode}`
+                                        : `Детали для ID: ${data.id}`;
+                                    return title;
+                                },
+                                className: 'modal-dialog-centered'
+
+                            }),
+                            type: 'column',
+                            renderer: function (api, rowIdx, columns) {
+                                // Исключаем колонки "Выбор" (индекс 13) и "Действия" (индекс 14)
+                                const filteredColumns = columns.filter(col =>
+                                    col.title &&
+                                    !col.hidden &&
+                                    col.columnIndex !== 13 && // Исключаем "Выбор"
+                                    col.columnIndex !== 14    // Исключаем "Действия"
+                                );
+
+                                const data = filteredColumns.map((col) => {
+                                    let cellData = col.data;
+
+                                    // Специальная обработка для даты контакта (индекс 0)
+                                    if (col.columnIndex === 0 && col.data) {
+                                        // Получаем исходные данные строки для правильного форматирования даты
+                                        const rowData = api.row(rowIdx).data();
+                                        if (rowData.acquisitionDate) {
+                                            cellData = new Date(rowData.acquisitionDate).toLocaleDateString('ru-RU');
+                                        }
+                                    }
+
+                                    // Очистка HTML тегов для других колонок при необходимости
+                                    if (typeof cellData === 'string' && cellData.includes('<')) {
+                                        const parser = new DOMParser();
+                                        const doc = parser.parseFromString(cellData, 'text/html');
+                                        const badges = doc.querySelectorAll('.badge');
+                                        if (badges.length > 0) {
+                                            let text = '';
+                                            badges.forEach(badge => {
+                                                text += badge.textContent.trim() + ' ';
+                                            });
+                                            cellData = text.trim();
+                                        } else {
+                                            cellData = doc.body.textContent || doc.body.innerText || cellData;
+                                        }
+                                    }
+
+                                    return `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
+                            <td><strong>${col.title}:</strong></td>
+                            <td>${cellData}</td>
+                        </tr>`;
+                                }).join('');
+
+                                return data
+                                    ? $('<table class="table table-borderless table-sm"/>').append('<tbody>' + data + '</tbody>')
+                                    : false;
+                            }
+                        }
+                    }
+
+                });
+
+                // --- EVENT HANDLERS ---
+
+                // Handle Delete Record button click
+                $(dt_backend_table_element).on('click', '.delete-record-backend', function () {
+                    const recordId = $(this).data('id');
+                    // Replace with a more elegant modal later (e.g., SweetAlert2)
+                    if (confirm(`Вы уверены, что хотите удалить запись с ID ${recordId}?`)) {
+                        fetch(`/residentialLand/${recordId}`, {
+                            method: 'DELETE',
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    // Add a success notification here
+                                    dt_backend.draw(); // Redraw the table
+                                } else {
+                                    return response.json().then(data => {
+                                        // Add an error notification here
+                                        alert('Ошибка при удалении: ' + (data.error || 'Неизвестная ошибка'));
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Network Error:', error);
+                                alert('Сетевая ошибка при удалении.');
+                            });
+                    }
+                });
+
+                // Handle "Add new object" button click
+                document.getElementById('add-new-object-btn').addEventListener('click', function () {
+                    window.location.href = '/residentialLand/create';
+                });
+
+            } else {
+                console.error("HTML element for table with class '" + dt_backend_table_selector + "' not found.");
+            }
+        });
+    </script>
+
+</div>
+
+<!-- Page specific JS can be placed here -->
+<th:block layout:fragment="page_js">
+    <!-- Vendors JS -->
+    <script th:src="@{/assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js}"></script>
+    <!-- Flat Picker -->
+    <script th:src="@{/assets/vendor/libs/moment/moment.js}"></script>
+    <script th:src="@{/assets/vendor/libs/flatpickr/flatpickr.js}"></script>
+    <!-- Form Validation -->
+    <script th:src="@{/assets/vendor/libs/form-validation/popular.js}"></script>
+    <script th:src="@{/assets/vendor/libs/form-validation/bootstrap5.js}"></script>
+    <script th:src="@{/assets/vendor/libs/form-validation/auto-focus.js}"></script>
+
+    <script th:src="@{/assets/vendor/libs/select2/select2.js}"></script>
+    <script th:src="@{/assets/vendor/libs/tagify/tagify.js}"></script>
+    <script th:src="@{/assets/vendor/libs/bootstrap-select/bootstrap-select.js}"></script>
+    <script th:src="@{/assets/vendor/libs/typeahead-js/typeahead.js}"></script>
+    <script th:src="@{/assets/vendor/libs/bloodhound/bloodhound.js}"></script>
+</th:block>
+
+
+</body>
+</html>

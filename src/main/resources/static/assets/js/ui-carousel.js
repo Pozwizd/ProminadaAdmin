@@ -94,11 +94,17 @@
   // --------------------------------------------------------------------
   if (swiperMultipleSlides) {
     new Swiper(swiperMultipleSlides, {
-      slidesPerView: 3,
-      spaceBetween: 30,
+      slidesPerView: 2,
+      spaceBetween: 20,
       pagination: {
         clickable: true,
         el: '.swiper-pagination'
+      },
+      breakpoints: {
+        576: {
+          slidesPerView: 3,
+          spaceBetween: 30
+        }
       }
     });
   }

@@ -62,7 +62,22 @@
   "branches": "Филиалы",
   "realtors": "Риелторы",
   "websiteManagement": "Управление сайтом",
-  "banners": "Баннеры",
+  "Information": "Информация",
+  "banners": {
+    "edit": "Редактировать баннер",
+    "toast": {
+      "update": {
+        "successful": "Баннер обновлен успешно",
+        "error": "Ошибка обновления баннера"
+      }
+    },
+    "name": "Баннеры",
+    "Form": {
+      "name": {
+        "size": "Длина названия баннера должна составлять от 5 до 50 символов"
+      }
+    }
+  },
   "systemUsers": "Пользователи системы",
   "pages": "Страницы",
   "changes": "Изменения",
@@ -285,5 +300,19 @@
   },
   "main": "Основное",
   "gallery": "Галерея",
-  "planning": "Планировка"
+  "planning": "Планировка",
+  "personalCard": {
+    "editButton": "Редактировать",
+    "informationHeader": "Информация",
+    "role": "Роль",
+    "fullName": "ФИО",
+    "phone": "Телефон",
+    "email": "Email",
+    "branch": "Филиал"
+  },
+  "banner": {
+    "name": "Название",
+    "status": "Статус",
+    "actions": "Действия"
+  }
 }

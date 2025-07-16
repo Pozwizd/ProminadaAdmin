@@ -5,7 +5,7 @@
 'use strict';
 
 $(function () {
-  var theme = $('html').hasClass('light-style') ? 'default' : 'default-dark',
+  var theme = $('html').attr('data-bs-theme') === 'dark' ? 'default-dark' : 'default',
     basicTree = $('#jstree-basic'),
     customIconsTree = $('#jstree-custom-icons'),
     contextMenu = $('#jstree-context-menu'),
@@ -100,19 +100,19 @@ $(function () {
       plugins: ['types'],
       types: {
         default: {
-          icon: 'ti ti-folder'
+          icon: 'icon-base ti tabler-folder'
         },
         html: {
-          icon: 'ti ti-brand-html5 text-danger'
+          icon: 'icon-base ti tabler-brand-html5 bg-danger'
         },
         css: {
-          icon: 'ti ti-brand-css3 text-info'
+          icon: 'icon-base ti tabler-brand-css3 bg-info'
         },
         img: {
-          icon: 'ti ti-photo text-success'
+          icon: 'icon-base ti tabler-photo bg-success'
         },
         js: {
-          icon: 'ti ti-brand-javascript text-warning'
+          icon: 'icon-base ti tabler-brand-javascript bg-warning'
         }
       }
     });
@@ -194,19 +194,19 @@ $(function () {
       plugins: ['types', 'contextmenu'],
       types: {
         default: {
-          icon: 'ti ti-folder'
+          icon: 'icon-base ti tabler-folder'
         },
         html: {
-          icon: 'ti ti-brand-html5 text-danger'
+          icon: 'icon-base ti tabler-brand-html5 bg-danger'
         },
         css: {
-          icon: 'ti ti-brand-css3 text-info'
+          icon: 'icon-base ti tabler-brand-css3 bg-info'
         },
         img: {
-          icon: 'ti ti-photo text-success'
+          icon: 'icon-base ti tabler-photo bg-success'
         },
         js: {
-          icon: 'ti ti-brand-javascript text-warning'
+          icon: 'icon-base ti tabler-brand-javascript bg-warning'
         }
       }
     });
@@ -288,19 +288,19 @@ $(function () {
       plugins: ['types', 'dnd'],
       types: {
         default: {
-          icon: 'ti ti-folder'
+          icon: 'icon-base ti tabler-folder'
         },
         html: {
-          icon: 'ti ti-brand-html5 text-danger'
+          icon: 'icon-base ti tabler-brand-html5 bg-danger'
         },
         css: {
-          icon: 'ti ti-brand-css3 text-info'
+          icon: 'icon-base ti tabler-brand-css3 bg-info'
         },
         img: {
-          icon: 'ti ti-photo text-success'
+          icon: 'icon-base ti tabler-photo bg-success'
         },
         js: {
-          icon: 'ti ti-brand-javascript text-warning'
+          icon: 'icon-base ti tabler-brand-javascript bg-warning'
         }
       }
     });
@@ -381,19 +381,19 @@ $(function () {
       plugins: ['types', 'checkbox', 'wholerow'],
       types: {
         default: {
-          icon: 'ti ti-folder'
+          icon: 'icon-base ti tabler-folder'
         },
         html: {
-          icon: 'ti ti-brand-html5 text-danger'
+          icon: 'icon-base ti tabler-brand-html5 bg-danger'
         },
         css: {
-          icon: 'ti ti-brand-css3 text-info'
+          icon: 'icon-base ti tabler-brand-css3 bg-info'
         },
         img: {
-          icon: 'ti ti-photo text-success'
+          icon: 'icon-base ti tabler-photo bg-success'
         },
         js: {
-          icon: 'ti ti-brand-javascript text-warning'
+          icon: 'icon-base ti tabler-brand-javascript bg-warning'
         }
       }
     });
@@ -420,19 +420,19 @@ $(function () {
       plugins: ['types', 'state'],
       types: {
         default: {
-          icon: 'ti ti-folder'
+          icon: 'icon-base ti tabler-folder'
         },
         html: {
-          icon: 'ti ti-brand-html5 text-danger'
+          icon: 'icon-base ti tabler-brand-html5 bg-danger'
         },
         css: {
-          icon: 'ti ti-brand-css3 text-info'
+          icon: 'icon-base ti tabler-brand-css3 bg-info'
         },
         img: {
-          icon: 'ti ti-photo text-success'
+          icon: 'icon-base ti tabler-photo bg-success'
         },
         js: {
-          icon: 'ti ti-brand-javascript text-warning'
+          icon: 'icon-base ti tabler-brand-javascript bg-warning'
         }
       }
     });

@@ -4,32 +4,29 @@
 
 'use strict';
 
-(function () {
-  let cardColor, shadeColor, labelColor, headingColor, barBgColor, borderColor;
+document.addEventListener('DOMContentLoaded', function (e) {
+  let cardColor, shadeColor, labelColor, headingColor, barBgColor, borderColor, fontFamily;
 
   if (isDarkStyle) {
-    cardColor = config.colors_dark.cardColor;
-    labelColor = config.colors_dark.textMuted;
-    headingColor = config.colors_dark.headingColor;
     shadeColor = 'dark';
-    barBgColor = '#8692d014';
-    borderColor = config.colors_dark.borderColor;
+    barBgColor = '#3d4157';
   } else {
-    cardColor = config.colors.cardColor;
-    labelColor = config.colors.textMuted;
-    headingColor = config.colors.headingColor;
-    shadeColor = '';
-    barBgColor = '#4b465c14';
-    borderColor = config.colors.borderColor;
+    barBgColor = '#efeef0';
+    shadeColor = 'light';
   }
+  cardColor = config.colors.cardColor;
+  labelColor = config.colors.textMuted;
+  headingColor = config.colors.headingColor;
+  borderColor = config.colors.borderColor;
+  fontFamily = config.fontFamily;
 
   // Donut Chart Colors
   const chartColors = {
     donut: {
-      series1: config.colors.success,
-      series2: '#28c76fb3',
-      series3: '#28c76f80',
-      series4: config.colors_label.success
+      series1: '#24B364',
+      series2: '#53D28C',
+      series3: '#7EDDA9',
+      series4: '#A9E9C5'
     }
   };
 
@@ -51,7 +48,7 @@
       plotOptions: {
         bar: {
           barHeight: '100%',
-          columnWidth: '30px',
+          columnWidth: '7px',
           startingShape: 'rounded',
           endingShape: 'rounded',
           borderRadius: 4,
@@ -76,7 +73,7 @@
       },
       series: [
         {
-          data: [60, 50, 20, 45, 50, 30, 70]
+          data: [75, 65, 25, 55, 60, 40, 88]
         }
       ],
       legend: {
@@ -221,7 +218,7 @@
   const salesLastYearEl = document.querySelector('#salesLastYear'),
     salesLastYearConfig = {
       chart: {
-        height: 90,
+        height: 80,
         type: 'area',
         parentHeightOffset: 0,
         toolbar: {
@@ -242,10 +239,11 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.8,
-          opacityFrom: 0.6,
-          opacityTo: 0.25
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          gradientToColors: [config.colors.cardColor],
+          opacityTo: 0.1,
+          stops: [0, 100]
         }
       },
       dataLabels: {
@@ -257,7 +255,7 @@
       },
       series: [
         {
-          data: [200, 55, 400, 250]
+          data: [200, 55, 380, 230]
         }
       ],
       xaxis: {
@@ -329,7 +327,7 @@
       },
       series: [
         {
-          data: [0, 25, 10, 40, 25, 55]
+          data: [0, 40, 15, 65, 40, 90]
         }
       ],
       tooltip: {
@@ -363,13 +361,14 @@
         fillColor: config.colors.info,
         strokeColors: 'transparent',
         strokeWidth: 3.2,
+        offsetX: -1,
         discrete: [
           {
             seriesIndex: 0,
             dataPointIndex: 5,
             fillColor: cardColor,
             strokeColor: config.colors.info,
-            size: 5,
+            size: 4.5,
             shape: 'circle'
           }
         ],
@@ -409,20 +408,21 @@
       series: [
         {
           name: 'PRODUCT A',
-          data: [4, 3, 6, 4, 3]
+          data: [5, 3, 6, 4, 3]
         },
         {
           name: 'PRODUCT B',
-          data: [-3, -4, -3, -2, -3]
+          data: [-4, -5, -4, -3, -4]
         }
       ],
       plotOptions: {
         bar: {
           horizontal: false,
-          columnWidth: '30%',
+          columnWidth: '45%',
           barHeight: '100%',
           borderRadius: 5,
           startingShape: 'rounded',
+          borderRadiusApplication: 'around',
           endingShape: 'rounded'
         }
       },
@@ -434,7 +434,7 @@
       },
       stroke: {
         curve: 'smooth',
-        width: 1,
+        width: 4,
         lineCap: 'round',
         colors: [cardColor]
       },
@@ -444,11 +444,12 @@
       colors: [config.colors.primary, config.colors.success],
       grid: {
         show: false,
+        strokeDashArray: 5,
         padding: {
-          top: -41,
-          right: -10,
+          top: -61,
+          right: -80,
           left: -8,
-          bottom: -26
+          bottom: -56
         }
       },
       xaxis: {
@@ -602,9 +603,9 @@
               show: false
             },
             value: {
-              fontSize: '22px',
+              fontSize: '24px',
               color: headingColor,
-              fontWeight: 600,
+              fontWeight: 500,
               offsetY: -5
             }
           }
@@ -815,10 +816,11 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.8,
-          opacityFrom: 0.6,
-          opacityTo: 0.1
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          gradientToColors: [config.colors.cardColor],
+          opacityTo: 0.15,
+          stops: [0, 100]
         }
       },
       dataLabels: {
@@ -888,10 +890,11 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.8,
-          opacityFrom: 0.6,
-          opacityTo: 0.1
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          gradientToColors: [config.colors.cardColor],
+          opacityTo: 0.15,
+          stops: [0, 100]
         }
       },
       dataLabels: {
@@ -960,10 +963,11 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.8,
-          opacityFrom: 0.6,
-          opacityTo: 0.1
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          gradientToColors: [config.colors.cardColor],
+          opacityTo: 0.15,
+          stops: [0, 100]
         }
       },
       dataLabels: {
@@ -1034,10 +1038,11 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.8,
-          opacityFrom: 0.6,
-          opacityTo: 0.1
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          gradientToColors: [config.colors.cardColor],
+          opacityTo: 0.15,
+          stops: [0, 100]
         }
       },
       dataLabels: {
@@ -1049,7 +1054,7 @@
       },
       series: [
         {
-          data: [300, 350, 330, 380, 340, 400, 380]
+          data: [300, 350, 330, 380, 340, 390, 380]
         }
       ],
       xaxis: {
@@ -1107,10 +1112,11 @@
       fill: {
         type: 'gradient',
         gradient: {
-          shade: shadeColor,
-          shadeIntensity: 0.8,
-          opacityFrom: 0.6,
-          opacityTo: 0.1
+          shadeIntensity: 1,
+          opacityFrom: 0.4,
+          gradientToColors: [config.colors.cardColor],
+          opacityTo: 0.1,
+          stops: [0, 100]
         }
       },
       dataLabels: {
@@ -1122,7 +1128,7 @@
       },
       series: [
         {
-          data: [400, 200, 650, 500]
+          data: [500, 160, 930, 670]
         }
       ],
       xaxis: {
@@ -1188,10 +1194,10 @@
       plotOptions: {
         bar: {
           barHeight: '100%',
-          columnWidth: '25px',
+          columnWidth: '11px',
           startingShape: 'rounded',
           endingShape: 'rounded',
-          borderRadius: 6
+          borderRadius: 5
         }
       },
       colors: [config.colors.warning],
@@ -1201,7 +1207,7 @@
           top: -30,
           left: -18,
           bottom: -13,
-          right: -10
+          right: -18
         }
       },
       dataLabels: {
@@ -1230,7 +1236,7 @@
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: 'Public Sans'
+            fontFamily: fontFamily
           },
           show: true
         }
@@ -1351,7 +1357,7 @@
           columnWidth: '30%',
           startingShape: 'rounded',
           endingShape: 'rounded',
-          borderRadius: 7,
+          borderRadius: 5,
           distributed: true
         }
       },
@@ -1364,7 +1370,7 @@
           top: -20,
           bottom: -12,
           left: -10,
-          right: 0
+          right: 40
         }
       },
       colors: [
@@ -1399,7 +1405,7 @@
           style: {
             colors: labelColor,
             fontSize: '13px',
-            fontFamily: 'Public Sans'
+            fontFamily: fontFamily
           }
         }
       },
@@ -1549,10 +1555,10 @@
             labels: {
               show: true,
               value: {
-                fontSize: '1.375rem',
-                fontFamily: 'Public Sans',
+                fontSize: '1.5rem',
+                fontFamily: fontFamily,
                 color: headingColor,
-                fontWeight: 600,
+                fontWeight: 500,
                 offsetY: -15,
                 formatter: function (val) {
                   return parseInt(val) + '%';
@@ -1560,7 +1566,7 @@
               },
               name: {
                 offsetY: 20,
-                fontFamily: 'Public Sans'
+                fontFamily: fontFamily
               },
               total: {
                 show: true,
@@ -1568,7 +1574,7 @@
                 color: config.colors.success,
                 fontSize: '.8125rem',
                 label: 'Total',
-                fontFamily: 'Public Sans',
+                fontFamily: fontFamily,
                 formatter: function (w) {
                   return '184';
                 }
@@ -1582,4 +1588,4 @@
     const generatedLeadsChart = new ApexCharts(generatedLeadsChartEl, generatedLeadsChartConfig);
     generatedLeadsChart.render();
   }
-})();
+});

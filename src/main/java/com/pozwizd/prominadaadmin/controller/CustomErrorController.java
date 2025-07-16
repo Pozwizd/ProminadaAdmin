@@ -19,23 +19,23 @@ public class CustomErrorController implements ErrorController {
             int statusCode = Integer.parseInt(status.toString());
 
             if (statusCode == 404) {
-                model.addAttribute("textError", "Страница отсутствует");
+                model.addAttribute("textError", "Page not found");
                 return new ModelAndView("error/error");
             } else if (statusCode == 500) {
-                model.addAttribute("textError", "Произошла ошибка");
+                model.addAttribute("textError", "An error occurred");
                 return new ModelAndView("error/error");
             } else if (statusCode == 403) {
-                model.addAttribute("textError", "Доступ запрещен");
+                model.addAttribute("textError", "Access denied");
                 return new ModelAndView("error/error");
             } else if (statusCode == 401) {
-                model.addAttribute("textError", "Вы не авторизованы");
+                model.addAttribute("textError", "You are not authorized");
                 return new ModelAndView("error/error");
             } else if (statusCode == 405) {
-                model.addAttribute("textError", "Метод не поддерживается");
+                model.addAttribute("textError", "Method not supported");
                 return new ModelAndView("error/error");
             }
         }
-        model.addAttribute("textError", "Произошла ошибка");
+        model.addAttribute("textError", "An error occurred");
         return new ModelAndView("error/error");
     }
 }

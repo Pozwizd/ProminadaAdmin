@@ -6,7 +6,7 @@
 <div layout:fragment="content">
 
     <div class="d-flex justify-content-between align-items-center py-3 mb-4">
-        <h4 class="fw-bold m-0" data-i18n="banners">Баннеры</h4>
+        <h4 class="fw-bold m-0" data-i18n="banners.name">Баннеры</h4>
     </div>
 
     <div class="main-card mb-3 card" id="card-block">
@@ -21,45 +21,73 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table style="width: 100%;" class="table table-hover table-striped table-bordered">
+                <table class="table table-hover table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th data-i18n="banner.name"></th>
-                        <th data-i18n="banner.status"></th>
-
-                        <th class="text-center" data-i18n="banner.actions"></th>
+                        <th style="width: 50%;" data-i18n="banner.name">Название</th>
+                        <th style="width: 30%;" data-i18n="banner.status">Статус</th>
+                        <th class="text-center" style="width: 20%;" data-i18n="banner.actions">Действия</th>
                     </tr>
                     </thead>
                     <tbody id="bannerTableBody">
+                    <!-- Данные таблицы -->
                     </tbody>
                 </table>
             </div>
         </div>
+
         <div class="card-footer d-flex justify-content-between align-items-center py-3">
-            <label class="d-flex align-items-center gap-1 mb-0">
-                <select id="pageSize" class="custom-select custom-select-sm form-control form-control-sm mx-2"
-                        style="width: auto;">
-                    <option value="10" selected>10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                    <option value="100">100</option>
-                </select>
-            </label>
-            <nav aria-label="Навигация по страницам">
-                <ul class="pagination mb-0" id="pagination">
-                    <li class="page-item disabled"><a class="page-link" href="#" tabindex="-1"
-                                                      aria-disabled="true">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                </ul>
-            </nav>
         </div>
 
     </div>
-    <script>
+    <script th:inline="javascript">
+        window.contextPath = '[[@{/}]]'.replaceAll('"', '');
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBanners();
+        });
 
+        function loadBanners() {
+            fetch(contextPath+'banner/getAll')
+                .then(response => response.json())
+                .then(data => {
+                    displayBanners(data);
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке баннеров:', error);
+                });
+        }
+
+        function displayBanners(banners) {
+            const tableBody = document.getElementById('bannerTableBody');
+            tableBody.innerHTML = '';
+
+            banners.forEach(banner => {
+                const row = document.createElement('tr');
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = banner.name;
+                row.appendChild(nameCell);
+
+                const statusCell = document.createElement('td');
+                statusCell.textContent = banner.status ? 'Активен' : 'Неактивен';
+                row.appendChild(statusCell);
+
+                const actionsCell = document.createElement('td');
+                actionsCell.className = 'text-center';
+                
+                const editButton = document.createElement('button');
+                editButton.className = 'btn btn-sm btn-primary';
+                editButton.innerHTML = '<i class="fas fa-edit"></i>';
+                editButton.onclick = function() {
+                    window.location.href = contextPath+'banner/edit/' + banner.id;
+                };
+                
+                actionsCell.appendChild(editButton);
+                row.appendChild(actionsCell);
+                
+                tableBody.appendChild(row);
+            });
+        }
     </script>
 
     <script th:src="@{/assets/js/main.js}"></script>

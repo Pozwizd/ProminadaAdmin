@@ -1,20 +1,18 @@
 /**
- * DataTables Extensions (jquery)
+ * DataTables Extensions (js)
  */
 
 'use strict';
 
-$(function () {
-  var dt_scrollable_table = $('.dt-scrollableTable'),
-    dt_fixedheader_table = $('.dt-fixedheader'),
-    dt_fixedcolumns_table = $('.dt-fixedcolumns'),
-    dt_select_table = $('.dt-select-table');
+document.addEventListener('DOMContentLoaded', function (e) {
+  const dt_scrollable_table = document.querySelector('.dt-scrollableTable');
+  let dt_scrollableTable;
 
   // Scrollable
   // --------------------------------------------------------------------
 
-  if (dt_scrollable_table.length) {
-    var dt_scrollableTable = dt_scrollable_table.DataTable({
+  if (dt_scrollable_table) {
+    dt_scrollableTable = new DataTable(dt_scrollable_table, {
       ajax: assetsPath + 'json/table-datatable.json',
       columns: [
         { data: 'full_name' },
@@ -33,20 +31,24 @@ $(function () {
           // Label
           targets: -2,
           render: function (data, type, full, meta) {
-            var $status_number = full['status'];
-            var $status = {
+            const statusNumber = full.status;
+            const statuses = {
               1: { title: 'Current', class: 'bg-label-primary' },
-              2: { title: 'Professional', class: ' bg-label-success' },
-              3: { title: 'Rejected', class: ' bg-label-danger' },
-              4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              2: { title: 'Professional', class: 'bg-label-success' },
+              3: { title: 'Rejected', class: 'bg-label-danger' },
+              4: { title: 'Resigned', class: 'bg-label-warning' },
+              5: { title: 'Applied', class: 'bg-label-info' }
             };
-            if (typeof $status[$status_number] === 'undefined') {
+
+            if (typeof statuses[statusNumber] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
+
+            return `
+              <span class="badge ${statuses[statusNumber].class}">
+                ${statuses[statusNumber].title}
+              </span>
+            `;
           }
         },
         {
@@ -54,11 +56,12 @@ $(function () {
           targets: -1,
           title: 'Actions',
           searchable: false,
+          className: 'd-flex align-items-center',
           orderable: false,
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
+              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -66,7 +69,7 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="item-edit text-body"><i class="text-primary ti ti-pencil"></i></a>'
+              '<a href="javascript:;" class="item-edit text-body"><i class="icon-base ti tabler-pencil"></i></a>'
             );
           }
         }
@@ -74,19 +77,56 @@ $(function () {
       // Scroll options
       scrollY: '300px',
       scrollX: true,
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>'
+      layout: {
+        topStart: {
+          rowClass: 'row mx-3 my-0 justify-content-between',
+          features: [
+            {
+              pageLength: {
+                menu: [7, 10, 25, 50, 100],
+                text: 'Show_MENU_entries'
+              }
+            }
+          ]
+        },
+        topEnd: {
+          search: {
+            placeholder: ''
+          }
+        },
+        bottomStart: {
+          rowClass: 'row mx-3 justify-content-between',
+          features: ['info']
+        },
+        bottomEnd: 'paging'
+      },
+      language: {
+        paginate: {
+          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
+          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
+          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
+          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+        }
+      },
+      initComplete: function (settings, json) {
+        // Add the mti-n1 class to the first row in tbody
+        dt_scrollable_table.querySelector('tbody tr:first-child').classList.add('border-top-0');
+      }
     });
   }
 
   // FixedHeader
   // --------------------------------------------------------------------
 
-  if (dt_fixedheader_table.length) {
-    var dt_fixedheader = dt_fixedheader_table.DataTable({
+  const dt_fixedheader_table = document.querySelector('.dt-fixedheader');
+  let dt_fixedheader;
+
+  if (dt_fixedheader_table) {
+    dt_fixedheader = new DataTable(dt_fixedheader_table, {
       ajax: assetsPath + 'json/table-datatable.json',
       columns: [
         { data: '' },
-        { data: 'id' },
+        { data: 'id', orderable: false, render: DataTable.render.select() },
         { data: 'id' },
         { data: 'full_name' },
         { data: 'email' },
@@ -125,41 +165,39 @@ $(function () {
           // Avatar image/badge, Name and post
           targets: 3,
           render: function (data, type, full, meta) {
-            var $user_img = full['avatar'],
-              $name = full['full_name'],
-              $post = full['post'];
-            if ($user_img) {
+            const userImg = full.avatar;
+            const name = full.full_name;
+            const post = full.post;
+            let output;
+
+            if (userImg) {
               // For Avatar image
-              var $output =
-                '<img src="' + assetsPath + 'img/avatars/' + $user_img + '" alt="Avatar" class="rounded-circle">';
+              output = `<img src="${assetsPath}img/avatars/${userImg}" alt="Avatar" class="rounded-circle">`;
             } else {
               // For Avatar badge
-              var stateNum = Math.floor(Math.random() * 6);
-              var states = ['success', 'danger', 'warning', 'info', 'primary', 'secondary'];
-              var $state = states[stateNum],
-                $name = full['full_name'];
-              var $initials = $name.match(/\b\w/g) || [];
-              $initials = (($initials.shift() || '') + ($initials.pop() || '')).toUpperCase();
-              $output = '<span class="avatar-initial rounded-circle bg-label-' + $state + '">' + $initials + '</span>';
+              const stateNum = Math.floor(Math.random() * 6);
+              const states = ['success', 'danger', 'warning', 'info', 'dark', 'primary', 'secondary'];
+              const state = states[stateNum];
+              const initials = (name.match(/\b\w/g) || []).map(i => i.toUpperCase()).join('');
+              output = `<span class="avatar-initial rounded-circle bg-label-${state}">${initials}</span>`;
             }
+
             // Creates full output for row
-            var $row_output =
-              '<div class="d-flex justify-content-start align-items-center">' +
-              '<div class="avatar-wrapper">' +
-              '<div class="avatar me-2">' +
-              $output +
-              '</div>' +
-              '</div>' +
-              '<div class="d-flex flex-column">' +
-              '<span class="emp_name text-truncate">' +
-              $name +
-              '</span>' +
-              '<small class="emp_post text-truncate text-muted">' +
-              $post +
-              '</small>' +
-              '</div>' +
-              '</div>';
-            return $row_output;
+            const rowOutput = `
+              <div class="d-flex justify-content-start align-items-center">
+                <div class="avatar-wrapper">
+                  <div class="avatar me-2">
+                    ${output}
+                  </div>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="emp_name text-truncate">${name}</span>
+                  <small class="emp_post text-truncate text-body-secondary">${post}</small>
+                </div>
+              </div>
+            `;
+
+            return rowOutput;
           },
           responsivePriority: 5
         },
@@ -176,32 +214,36 @@ $(function () {
           // Label
           targets: -2,
           render: function (data, type, full, meta) {
-            // var $rand_num = Math.floor(Math.random() * 5) + 1;
-            var $status_number = full['status'];
-            var $status = {
+            const statusNumber = full.status;
+            const statuses = {
               1: { title: 'Current', class: 'bg-label-primary' },
-              2: { title: 'Professional', class: ' bg-label-success' },
-              3: { title: 'Rejected', class: ' bg-label-danger' },
-              4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              2: { title: 'Professional', class: 'bg-label-success' },
+              3: { title: 'Rejected', class: 'bg-label-danger' },
+              4: { title: 'Resigned', class: 'bg-label-warning' },
+              5: { title: 'Applied', class: 'bg-label-info' }
             };
-            if (typeof $status[$status_number] === 'undefined') {
+
+            if (typeof statuses[statusNumber] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
+
+            return `
+              <span class="badge ${statuses[statusNumber].class}">
+                ${statuses[statusNumber].title}
+              </span>
+            `;
           }
         },
         {
           // Actions
           targets: -1,
           title: 'Actions',
+          className: 'd-flex align-items-center',
           orderable: false,
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
+              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -209,18 +251,51 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record">Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="btn btn-sm btn-icon item-edit"><i class="text-primary ti ti-pencil"></i></a>'
+              '<a href="javascript:;" class="btn btn-icon item-edit"><i class="icon-base ti tabler-pencil"></i></a>'
             );
           }
         }
       ],
+      select: {
+        style: 'multi',
+        selector: 'td:nth-child(2)'
+      },
       order: [[2, 'desc']],
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      layout: {
+        topStart: {
+          rowClass: 'row mx-3 my-0 justify-content-between',
+          features: [
+            {
+              pageLength: {
+                menu: [7, 10, 25, 50, 100],
+                text: 'Show_MENU_entries'
+              }
+            }
+          ]
+        },
+        topEnd: {
+          search: {
+            placeholder: ''
+          }
+        },
+        bottomStart: {
+          rowClass: 'row mx-3 justify-content-between',
+          features: ['info']
+        },
+        bottomEnd: 'paging'
+      },
       displayLength: 7,
-      lengthMenu: [7, 10, 25, 50, 75, 100],
+      language: {
+        paginate: {
+          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
+          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
+          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
+          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+        }
+      },
       responsive: {
         details: {
-          display: $.fn.dataTable.Responsive.display.modal({
+          display: DataTable.Responsive.display.modal({
             header: function (row) {
               var data = row.data();
               return 'Details of ' + data['full_name'];
@@ -228,43 +303,65 @@ $(function () {
           }),
           type: 'column',
           renderer: function (api, rowIdx, columns) {
-            var data = $.map(columns, function (col, i) {
-              return col.title !== '' // ? Do not show row in modal popup if title is blank (for check box)
-                ? '<tr data-dt-row="' +
-                    col.rowIndex +
-                    '" data-dt-column="' +
-                    col.columnIndex +
-                    '">' +
-                    '<td>' +
-                    col.title +
-                    ':' +
-                    '</td> ' +
-                    '<td>' +
-                    col.data +
-                    '</td>' +
-                    '</tr>'
-                : '';
-            }).join('');
+            const data = columns
+              .map(function (col) {
+                return col.title !== '' // Do not show row in modal popup if title is blank (for check box)
+                  ? `<tr data-dt-row="${col.rowIndex}" data-dt-column="${col.columnIndex}">
+                      <td>${col.title}:</td>
+                      <td>${col.data}</td>
+                    </tr>`
+                  : '';
+              })
+              .join('');
 
-            return data ? $('<table class="table"/><tbody />').append(data) : false;
+            if (data) {
+              const div = document.createElement('div');
+              div.classList.add('table-responsive');
+              const table = document.createElement('table');
+              div.appendChild(table);
+              table.classList.add('table');
+              const tbody = document.createElement('tbody');
+              tbody.innerHTML = data;
+              table.appendChild(tbody);
+              return div;
+            }
+            return false;
           }
         }
       }
     });
     // Fixed header
     if (window.Helpers.isNavbarFixed()) {
-      var navHeight = $('#layout-navbar').outerHeight();
-      new $.fn.dataTable.FixedHeader(dt_fixedheader).headerOffset(navHeight);
+      const navHeight = document.getElementById('layout-navbar').offsetHeight;
+      new DataTable.FixedHeader(dt_fixedheader).headerOffset(navHeight);
     } else {
-      new $.fn.dataTable.FixedHeader(dt_fixedheader);
+      new DataTable.FixedHeader(dt_fixedheader);
     }
+
+    //? The 'delete-record' class is necessary for the functionality of the following code.
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('delete-record')) {
+        dt_fixedheader.row(e.target.closest('tr')).remove().draw();
+        const modalEl = document.querySelector('.dtr-bs-modal');
+        if (modalEl && modalEl.classList.contains('show')) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal?.hide();
+        }
+      }
+    });
   }
 
   // FixedColumns
   // --------------------------------------------------------------------
 
-  if (dt_fixedcolumns_table.length) {
-    var dt_fixedcolumns = dt_fixedcolumns_table.DataTable({
+  const dt_fixedcolumns_table = document.querySelector('.dt-fixedcolumns');
+  let dt_fixedcolumns;
+
+  if (dt_fixedcolumns_table) {
+    let tableTitle = document.createElement('h5');
+    tableTitle.classList.add('card-title', 'mb-0', 'text-md-start', 'text-center', 'py-md-0', 'py-6');
+    tableTitle.innerHTML = 'Fixed Columns';
+    dt_fixedcolumns = new DataTable(dt_fixedcolumns_table, {
       ajax: assetsPath + 'json/table-datatable.json',
       columns: [
         { data: 'full_name' },
@@ -283,20 +380,24 @@ $(function () {
           // Label
           targets: -2,
           render: function (data, type, full, meta) {
-            var $status_number = full['status'];
-            var $status = {
+            const statusNumber = full.status;
+            const statuses = {
               1: { title: 'Current', class: 'bg-label-primary' },
-              2: { title: 'Professional', class: ' bg-label-success' },
-              3: { title: 'Rejected', class: ' bg-label-danger' },
-              4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              2: { title: 'Professional', class: 'bg-label-success' },
+              3: { title: 'Rejected', class: 'bg-label-danger' },
+              4: { title: 'Resigned', class: 'bg-label-warning' },
+              5: { title: 'Applied', class: 'bg-label-info' }
             };
-            if (typeof $status[$status_number] === 'undefined') {
+
+            if (typeof statuses[statusNumber] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
+
+            return `
+              <span class="badge ${statuses[statusNumber].class}">
+                ${statuses[statusNumber].title}
+              </span>
+            `;
           }
         },
         {
@@ -304,11 +405,12 @@ $(function () {
           targets: -1,
           title: 'Actions',
           searchable: false,
+          className: 'd-flex align-items-center',
           orderable: false,
           render: function (data, type, full, meta) {
             return (
               '<div class="d-inline-block">' +
-              '<a href="javascript:;" class="btn btn-sm btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="text-primary ti ti-dots-vertical"></i></a>' +
+              '<a href="javascript:;" class="btn btn-icon dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>' +
               '<div class="dropdown-menu dropdown-menu-end m-0">' +
               '<a href="javascript:;" class="dropdown-item">Details</a>' +
               '<a href="javascript:;" class="dropdown-item">Archive</a>' +
@@ -316,30 +418,70 @@ $(function () {
               '<a href="javascript:;" class="dropdown-item text-danger delete-record"></i>Delete</a>' +
               '</div>' +
               '</div>' +
-              '<a href="javascript:;" class="item-edit text-body"><i class="text-primary ti ti-pencil"></i></a>'
+              '<a href="javascript:;" class="item-edit text-body"><i class="icon-base ti tabler-pencil"></i></a>'
             );
           }
         }
       ],
-      dom: '<"d-flex justify-content-between align-items-center row"<"col-sm-12 col-md-2 d-flex"f><"col-sm-12 col-md-10 d-none"i>>t',
+      layout: {
+        topStart: {
+          rowClass: 'row card-header pt-0 pb-0',
+          features: [tableTitle]
+        },
+        topEnd: {
+          search: {
+            placeholder: ''
+          }
+        },
+        bottomStart: {
+          rowClass: 'row mx-3 justify-content-between',
+          features: ['info']
+        },
+        bottomEnd: {
+          paging: {
+            firstLast: false
+          }
+        }
+      },
       scrollY: 300,
       scrollX: true,
       scrollCollapse: true,
       paging: false,
       info: false,
       // Fixed column option
-      fixedColumns: true
+      fixedColumns: {
+        start: 1
+      },
+      initComplete: function (settings, json) {
+        // Add the mti-n1 class to the first row in tbody
+        dt_fixedcolumns_table.querySelector('tbody tr:first-child').classList.add('border-top-0');
+      }
+    });
+
+    //? The 'delete-record' class is necessary for the functionality of the following code.
+    document.addEventListener('click', function (e) {
+      if (e.target.classList.contains('delete-record')) {
+        dt_fixedcolumns.row(e.target.closest('tr')).remove().draw();
+        const modalEl = document.querySelector('.dtr-bs-modal');
+        if (modalEl && modalEl.classList.contains('show')) {
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          modal?.hide();
+        }
+      }
     });
   }
 
   // Select
   // --------------------------------------------------------------------
 
-  if (dt_select_table.length) {
-    var dt_select = dt_select_table.DataTable({
+  const dt_select_table = document.querySelector('.dt-select-table');
+  let dt_select;
+
+  if (dt_select_table) {
+    dt_select = new DataTable(dt_select_table, {
       ajax: assetsPath + 'json/table-datatable.json',
       columns: [
-        { data: 'id' },
+        { data: 'id', orderable: false, render: DataTable.render.select() },
         { data: 'full_name' },
         { data: 'post' },
         { data: 'email' },
@@ -366,25 +508,59 @@ $(function () {
           // Label
           targets: -1,
           render: function (data, type, full, meta) {
-            var $status_number = full['status'];
-            var $status = {
+            const statusNumber = full.status;
+            const statuses = {
               1: { title: 'Current', class: 'bg-label-primary' },
-              2: { title: 'Professional', class: ' bg-label-success' },
-              3: { title: 'Rejected', class: ' bg-label-danger' },
-              4: { title: 'Resigned', class: ' bg-label-warning' },
-              5: { title: 'Applied', class: ' bg-label-info' }
+              2: { title: 'Professional', class: 'bg-label-success' },
+              3: { title: 'Rejected', class: 'bg-label-danger' },
+              4: { title: 'Resigned', class: 'bg-label-warning' },
+              5: { title: 'Applied', class: 'bg-label-info' }
             };
-            if (typeof $status[$status_number] === 'undefined') {
+
+            if (typeof statuses[statusNumber] === 'undefined') {
               return data;
             }
-            return (
-              '<span class="badge ' + $status[$status_number].class + '">' + $status[$status_number].title + '</span>'
-            );
+
+            return `
+              <span class="badge ${statuses[statusNumber].class}">
+                ${statuses[statusNumber].title}
+              </span>
+            `;
           }
         }
       ],
       order: [[1, 'desc']],
-      dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
+      layout: {
+        topStart: {
+          rowClass: 'row mx-3 my-0 justify-content-between',
+          features: [
+            {
+              pageLength: {
+                menu: [7, 10, 25, 50, 100],
+                text: 'Show_MENU_entries'
+              }
+            }
+          ]
+        },
+        topEnd: {
+          search: {
+            placeholder: ''
+          }
+        },
+        bottomStart: {
+          rowClass: 'row mx-3 justify-content-between',
+          features: ['info']
+        },
+        bottomEnd: 'paging'
+      },
+      language: {
+        paginate: {
+          next: '<i class="icon-base ti tabler-chevron-right scaleX-n1-rtl icon-18px"></i>',
+          previous: '<i class="icon-base ti tabler-chevron-left scaleX-n1-rtl icon-18px"></i>',
+          first: '<i class="icon-base ti tabler-chevrons-left scaleX-n1-rtl icon-18px"></i>',
+          last: '<i class="icon-base ti tabler-chevrons-right scaleX-n1-rtl icon-18px"></i>'
+        }
+      },
       select: {
         // Select style
         style: 'multi'
@@ -395,7 +571,25 @@ $(function () {
   // Filter form control to default size
   // ? setTimeout used for multilingual table initialization
   setTimeout(() => {
-    $('.dataTables_filter .form-control').removeClass('form-control-sm');
-    $('.dataTables_length .form-select').removeClass('form-select-sm');
-  }, 200);
+    const elementsToModify = [
+      { selector: '.dt-search .form-control', classToRemove: 'form-control-sm', classToAdd: 'ms-4' },
+      { selector: '.dt-length .form-select', classToRemove: 'form-select-sm' },
+      { selector: '.dt-layout-table', classToRemove: 'row mt-2' },
+      { selector: '.dt-layout-end', classToAdd: 'mt-0' },
+      { selector: '.dt-layout-end .dt-search', classToAdd: 'mt-0 mt-md-6' },
+      { selector: '.dt-layout-full', classToRemove: 'col-md col-12', classToAdd: 'table-responsive' }
+    ];
+
+    // Delete record
+    elementsToModify.forEach(({ selector, classToRemove, classToAdd }) => {
+      document.querySelectorAll(selector).forEach(element => {
+        if (classToRemove) {
+          classToRemove.split(' ').forEach(className => element.classList.remove(className));
+        }
+        if (classToAdd) {
+          classToAdd.split(' ').forEach(className => element.classList.add(className));
+        }
+      });
+    });
+  }, 100);
 });

@@ -1,6 +1,12 @@
 package com.pozwizd.prominadaadmin.service.serviceImp;
 
+import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandFile;
+import com.pozwizd.prominadaadmin.repository.primary.ResidentialLandFileRepository;
 import com.pozwizd.prominadaadmin.service.FileService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j; // Added
+import org.mapstruct.Named;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,14 +23,14 @@ import java.util.UUID;
  * Поддерживает работу как с временными, так и с постоянными файлами.
  */
 @Service
+@RequiredArgsConstructor
+@Slf4j // Added
 public class FileServiceImp implements FileService {
     @Value("${file.upload.dir}")
     private String uploadDir;
 
+    private final ResidentialLandFileRepository residentialLandFileRepository;
 
-    public FileServiceImp() {
-        createUploadDirectories();
-    }
 
     private void createUploadDirectories() {
         try {
@@ -38,9 +44,10 @@ public class FileServiceImp implements FileService {
     }
 
     @Override
+    @Named( "uploadFile")
     public String uploadFile(MultipartFile file) throws IOException {
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir, fileName);
+        Path filePath = Paths.get(uploadDir +"/uploads/", fileName);
         Files.copy(file.getInputStream(), filePath);
         return "uploads/" + fileName;
     }
@@ -53,6 +60,7 @@ public class FileServiceImp implements FileService {
      * @throws IOException если произошла ошибка при удалении файла
      */
     @Override
+    @Named( "deleteFile")
     public boolean deleteFile(String fileName) throws IOException {
         Path filePath = Paths.get(uploadDir, fileName);
         if (Files.exists(filePath)) {
@@ -60,5 +68,19 @@ public class FileServiceImp implements FileService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void saveResidentialLandFile(MultipartFile file, ResidentialLand residentialLand) {
+        try {
+            String filePath = uploadFile(file);
+            ResidentialLandFile residentialLandFile = new ResidentialLandFile();
+            residentialLandFile.setFilePath(filePath);
+            residentialLandFile.setResidentialLand(residentialLand);
+            residentialLandFileRepository.save(residentialLandFile);
+        } catch (IOException e) {
+            log.error("Failed to store file {}: {}", file.getOriginalFilename(), e.getMessage()); // Changed logging
+            throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
+        }
     }
 }

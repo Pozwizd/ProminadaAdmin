@@ -6,19 +6,20 @@
 
 (function () {
   // Basic
-  //------------------------------------------------------
   const tagifyBasicEl = document.querySelector('#TagifyBasic');
-  const TagifyBasic = new Tagify(tagifyBasicEl);
+  if (tagifyBasicEl) {
+    const TagifyBasic = new Tagify(tagifyBasicEl);
+  }
 
   // Read only
-  //------------------------------------------------------
   const tagifyReadonlyEl = document.querySelector('#TagifyReadonly');
-  const TagifyReadonly = new Tagify(tagifyReadonlyEl);
+  if (tagifyReadonlyEl) {
+    const TagifyReadonly = new Tagify(tagifyReadonlyEl);
+  }
 
   // Custom list & inline suggestion
-  //------------------------------------------------------
-  const TagifyCustomInlineSuggestionEl = document.querySelector('#TagifyCustomInlineSuggestion');
-  const TagifyCustomListSuggestionEl = document.querySelector('#TagifyCustomListSuggestion');
+  const tagifyCustomInlineSuggestionEl = document.querySelector('#TagifyCustomInlineSuggestion');
+  const tagifyCustomListSuggestionEl = document.querySelector('#TagifyCustomListSuggestion');
 
   const whitelist = [
     'A# .NET',
@@ -77,32 +78,37 @@
     'Active Server Pages',
     'ASP.NET'
   ];
+
   // Inline
-  let TagifyCustomInlineSuggestion = new Tagify(TagifyCustomInlineSuggestionEl, {
-    whitelist: whitelist,
-    maxTags: 10,
-    dropdown: {
-      maxItems: 20,
-      classname: 'tags-inline',
-      enabled: 0,
-      closeOnSelect: false
-    }
-  });
+  if (tagifyCustomInlineSuggestionEl) {
+    const tagifyCustomInlineSuggestion = new Tagify(tagifyCustomInlineSuggestionEl, {
+      whitelist: whitelist,
+      maxTags: 10,
+      dropdown: {
+        maxItems: 20,
+        classname: 'tags-inline',
+        enabled: 0,
+        closeOnSelect: false
+      }
+    });
+  }
+
   // List
-  let TagifyCustomListSuggestion = new Tagify(TagifyCustomListSuggestionEl, {
-    whitelist: whitelist,
-    maxTags: 10,
-    dropdown: {
-      maxItems: 20,
-      classname: '',
-      enabled: 0,
-      closeOnSelect: false
-    }
-  });
+  if (tagifyCustomListSuggestionEl) {
+    const tagifyCustomListSuggestion = new Tagify(tagifyCustomListSuggestionEl, {
+      whitelist: whitelist,
+      maxTags: 10,
+      dropdown: {
+        maxItems: 20,
+        classname: '',
+        enabled: 0,
+        closeOnSelect: false
+      }
+    });
+  }
 
   // Users List suggestion
-  //------------------------------------------------------
-  const TagifyUserListEl = document.querySelector('#TagifyUserList');
+  const tagifyUserListEl = document.querySelector('#TagifyUserList');
 
   const usersList = [
     {
@@ -111,60 +117,20 @@
       avatar: 'https://i.pravatar.cc/80?img=1',
       email: 'jhattersley0@ucsd.edu'
     },
-    {
-      value: 2,
-      name: 'Antons Esson',
-      avatar: 'https://i.pravatar.cc/80?img=2',
-      email: 'aesson1@ning.com'
-    },
-    {
-      value: 3,
-      name: 'Ardeen Batisse',
-      avatar: 'https://i.pravatar.cc/80?img=3',
-      email: 'abatisse2@nih.gov'
-    },
-    {
-      value: 4,
-      name: 'Graeme Yellowley',
-      avatar: 'https://i.pravatar.cc/80?img=4',
-      email: 'gyellowley3@behance.net'
-    },
-    {
-      value: 5,
-      name: 'Dido Wilford',
-      avatar: 'https://i.pravatar.cc/80?img=5',
-      email: 'dwilford4@jugem.jp'
-    },
-    {
-      value: 6,
-      name: 'Celesta Orwin',
-      avatar: 'https://i.pravatar.cc/80?img=6',
-      email: 'corwin5@meetup.com'
-    },
-    {
-      value: 7,
-      name: 'Sally Main',
-      avatar: 'https://i.pravatar.cc/80?img=7',
-      email: 'smain6@techcrunch.com'
-    },
-    {
-      value: 8,
-      name: 'Grethel Haysman',
-      avatar: 'https://i.pravatar.cc/80?img=8',
-      email: 'ghaysman7@mashable.com'
-    },
+    { value: 2, name: 'Antons Esson', avatar: 'https://i.pravatar.cc/80?img=2', email: 'aesson1@ning.com' },
+    { value: 3, name: 'Ardeen Batisse', avatar: 'https://i.pravatar.cc/80?img=3', email: 'abatisse2@nih.gov' },
+    { value: 4, name: 'Graeme Yellowley', avatar: 'https://i.pravatar.cc/80?img=4', email: 'gyellowley3@behance.net' },
+    { value: 5, name: 'Dido Wilford', avatar: 'https://i.pravatar.cc/80?img=5', email: 'dwilford4@jugem.jp' },
+    { value: 6, name: 'Celesta Orwin', avatar: 'https://i.pravatar.cc/80?img=6', email: 'corwin5@meetup.com' },
+    { value: 7, name: 'Sally Main', avatar: 'https://i.pravatar.cc/80?img=7', email: 'smain6@techcrunch.com' },
+    { value: 8, name: 'Grethel Haysman', avatar: 'https://i.pravatar.cc/80?img=8', email: 'ghaysman7@mashable.com' },
     {
       value: 9,
       name: 'Marvin Mandrake',
       avatar: 'https://i.pravatar.cc/80?img=9',
       email: 'mmandrake8@sourceforge.net'
     },
-    {
-      value: 10,
-      name: 'Corrie Tidey',
-      avatar: 'https://i.pravatar.cc/80?img=10',
-      email: 'ctidey9@youtube.com'
-    }
+    { value: 10, name: 'Corrie Tidey', avatar: 'https://i.pravatar.cc/80?img=10', email: 'ctidey9@youtube.com' }
   ];
 
   function tagTemplate(tagData) {
@@ -173,7 +139,7 @@
       contenteditable='false'
       spellcheck='false'
       tabIndex="-1"
-      class="${this.settings.classNames.tag} ${tagData.class ? tagData.class : ''}"
+      class="${this.settings.classNames.tag} ${tagData.class || ''}"
       ${this.getAttributes(tagData)}
     >
       <x title='' class='tagify__tag__removeBtn' role='button' aria-label='remove tag'></x>
@@ -190,92 +156,77 @@
   function suggestionItemTemplate(tagData) {
     return `
     <div ${this.getAttributes(tagData)}
-      class='tagify__dropdown__item align-items-center ${tagData.class ? tagData.class : ''}'
+      class='tagify__dropdown__item align-items-center ${tagData.class || ''}'
       tabindex="0"
       role="option"
     >
       ${
         tagData.avatar
           ? `<div class='tagify__dropdown__item__avatar-wrap'>
-          <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
-        </div>`
+        <img onerror="this.style.visibility='hidden'" src="${tagData.avatar}">
+      </div>`
           : ''
       }
-      <strong>${tagData.name}</strong>
+      <div class="fw-medium">${tagData.name}</div>
       <span>${tagData.email}</span>
     </div>
   `;
   }
 
-  // initialize Tagify on the above input node reference
-  let TagifyUserList = new Tagify(TagifyUserListEl, {
-    tagTextProp: 'name', // very important since a custom template is used with this property as text. allows typing a "value" or a "name" to match input with whitelist
-    enforceWhitelist: true,
-    skipInvalid: true, // do not remporarily add invalid tags
-    dropdown: {
-      closeOnSelect: false,
-      enabled: 0,
-      classname: 'users-list',
-      searchKeys: ['name', 'email'] // very important to set by which keys to search for suggesttions when typing
-    },
-    templates: {
-      tag: tagTemplate,
-      dropdownItem: suggestionItemTemplate
-    },
-    whitelist: usersList
-  });
+  function dropdownHeaderTemplate(suggestions) {
+    return `
+        <div class="${this.settings.classNames.dropdownItem} ${this.settings.classNames.dropdownItem}__addAll">
+            <strong>${this.value.length ? 'Add remaining' : 'Add All'}</strong>
+            <span>${suggestions.length} members</span>
+        </div>
+    `;
+  }
 
-  TagifyUserList.on('dropdown:show dropdown:updated', onDropdownShow);
-  TagifyUserList.on('dropdown:select', onSelectSuggestion);
+  if (tagifyUserListEl) {
+    const tagifyUserList = new Tagify(tagifyUserListEl, {
+      tagTextProp: 'name', // very important since a custom template is used with this property as text. allows typing a "value" or a "name" to match input with whitelist
+      enforceWhitelist: true,
+      skipInvalid: true, // do not remporarily add invalid tags
+      dropdown: {
+        closeOnSelect: false,
+        enabled: 0,
+        classname: 'users-list',
+        searchKeys: ['name', 'email'] // very important to set by which keys to search for suggesttions when typing
+      },
+      templates: {
+        tag: tagTemplate,
+        dropdownItem: suggestionItemTemplate,
+        dropdownHeader: dropdownHeaderTemplate
+      },
+      whitelist: usersList
+    });
 
-  let addAllSuggestionsEl;
+    tagifyUserList.on('dropdown:select', onSelectSuggestion).on('edit:start', onEditStart); // show custom text in the tag while in edit-mode
 
-  function onDropdownShow(e) {
-    let dropdownContentEl = e.detail.tagify.DOM.dropdown.content;
+    function onSelectSuggestion(e) {
+      // custom class from "dropdownHeaderTemplate"
+      if (e.detail.elm.classList.contains(`${tagifyUserList.settings.classNames.dropdownItem}__addAll`)) {
+        tagifyUserList.dropdown.selectAll();
+      }
+    }
 
-    if (TagifyUserList.suggestedListItems.length > 1) {
-      addAllSuggestionsEl = getAddAllSuggestionsEl();
-
-      // insert "addAllSuggestionsEl" as the first element in the suggestions list
-      dropdownContentEl.insertBefore(addAllSuggestionsEl, dropdownContentEl.firstChild);
+    function onEditStart({ detail: { tag, data } }) {
+      tagifyUserList.setTagTextNode(tag, `${data.name} <${data.email}>`);
     }
   }
 
-  function onSelectSuggestion(e) {
-    if (e.detail.elm == addAllSuggestionsEl) TagifyUserList.dropdown.selectAll.call(TagifyUserList);
-  }
-
-  // create an "add all" custom suggestion element every time the dropdown changes
-  function getAddAllSuggestionsEl() {
-    // suggestions items should be based on "dropdownItem" template
-    return TagifyUserList.parseTemplate('dropdownItem', [
-      {
-        class: 'addAll',
-        name: 'Add all',
-        email:
-          TagifyUserList.settings.whitelist.reduce(function (remainingSuggestions, item) {
-            return TagifyUserList.isTagDuplicate(item.value) ? remainingSuggestions : remainingSuggestions + 1;
-          }, 0) + ' Members'
-      }
-    ]);
-  }
-
   // Email List suggestion
-  //------------------------------------------------------
-  // generate random whitelist items (for the demo)
-  let randomStringsArr = Array.apply(null, Array(100)).map(function () {
-    return (
-      Array.apply(null, Array(~~(Math.random() * 10 + 3)))
-        .map(function () {
-          return String.fromCharCode(Math.random() * (123 - 97) + 97);
-        })
-        .join('') + '@gmail.com'
-    );
-  });
+  const tagifyEmailListEl = document.querySelector('#TagifyEmailList');
+  if (tagifyEmailListEl) {
+    const randomStringsArr = Array.from({ length: 100 }, () => {
+      return (
+        Array.from({ length: Math.floor(Math.random() * 10 + 3) }, () =>
+          String.fromCharCode(Math.random() * (123 - 97) + 97)
+        ).join('') + '@gmail.com'
+      );
+    });
 
-  const TagifyEmailListEl = document.querySelector('#TagifyEmailList'),
-    TagifyEmailList = new Tagify(TagifyEmailListEl, {
-      // email address validation (https://stackoverflow.com/a/46181/104380)
+    const tagifyEmailList = new Tagify(tagifyEmailListEl, {
       pattern:
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       whitelist: randomStringsArr,
@@ -286,16 +237,13 @@
         position: 'text',
         enabled: 1 // show suggestions dropdown after 1 typed character
       }
-    }),
-    button = TagifyEmailListEl.nextElementSibling; // "add new tag" action-button
+    });
 
-  button.addEventListener('click', onAddButtonClick);
+    const button = tagifyEmailListEl.nextElementSibling;
+    button.addEventListener('click', () => tagifyEmailList.addEmptyTag());
 
-  function onAddButtonClick() {
-    TagifyEmailList.addEmptyTag();
-  }
-
-  function onInvalidTag(e) {
-    console.log('invalid', e.detail);
+    function onInvalidTag(e) {
+      console.log('invalid', e.detail);
+    }
   }
 })();

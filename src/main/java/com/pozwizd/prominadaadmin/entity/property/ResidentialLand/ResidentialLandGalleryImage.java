@@ -20,7 +20,7 @@ public class ResidentialLandGalleryImage {
     private String pathImage;
 
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "residential_land_id")
     private ResidentialLand residentialLand;
 

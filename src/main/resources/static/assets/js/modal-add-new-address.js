@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
           // Use this for enabling/changing valid/invalid class
           // eleInvalidClass: '',
           eleValidClass: '',
-          rowSelector: '.col-12'
+          rowSelector: '.form-control-validation'
         }),
         submitButton: new FormValidation.plugins.SubmitButton(),
         // Submit the form when all fields are valid

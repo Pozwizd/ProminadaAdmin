@@ -4,53 +4,51 @@
 
 'use strict';
 
-(function () {
-  const collapseElementList = [].slice.call(document.querySelectorAll('.card-collapsible'));
-  const expandElementList = [].slice.call(document.querySelectorAll('.card-expand'));
-  const closeElementList = [].slice.call(document.querySelectorAll('.card-close'));
-
-  let cardDnD = document.getElementById('sortable-4');
+document.addEventListener('DOMContentLoaded', function () {
+  const collapseElementList = Array.from(document.querySelectorAll('.card-collapsible'));
+  const expandElementList = Array.from(document.querySelectorAll('.card-expand'));
+  const closeElementList = Array.from(document.querySelectorAll('.card-close'));
+  const cardDnD = document.getElementById('sortable-4');
 
   // Collapsible card
   // --------------------------------------------------------------------
-  if (collapseElementList) {
-    collapseElementList.map(function (collapseElement) {
-      collapseElement.addEventListener('click', event => {
-        event.preventDefault();
-        // Collapse the element
-        new bootstrap.Collapse(collapseElement.closest('.card').querySelector('.collapse'));
-        // Toggle collapsed class in `.card-header` element
-        collapseElement.closest('.card-header').classList.toggle('collapsed');
-        // Toggle class ti-chevron-down & ti-chevron-right
-        Helpers._toggleClass(collapseElement.firstElementChild, 'ti-chevron-down', 'ti-chevron-right');
-      });
+  collapseElementList.forEach(function (collapseElement) {
+    collapseElement.addEventListener('click', function (event) {
+      event.preventDefault();
+      // Collapse the element
+      new bootstrap.Collapse(collapseElement.closest('.card').querySelector('.collapse'));
+      // Toggle collapsed class in `.card-header` element
+      collapseElement.closest('.card-header').classList.toggle('collapsed');
+      // Toggle class tabler-chevron-down & tabler-chevron-up
+      Helpers._toggleClass(collapseElement.firstElementChild, 'tabler-chevron-down', 'tabler-chevron-up');
     });
-  }
+  });
 
   // Card Toggle fullscreen
   // --------------------------------------------------------------------
-  if (expandElementList) {
-    expandElementList.map(function (expandElement) {
-      expandElement.addEventListener('click', event => {
-        event.preventDefault();
-        // Toggle class ti-arrows-maximize & ti-arrows-minimize
-        Helpers._toggleClass(expandElement.firstElementChild, 'ti-arrows-maximize', 'ti-arrows-minimize');
-
-        expandElement.closest('.card').classList.toggle('card-fullscreen');
-      });
+  expandElementList.forEach(function (expandElement) {
+    expandElement.addEventListener('click', function (event) {
+      event.preventDefault();
+      // Toggle class tabler-arrows-maximize & tabler-arrows-minimize
+      Helpers._toggleClass(expandElement.firstElementChild, 'tabler-arrows-maximize', 'tabler-arrows-minimize');
+      expandElement.closest('.card').classList.toggle('card-fullscreen');
     });
-  }
+  });
 
-  // Toggle fullscreen on esc key
-  document.addEventListener('keyup', event => {
+  // Toggle fullscreen on ESC key
+  document.addEventListener('keyup', function (event) {
     event.preventDefault();
     //Esc button
     if (event.key === 'Escape') {
       const cardFullscreen = document.querySelector('.card-fullscreen');
-      // Toggle class ti-arrows-maximize & ti-arrows-minimize
+      // Toggle class tabler-arrows-maximize & tabler-arrows-minimize
 
       if (cardFullscreen) {
-        Helpers._toggleClass(cardFullscreen.querySelector('.card-expand').firstChild, 'ti-arrows-maximize', 'ti-arrows-minimize');
+        Helpers._toggleClass(
+          cardFullscreen.querySelector('.card-expand').firstElementChild,
+          'tabler-arrows-maximize',
+          'tabler-arrows-minimize'
+        );
         cardFullscreen.classList.toggle('card-fullscreen');
       }
     }
@@ -58,57 +56,87 @@
 
   // Card close
   // --------------------------------------------------------------------
-  if (closeElementList) {
-    closeElementList.map(function (closeElement) {
-      closeElement.addEventListener('click', event => {
-        event.preventDefault();
-        closeElement.closest('.card').classList.add('d-none');
-      });
+  closeElementList.forEach(function (closeElement) {
+    closeElement.addEventListener('click', function (event) {
+      event.preventDefault();
+      closeElement.closest('.card').classList.add('d-none');
     });
-  }
+  });
 
   // Sortable.js (Drag & Drop cards)
   // --------------------------------------------------------------------
-  if (typeof cardDnD !== undefined && cardDnD !== null) {
+  if (cardDnD) {
     Sortable.create(cardDnD, {
       animation: 500,
       handle: '.card'
     });
   }
-})();
 
-// Card reload (jquery)
-// --------------------------------------------------------------------
-$(function () {
-  const cardReload = $('.card-reload');
-  if (cardReload.length) {
-    cardReload.on('click', function (e) {
-      e.preventDefault();
-      var $this = $(this);
-      $this.closest('.card').block({
-        message:
-          '<div class="sk-fold sk-primary"><div class="sk-fold-cube"></div><div class="sk-fold-cube"></div><div class="sk-fold-cube"></div><div class="sk-fold-cube"></div></div><h5>LOADING...</h5>',
+  // Card reload (js)
+  // --------------------------------------------------------------------
+  const cardReload = document.querySelectorAll('.card-reload');
 
-        css: {
-          backgroundColor: 'transparent',
-          border: '0'
-        },
-        overlayCSS: {
-          backgroundColor: $('html').hasClass('dark-style') ? '#000' : '#fff',
-          opacity: 0.55
+  if (cardReload) {
+    // Add unique data attributes to each card
+    const cards = document.querySelectorAll('.card-action');
+    cards.forEach((card, index) => {
+      card.dataset.cardId = `card-${index + 1}`;
+    });
+
+    cardReload.forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Find the closest card with the "card-action" class
+        const card = button.closest('.card-action');
+        if (!card) {
+          console.error('Closest card with .card-action class not found!');
+          return;
         }
+
+        // Get the unique identifier for the card
+        const cardId = card.dataset.cardId;
+
+        // Apply Notiflix Block to the specific card
+        Block.standard(`[data-card-id="${cardId}"]`, {
+          backgroundColor:
+            document.documentElement.getAttribute('data-bs-theme') === 'dark'
+              ? 'rgba(' + window.Helpers.getCssVar('pure-black-rgb') + ', 0.5)'
+              : 'rgba(' + window.Helpers.getCssVar('white-rgb') + ', 0.5)',
+          svgSize: '0px'
+        });
+
+        // Inject custom spinner HTML into the blocked card
+        const customSpinnerHTML = `
+          <div class="sk-fold sk-primary">
+            <div class="sk-fold-cube"></div>
+            <div class="sk-fold-cube"></div>
+            <div class="sk-fold-cube"></div>
+            <div class="sk-fold-cube"></div>
+          </div>
+          <h5>LOADING...</h5>
+        `;
+        const notiflixBlock = card.querySelector('.notiflix-block');
+        if (notiflixBlock) {
+          notiflixBlock.innerHTML = customSpinnerHTML;
+        }
+
+        // Simulate an async operation and unblock the card
+        setTimeout(function () {
+          Block.remove(`[data-card-id="${cardId}"]`);
+
+          // Check if a card alert exists, and add the alert message
+          const cardAlert = card.querySelector('.card-alert');
+          if (cardAlert) {
+            cardAlert.innerHTML = `
+              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <span class="fw-medium">Holy grail!</span> Your success/error message here.
+              </div>
+            `;
+          }
+        }, 2500); // Adjust the timeout duration as needed
       });
-      setTimeout(function () {
-        $this.closest('.card').unblock();
-        if ($this.closest('.card').find('.card-alert').length) {
-          $this
-            .closest('.card')
-            .find('.card-alert')
-            .html(
-              '<div class="alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button><strong>Holy grail!</strong> Your success/error message here.</div>'
-            );
-        }
-      }, 2500);
     });
   }
 });

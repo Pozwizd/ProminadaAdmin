@@ -17,7 +17,7 @@
                 <div class="col-lg-2 col-md-4 col-sm-4">
                     <a th:href="@{/personal/create}" class="btn btn-primary btn-sm w-100" id="createEntity">
                         <span data-i18n="personal.addUser">Добавить пользователя</span>
-                        <i class="ti ti-plus"></i>
+                        <i class="ti tabler-plus"></i>
                     </a>
                 </div>
             </div>
@@ -103,6 +103,11 @@
             </div>
         </div>
     </div>
+
+
+</div>
+
+<th:block layout:fragment="page_js">
     <script>
         let personalAppInstance = null;
 
@@ -146,6 +151,7 @@
                 clearFiltersBtnId: 'clearFiltersBtn',
                 createUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/create',
                 editUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/edit/',
+                cardUrl: '[[@{/}]]'.replaceAll("\"", "") + 'personal/',
                 notificationKeyword: 'message',
 
                 // Новая секция для ключей i18n
@@ -172,26 +178,7 @@
         });
     </script>
 
-    <script th:src="@{/assets/js/main.js}"></script>
+</th:block>
 
-    <script>
-        function localize() {
-            let i18nList = document.querySelectorAll('[data-i18n]');
-
-            let currentLanguageEle = document.querySelector('.dropdown-item[data-language="' + i18next.language + '"]');
-
-            if (currentLanguageEle) {
-                currentLanguageEle.click();
-            }
-
-            i18nList.forEach(function (item) {
-                item.innerHTML = i18next.t(item.dataset.i18n);
-            });
-        }
-
-        localize();
-    </script>
-
-</div>
 </body>
 </html>

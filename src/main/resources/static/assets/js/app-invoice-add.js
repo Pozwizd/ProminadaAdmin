@@ -4,28 +4,38 @@
 
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   const invoiceItemPriceList = document.querySelectorAll('.invoice-item-price'),
     invoiceItemQtyList = document.querySelectorAll('.invoice-item-qty'),
-    invoiceDateList = document.querySelectorAll('.date-picker');
+    invoiceDateList = document.querySelectorAll('.date-picker'),
+    invoiceDate = document.querySelector('.invoice-date'),
+    dueDate = document.querySelector('.due-date');
 
   // Price
   if (invoiceItemPriceList) {
     invoiceItemPriceList.forEach(function (invoiceItemPrice) {
-      new Cleave(invoiceItemPrice, {
-        delimiter: '',
-        numeral: true
-      });
+      if (invoiceItemPrice) {
+        invoiceItemPrice.addEventListener('input', event => {
+          invoiceItemPrice.value = formatNumeral(event.target.value, {
+            delimiter: '',
+            numeral: true
+          });
+        });
+      }
     });
   }
 
   // Qty
   if (invoiceItemQtyList) {
     invoiceItemQtyList.forEach(function (invoiceItemQty) {
-      new Cleave(invoiceItemQty, {
-        delimiter: '',
-        numeral: true
-      });
+      if (invoiceItemQty) {
+        invoiceItemQty.addEventListener('input', event => {
+          invoiceItemQty.value = formatNumeral(event.target.value, {
+            delimiter: '',
+            numeral: true
+          });
+        });
+      }
     });
   }
 
@@ -37,10 +47,8 @@
       });
     });
   }
-})();
 
-// repeater (jquery)
-$(function () {
+  // repeater (jquery)
   var applyChangesBtn = $('.btn-apply-changes'),
     discount,
     tax1,

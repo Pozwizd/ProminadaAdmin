@@ -4,17 +4,17 @@
 
 'use strict';
 
-(function () {
+document.addEventListener('DOMContentLoaded', function (e) {
   // Invoice amount
   const paymentAmount = document.querySelector('.invoice-amount');
 
-  // Prefix
   if (paymentAmount) {
-    new Cleave(paymentAmount, {
-      numeral: true
+    paymentAmount.addEventListener('input', event => {
+      paymentAmount.value = formatNumeral(event.target.value, {
+        numeralThousandsGroupStyle: 'thousand'
+      });
     });
   }
-
   // Datepicker
   const date = new Date(),
     invoiceDateList = document.querySelectorAll('.invoice-date');
@@ -23,8 +23,9 @@
     invoiceDateList.forEach(function (invoiceDateEl) {
       invoiceDateEl.flatpickr({
         monthSelectorType: 'static',
-        defaultDate: date
+        defaultDate: date,
+        static: true
       });
     });
   }
-})();
+});

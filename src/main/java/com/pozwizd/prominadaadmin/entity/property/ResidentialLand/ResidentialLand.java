@@ -1,15 +1,13 @@
 package com.pozwizd.prominadaadmin.entity.property.ResidentialLand;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
-import com.pozwizd.prominadaadmin.entity.other.City;
-import com.pozwizd.prominadaadmin.entity.other.District;
-import com.pozwizd.prominadaadmin.entity.other.RegDistrict;
-import com.pozwizd.prominadaadmin.entity.other.Topozone;
+import com.pozwizd.prominadaadmin.entity.location.*;
 import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -23,23 +21,32 @@ public class ResidentialLand {
 
     private Integer houseNumber;
 
-    private String street;
+
+
+    @ManyToOne
+    @JoinColumn(name = "region_id")
+    private Region region;
 
     @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 
     @ManyToOne
-    @JoinColumn(name = "reg_district_id")
-    private RegDistrict regDistrict;
+    @JoinColumn(name = "district_id")
+    private District district;
 
     @ManyToOne
-    @JoinColumn(name = "distinct_id")
-    private District distinct;
+    @JoinColumn(name = "street_id")
+    private Street street;
+
+    @ManyToOne
+    @JoinColumn(name = "house_id")
+    private House house;
 
     @ManyToOne
     @JoinColumn(name = "topozone_id")
     private Topozone topozone;
+
 
     private String ownerFullName;
 
@@ -56,18 +63,23 @@ public class ResidentialLand {
 
     private String langPurpose;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialLand")
-    private List<ResidentialLandFile> files;
+    @OneToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "residentialLand")
+    private List<ResidentialLandFile> residentialLandFiles = new ArrayList<>();
 
     @Lob
     private String adminComment;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL,
+            orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "residential_land_main_id")
-    private ResidentialLandMain ResidentialLandMain;
+    private ResidentialLandMain residentialLandMain;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "residentialLand")
-    private List<ResidentialLandGalleryImage> galleryImages;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL,
+            orphanRemoval = true, mappedBy = "residentialLand")
+    private List<ResidentialLandGalleryImage> residentialLandGalleryImages = new ArrayList<>();
 
     private LocalDate dateOfCreating;
 

@@ -1,12 +1,14 @@
 package com.pozwizd.prominadaadmin.service.serviceImp;
 
 import com.pozwizd.prominadaadmin.entity.Feedback;
+import com.pozwizd.prominadaadmin.exception.OperationException;
 import com.pozwizd.prominadaadmin.mapper.FeedbackMapper;
 import com.pozwizd.prominadaadmin.models.feedback.FeedbackResponse;
-import com.pozwizd.prominadaadmin.repository.FeedbackRepository;
+import com.pozwizd.prominadaadmin.repository.primary.FeedbackRepository;
 import com.pozwizd.prominadaadmin.service.FeedbackService;
 import com.pozwizd.prominadaadmin.specification.FeedbackSpecification;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import java.util.Optional;
  * а также для поиска и фильтрации отзывов по различным критериям.
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class FeedbackServiceImp implements FeedbackService {
 
@@ -35,7 +38,14 @@ public class FeedbackServiceImp implements FeedbackService {
      */
     @Override
     public List<Feedback> findAll() {
-        return feedbackRepository.findAll();
+        try {
+            List<Feedback> feedbacks = feedbackRepository.findAll();
+            log.info("Успешно получено {} отзывов", feedbacks.size()); // Логирование успеха
+            return feedbacks;
+        } catch (Exception e) {
+            log.error("Ошибка при получении всех отзывов", e);
+            throw new OperationException("получении всех отзывов", e.getMessage());
+        }
     }
 
     /**
@@ -46,7 +56,18 @@ public class FeedbackServiceImp implements FeedbackService {
      */
     @Override
     public Optional<Feedback> findById(Long id) {
-        return feedbackRepository.findById(id);
+        try {
+            Optional<Feedback> feedback = feedbackRepository.findById(id);
+            if (feedback.isPresent()) {
+                log.info("Отзыв с ID {} найден", id);
+            } else {
+                log.warn("Отзыв с ID {} не найден", id);
+            }
+            return feedback;
+        } catch (Exception e) {
+            log.error("Ошибка при поиске отзыва по ID", e);
+            throw new OperationException("поиске отзыва по ID", e.getMessage());
+        }
     }
 
     /**
@@ -58,7 +79,14 @@ public class FeedbackServiceImp implements FeedbackService {
     @Transactional
     @Override
     public Feedback save(Feedback feedback) {
-        return feedbackRepository.save(feedback);
+        try {
+            Feedback savedFeedback = feedbackRepository.save(feedback);
+            log.info("Отзыв успешно сохранен с ID {}", savedFeedback.getId());
+            return savedFeedback;
+        } catch (Exception e) {
+            log.error("Ошибка при сохранении отзыва", e);
+            throw new OperationException("сохранении отзыва", e.getMessage());
+        }
     }
 
     /**
@@ -69,7 +97,13 @@ public class FeedbackServiceImp implements FeedbackService {
     @Transactional
     @Override
     public void deleteById(Long id) {
-        feedbackRepository.deleteById(id);
+        try {
+            feedbackRepository.deleteById(id);
+            log.info("Отзыв с ID {} успешно удален", id);
+        } catch (Exception e) {
+            log.error("Ошибка при удалении отзыва по ID", e);
+            throw new OperationException("удалении отзыва", e.getMessage());
+        }
     }
 
     /**
@@ -87,11 +121,17 @@ public class FeedbackServiceImp implements FeedbackService {
                                                       String name,
                                                       String phoneNumber,
                                                       String description) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return feedbackMapper.toFeedbackResponse(feedbackRepository.findAll(FeedbackSpecification.search(name,
-                phoneNumber,
-                description),
-                pageRequest));
+        try {
+            PageRequest pageRequest = PageRequest.of(page, size);
+            Page<FeedbackResponse> pageResponse = feedbackMapper.toFeedbackResponse(feedbackRepository.findAll(
+                    FeedbackSpecification.search(name, phoneNumber, description), pageRequest
+            ));
+            log.info("Получена страница с {} отзывами", pageResponse.getContent().size());
+            return pageResponse;
+        } catch (Exception e) {
+            log.error("Ошибка при получении постраничного списка отзывов", e);
+            throw new OperationException("получении постраничного списка отзывов", e.getMessage());
+        }
     }
 
     /**
@@ -103,6 +143,17 @@ public class FeedbackServiceImp implements FeedbackService {
      */
     @Override
     public Feedback getFeedbackById(Long id) {
-        return feedbackRepository.findById(id).orElseThrow();
+        try {
+            Feedback feedback = feedbackRepository.findById(id)
+                    .orElseThrow(() -> new NoSuchElementException("Отзыв с ID " + id + " не найден"));
+            log.info("Отзыв с ID {} успешно получен", id);
+            return feedback;
+        } catch (NoSuchElementException e) {
+            log.error("Отзыв с ID {} не найден", id, e);
+            throw e;
+        } catch (Exception e) {
+            log.error("Ошибка при получении отзыва по ID", e);
+            throw new OperationException("получении отзыва", e.getMessage());
+        }
     }
 }
