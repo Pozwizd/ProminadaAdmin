@@ -1,4 +1,4 @@
-package com.pozwizd.prominadaadmin.mapper;
+package com.pozwizd.prominadaadmin.mapper.property.builderProperty;
 
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;

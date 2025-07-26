@@ -6,23 +6,31 @@ import com.pozwizd.prominadaadmin.entity.property.HousingState;
 import com.pozwizd.prominadaadmin.entity.property.enums.DesignatedUseOfLand;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "commercial_properties_main")
 public class CommercialPropertiesMain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commercial_properties_id")
+    @ToString.Exclude
     private CommercialProperties commercialProperties;
 
     private PublicationStatus publicationStatus;
+
 
     private String objectCode;
 
@@ -35,17 +43,14 @@ public class CommercialPropertiesMain {
 
     private Double price;
 
-    // Ориентир
     private String landmark;
 
     @OneToOne
     @JoinColumn(name = "housing_state_id")
     private HousingState housingState;
 
-    // Срок сдачи
     private LocalDate completionDate;
 
-    // Дата ввода в эксплуатацию
     private LocalDate commissioningDate;
 
     private Integer floor;
@@ -140,10 +145,10 @@ public class CommercialPropertiesMain {
     @Lob
     private String description;
 
-    private String AdvertisingHeadline;
+    private String advertisingHeadline;
 
     @Lob
-    private String AdvertisingText;
+    private String advertisingText;
 
     private Boolean isAdvertising;
 

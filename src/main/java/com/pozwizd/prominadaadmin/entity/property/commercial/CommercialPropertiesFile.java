@@ -1,12 +1,15 @@
 package com.pozwizd.prominadaadmin.entity.property.commercial;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "commercial_properties_file")
 public class CommercialPropertiesFile {
     @Id
@@ -18,8 +21,9 @@ public class CommercialPropertiesFile {
 
     private String path;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commercial_properties_id")
+    @ToString.Exclude
     private CommercialProperties commercialProperties;
 
 

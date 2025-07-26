@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.service.serviceImp;
 
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandFile;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandFile;
 import com.pozwizd.prominadaadmin.repository.primary.ResidentialLandFileRepository;
 import com.pozwizd.prominadaadmin.service.FileService;
 import lombok.RequiredArgsConstructor;
@@ -24,13 +24,25 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
-@Slf4j // Added
+@Slf4j
 public class FileServiceImp implements FileService {
+
+
     @Value("${file.upload.dir}")
     private String uploadDir;
 
     private final ResidentialLandFileRepository residentialLandFileRepository;
 
+
+    // Условие для проверки валидности файла
+    @Named("isValidFile")
+    public boolean isValidFile(MultipartFile file) {
+        return file != null &&
+                !file.isEmpty() &&
+                file.getSize() > 0 &&
+                file.getOriginalFilename() != null &&
+                !file.getOriginalFilename().trim().isEmpty();
+    }
 
     private void createUploadDirectories() {
         try {
@@ -44,13 +56,26 @@ public class FileServiceImp implements FileService {
     }
 
     @Override
-    @Named( "uploadFile")
+    @Named("uploadFile")
     public String uploadFile(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            return null;
+        }
         String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
         Path filePath = Paths.get(uploadDir +"/uploads/", fileName);
         Files.copy(file.getInputStream(), filePath);
         return "uploads/" + fileName;
     }
+
+    // Новый метод для условной загрузки файла
+    @Named("uploadFileIfPresent")
+    public String uploadFileIfPresent(MultipartFile file) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null; // Возвращаем null, чтобы MapStruct игнорировал это поле
+        }
+        return uploadFile(file);
+    }
+
 
     /**
      * Удаляет файл из системы по его имени.
@@ -60,7 +85,7 @@ public class FileServiceImp implements FileService {
      * @throws IOException если произошла ошибка при удалении файла
      */
     @Override
-    @Named( "deleteFile")
+    @Named("deleteFile")
     public boolean deleteFile(String fileName) throws IOException {
         Path filePath = Paths.get(uploadDir, fileName);
         if (Files.exists(filePath)) {

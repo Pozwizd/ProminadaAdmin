@@ -1,6 +1,8 @@
 package com.pozwizd.prominadaadmin.service.forMapper;
 
 import com.pozwizd.prominadaadmin.entity.location.*;
+import com.pozwizd.prominadaadmin.entity.property.HousingState;
+import com.pozwizd.prominadaadmin.repository.HousingStateRepository;
 import com.pozwizd.prominadaadmin.repository.secondary.*;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.Named;
@@ -16,6 +18,8 @@ public class EntityLookupService {
     private final TopozoneRepository topozoneRepository;
     private final StreetRepository streetRepository;
     private final HouseRepository houseRepository;
+
+    private final HousingStateRepository housingStateRepository;
 
 
     @Named("findDistrictById")
@@ -46,5 +50,10 @@ public class EntityLookupService {
     @Named("findStreetById")
     public Street findStreetById(Long id) {
         return id != null ? streetRepository.findById(id).orElse(null) : null;
+    }
+
+    @Named("findHousingStateById")
+    public HousingState findHousingStateById(Long id) {
+        return id != null ? housingStateRepository.findById(id).orElse(null) : null;
     }
 }

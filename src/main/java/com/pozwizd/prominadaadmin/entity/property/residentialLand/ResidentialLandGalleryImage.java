@@ -1,13 +1,15 @@
-package com.pozwizd.prominadaadmin.entity.property.ResidentialLand;
+package com.pozwizd.prominadaadmin.entity.property.residentialLand;
 
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 @Table(name = "residential_land_gallery_image")
 public class ResidentialLandGalleryImage {
     @Id
@@ -20,8 +22,9 @@ public class ResidentialLandGalleryImage {
     private String pathImage;
 
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "residential_land_id")
+    @ToString.Exclude
     private ResidentialLand residentialLand;
 
 

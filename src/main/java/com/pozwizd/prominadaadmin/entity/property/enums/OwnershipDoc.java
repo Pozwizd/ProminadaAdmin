@@ -1,6 +1,9 @@
 package com.pozwizd.prominadaadmin.entity.property.enums;
 
 
+import lombok.Getter;
+
+@Getter
 public enum OwnershipDoc {
     PURCHASE_AGREEMENT("Договор купли-продажи"),
     OWNERSHIP_CERTIFICATE("Свидетельство о владении");
@@ -11,7 +14,4 @@ public enum OwnershipDoc {
         this.description = description;
     }
 
-    public String getDescription() {
-        return description;
-    }
 }

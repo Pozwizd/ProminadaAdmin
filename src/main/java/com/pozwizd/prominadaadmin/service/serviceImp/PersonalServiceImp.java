@@ -9,6 +9,7 @@ import com.pozwizd.prominadaadmin.mapper.PersonalMapper;
 import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackRequest;
 import com.pozwizd.prominadaadmin.models.feedback.FeedbackRequest;
 import com.pozwizd.prominadaadmin.models.personal.PersonalRequest;
+import com.pozwizd.prominadaadmin.models.personal.PersonalResponse;
 import com.pozwizd.prominadaadmin.models.personal.PersonalTableResponse;
 import com.pozwizd.prominadaadmin.repository.primary.PersonalRepository;
 import com.pozwizd.prominadaadmin.service.FileService;
@@ -27,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
 /**
@@ -196,10 +196,11 @@ public class PersonalServiceImp implements PersonalService {
      * Устанавливает двустороннюю связь с филиалами.
      *
      * @param personalRequest PersonalRequest с данными пользователя
+     * @return Сохраненный пользователь с обновленными данными
      */
     @Transactional
     @Override
-    public void saveFromRequest(PersonalRequest personalRequest) {
+    public PersonalResponse saveFromRequest(PersonalRequest personalRequest) {
         try {
             log.info("Начало сохранения пользователя с данными: {}", personalRequest);
             Personal personal = personalMapper.toEntityFromPersonalRequest(personalRequest);
@@ -276,19 +277,23 @@ public class PersonalServiceImp implements PersonalService {
 
             savedPersonal = personalRepository.save(personal);
             log.info("Пользователь с ID {} успешно сохранен", savedPersonal.getId());
+            return personalMapper.toPersonalProfileResponse(savedPersonal);
+
         } catch (Exception e) {
             log.error("Ошибка при сохранении пользователя из PersonalRequest", e);
             throw new OperationException("сохранении пользователя из PersonalRequest", e.getMessage());
         }
     }
 
-    @Override
-    @Async
     @Transactional
-    public void updatePersonal(@Valid PersonalRequest personalRequest) {
+    @Override
+    public PersonalResponse updatePersonal(PersonalRequest personalRequest) {
         try {
             log.info("Начало обновления пользователя с ID {}", personalRequest.getId());
-            Personal oldPersonal = personalRepository.findById(personalRequest.getId()).orElseThrow();
+
+            Personal oldPersonal = personalRepository.findById(personalRequest.getId())
+                    .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
+
             Personal personal = personalMapper.toUpdateEntityFromPersonalRequest(oldPersonal, personalRequest);
 
             if (personalRequest.getAvatar() != null) {
@@ -296,51 +301,18 @@ public class PersonalServiceImp implements PersonalService {
                     personal.setPathAvatar(fileService.uploadFile(personalRequest.getAvatar()));
                 } catch (IOException e) {
                     log.error("Ошибка при загрузке аватара", e);
-                    throw new RuntimeException(e);
+                    throw new RuntimeException("Ошибка при загрузке аватара", e);
                 }
             } else {
                 personal.setPathAvatar(oldPersonal.getPathAvatar());
             }
 
-            personalRepository.save(personal);
+            Personal savedPersonal = personalRepository.save(personal);
             log.info("Пользователь с ID {} успешно обновлен", personalRequest.getId());
+
+            return personalMapper.toPersonalProfileResponse(savedPersonal);
         } catch (Exception e) {
-            log.error("Ошибка при обновлении пользователя", e);
-            throw new OperationException("обновлении пользователя", e.getMessage());
+            throw new CompletionException(e);
         }
-    }
-
-    @Async
-    @Transactional
-    @Override
-    public CompletableFuture<Personal> updatePersonalAsync(PersonalRequest personalRequest) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                log.info("Начало обновления пользователя с ID {}", personalRequest.getId());
-
-                Personal oldPersonal = personalRepository.findById(personalRequest.getId())
-                        .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден"));
-
-                Personal personal = personalMapper.toUpdateEntityFromPersonalRequest(oldPersonal, personalRequest);
-
-                if (personalRequest.getAvatar() != null) {
-                    try {
-                        personal.setPathAvatar(fileService.uploadFile(personalRequest.getAvatar()));
-                    } catch (IOException e) {
-                        log.error("Ошибка при загрузке аватара", e);
-                        throw new RuntimeException("Ошибка при загрузке аватара", e);
-                    }
-                } else {
-                    personal.setPathAvatar(oldPersonal.getPathAvatar());
-                }
-
-                Personal savedPersonal = personalRepository.save(personal);
-                log.info("Пользователь с ID {} успешно обновлен", personalRequest.getId());
-
-                return savedPersonal;
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        });
     }
 }

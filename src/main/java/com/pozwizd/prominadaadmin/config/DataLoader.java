@@ -3,21 +3,21 @@ package com.pozwizd.prominadaadmin.config;
 import com.pozwizd.prominadaadmin.entity.*;
 import com.pozwizd.prominadaadmin.entity.location.*;
 import com.pozwizd.prominadaadmin.entity.property.BuildingCompany;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandFile;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandGalleryImage;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandMain;
+import com.pozwizd.prominadaadmin.entity.property.HousingState;
+import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
+import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialPropertiesMain;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandFile;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandGalleryImage;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandMain;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import com.pozwizd.prominadaadmin.repository.secondary.*;
 import com.pozwizd.prominadaadmin.service.*;
-import com.pozwizd.prominadaadmin.entity.Personal;
-import com.pozwizd.prominadaadmin.entity.Role; // Assuming Role enum exists here
 import com.pozwizd.prominadaadmin.service.location.CityService;
-import com.pozwizd.prominadaadmin.service.location.DistrictService;
 import com.pozwizd.prominadaadmin.service.location.RegionService;
 import com.pozwizd.prominadaadmin.service.location.TopozoneService;
-import com.pozwizd.prominadaadmin.service.serviceImp.*;
+import com.pozwizd.prominadaadmin.service.serviceImp.BranchServiceImp;
 import lombok.RequiredArgsConstructor;
 import net.datafaker.Faker;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -25,11 +25,13 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
-import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -46,9 +48,10 @@ public class DataLoader {
     private final ImageBannerService imageBannerService;
     private final ResidentialLandService residentialLandService;
     private final RealtorService realtorService;
+    private final HousingStateService housingStateService;
+    private final CommercialPropertiesService commercialPropertiesService;
 
     private final RegionRepository regionRepository;
-    private final CityRepository cityRepository;
     private final DistrictRepository districtRepository;
     private final StreetRepository streetRepository;
     private final HouseRepository houseRepository;
@@ -57,12 +60,7 @@ public class DataLoader {
     private final RegionService regionService;
     private final CityService cityService;
 
-
-    private final DistrictService districtService;
     private final TopozoneService topozoneService;
-
-
-    private final FileService fileService;
 
     @EventListener(ApplicationReadyEvent.class)
     public void loadEntity() {
@@ -72,11 +70,125 @@ public class DataLoader {
         loadPersonal();
         loadBanner();
         loadFakeTopozone();
+        loadRealtor();
         loadResidentialLand();
         loadFakeBuilderProperties();
         loadFakeBuildingCompany();
-        loadRealtor();
+        loadHouseEstate();
+        loadCommercialProperty();
+
     }
+
+    private void loadHouseEstate() {
+        for (int i = 0; i < 10; i++) {
+            HousingState housingState = new HousingState();
+            housingState.setName(faker.lorem().word());
+            housingState.setDescription(faker.lorem().sentence());
+            housingStateService.create(housingState);
+        }
+    }
+
+    private void loadCommercialProperty() {
+        List<Region> regions = regionRepository.findAll();
+
+        for (int i = 0; i < 10; i++) {
+            Region region = getRandomEntity(regions);
+            City city = getRandomEntity(region.getCities());
+            District district = getRandomEntity(city.getDistricts());
+            Street street = getRandomEntity(district.getStreets());
+            House house = getRandomEntity(street.getHouses());
+
+            CommercialProperties commercialProperty = CommercialProperties.builder()
+                    .region(region)
+                    .city(city)
+                    .district(district)
+                    .street(street)
+                    .house(house)
+                    .houseSection(faker.number().digits(2))
+                    .flatNumber(faker.number().digits(3))
+                    .ownerName(faker.name().fullName())
+                    .phoneNumber(faker.phoneNumber().phoneNumber())
+                    .acquisitionDate(faker.date().birthday().toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate())
+                    .ownershipDoc(getRandomEnum(OwnershipDoc.class))
+                    .comment(faker.lorem().sentence())
+                    .cadastralNumber(faker.number().digits(10))
+                    .langPurpose(faker.commerce().department())
+                    .adminComment(faker.lorem().paragraph())
+                    .dateOfCreating(LocalDate.now())
+                    .build();
+
+            CommercialPropertiesMain main = CommercialPropertiesMain.builder()
+                    .commercialProperties(commercialProperty)
+                    .publicationStatus(getRandomEnum(PublicationStatus.class))
+                    .objectCode(faker.code().isbn10())
+                    .branchCode(faker.number().numberBetween(1, 100))
+                    .employeeCode(faker.number().numberBetween(1000, 9999))
+                    .personalName(faker.name().fullName())
+                    .price(faker.number().randomDouble(2, 50000, 5000000))
+                    .landmark(faker.address().streetAddress())
+                    .completionDate(faker.date().past(365, TimeUnit.DAYS).toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate())
+                    .commissioningDate(faker.date().past(200, TimeUnit.DAYS).toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate())
+                    .floor(faker.number().numberBetween(1, 20))
+                    .totalFloor(faker.number().numberBetween(1, 25))
+                    .roomCount(faker.number().numberBetween(1, 10))
+                    .typeCommBuilding(getRandomEnum(TypeCommercialBuilding.class))
+                    .isVnp(faker.bool().bool())
+                    .vnpDate(faker.date().past(100, TimeUnit.DAYS).toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate())
+                    .sourceInformation(getRandomEnum(SourceInformation.class))
+                    .area(faker.number().randomDouble(2, 20, 500))
+                    .livingArea(faker.number().randomDouble(2, 15, 400))
+                    .roomSizes(faker.number().digits(2) + "x" + faker.number().digits(2))
+                    .ceilingHeight(faker.number().randomDouble(1, (int) 2.5, (int) 4.0) + "м")
+                    .siteArea(faker.number().digits(3) + " кв.м")
+                    .livingSiteArea(faker.number().randomDouble(2, 10, 300))
+                    .designatedUseOfLand(getRandomEnum(DesignatedUseOfLand.class))
+                    .landOwnership(faker.bool().bool())
+                    .conditionInterior(getRandomEnum(ConditionInterior.class))
+                    .conditionBuilding(getRandomEnum(ConditionBuilding.class))
+                    .bathroom(faker.number().numberBetween(1, 5))
+                    .viewFromWindows(faker.options().option("Во двор", "На улицу", "Парк", "Река"))
+                    .hasFurnishings(faker.bool().bool())
+                    .hasCarPark(faker.bool().bool())
+                    .hasHousingStock(faker.bool().bool())
+                    .hasFacade(faker.bool().bool())
+                    .hasRailwayTracks(faker.bool().bool())
+                    .gas(getRandomEnum(Gas.class))
+                    .waterSupply(getRandomEnum(WaterSupply.class))
+                    .sewage(getRandomEnum(Sewage.class))
+                    .heating(getRandomEnum(Heating.class))
+                    .airConditioner(getRandomEnum(AirConditioner.class))
+                    .ventilation(getRandomEnum(Ventilation.class))
+                    .stairs(getRandomEnum(Stairs.class))
+                    .electrification(getRandomEnum(Electrification.class))
+                    .floorType(getRandomEnum(FloorType.class))
+                    .typeWindows(getRandomEnum(TypeWindows.class))
+                    .carpentryCondition(getRandomEnum(CarpentryCondition.class))
+                    .entranceDoor(getRandomEnum(EntranceDoor.class))
+                    .lastCommunication(faker.date().past(30, TimeUnit.DAYS).toInstant()
+                            .atZone(ZoneId.systemDefault()).toLocalDate())
+                    .hasTrade(faker.bool().bool())
+                    .hasExclusive(faker.bool().bool())
+                    .urgent(faker.bool().bool())
+                    .isFree(faker.bool().bool())
+                    .isOpenObject(faker.bool().bool())
+                    .fromMediator(faker.bool().bool())
+                    .description(faker.lorem().paragraph(3))
+                    .advertisingHeadline(faker.commerce().productName())
+                    .advertisingText(faker.lorem().paragraph(2))
+                    .isAdvertising(faker.bool().bool())
+                    .build();
+
+            commercialProperty.setCommercialPropertiesMain(main);
+
+            commercialPropertiesService.create(commercialProperty);
+        }
+    }
+
+
 
     private static List<DocumentFeedback> getDocumentFeedbacks() {
         List<DocumentFeedback> documentFeedbacks = new ArrayList<>();
@@ -191,9 +303,7 @@ public class DataLoader {
             while ((line = br.readLine()) != null) {
                 String[] columns = line.split(";", -1);
 
-                if (columns.length < 8) {
-                    continue;
-                }
+                if (columns.length < 8) continue;
                 String regionName = columns[0].trim();
                 String districtName = columns[2].trim();
                 String cityName = columns[4].trim();
@@ -374,7 +484,6 @@ public class DataLoader {
 
         for (int i = 0; i < 100; i++) {
             ResidentialLand residentialLand = new ResidentialLand();
-            residentialLand.setHouseNumber(faker.number().numberBetween(1, 100));
             List<Region> regions = regionRepository.findAll();
             Region region = getRandomEntity(regions);
             City city = getRandomEntity(region.getCities());
@@ -387,17 +496,24 @@ public class DataLoader {
             residentialLand.setStreet(street);
             residentialLand.setHouse(house);
 
+
             residentialLand.setTopozone(getRandomEntity(topozones));
 
             residentialLand.setOwnerFullName(faker.name().fullName());
             residentialLand.setPhoneNumber(faker.phoneNumber().cellPhone());
+            residentialLand.setRealtor(realtorService.readById(faker.number().numberBetween(1, 10L)));
+            residentialLand.setAdminComment(faker.lorem().paragraph());
 
-
+            LocalDate date = faker.date().past(365, TimeUnit.DAYS)
+                    .toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate();
+            residentialLand.setDateOfCreating(date);
             residentialLand.setPhoneNumber(faker.phoneNumber().cellPhone());
             residentialLand.setAcquisitionDate(LocalDate.now());
             residentialLand.setOwnershipDoc(OwnershipDoc.OWNERSHIP_CERTIFICATE);
             residentialLand.setOwnershipDoc(getRandomEnum(OwnershipDoc.class));
-            residentialLand.setImportantComment(faker.lorem().sentence());
+            residentialLand.setImportantComment(faker.lorem().paragraph());
             residentialLand.setCadastralNumber(faker.number().digits(6));
             residentialLand.setLangPurpose(faker.lorem().sentence());
 

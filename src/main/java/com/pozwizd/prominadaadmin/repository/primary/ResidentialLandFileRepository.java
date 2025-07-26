@@ -1,6 +1,6 @@
 package com.pozwizd.prominadaadmin.repository.primary;
 
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandFile;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

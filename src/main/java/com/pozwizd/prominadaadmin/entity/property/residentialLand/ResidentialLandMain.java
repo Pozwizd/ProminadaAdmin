@@ -1,24 +1,30 @@
-package com.pozwizd.prominadaadmin.entity.property.ResidentialLand;
+package com.pozwizd.prominadaadmin.entity.property.residentialLand;
 
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 public class ResidentialLandMain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "residential_land_id")
+    @ToString.Exclude
     private ResidentialLand residentialLand;
 
     private PublicationStatus publicationStatus;
@@ -37,7 +43,7 @@ public class ResidentialLandMain {
 
     private Double landAreaAcres;
 
-    private Double FreePlotAreaAcres;
+    private Double freePlotAreaAcres;
 
     private Boolean landOwnership;
 
@@ -94,6 +100,7 @@ public class ResidentialLandMain {
     private Boolean isVnp;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String vnpDate;
 
     private SourceInformation sourceInformation;
@@ -111,12 +118,30 @@ public class ResidentialLandMain {
     private Boolean fromMediator;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String description;
 
     private String AdvertisingHeadline;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String AdvertisingText;
 
     private Boolean isAdvertising;
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        ResidentialLandMain that = (ResidentialLandMain) o;
+        return getId() != null && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
+    }
 }

@@ -3,7 +3,7 @@ package com.pozwizd.prominadaadmin.service.serviceImp;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyLayouts;
-import com.pozwizd.prominadaadmin.mapper.BuilderPropertyMapper;
+import com.pozwizd.prominadaadmin.mapper.property.builderProperty.BuilderPropertyMapper;
 import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDto;
 import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDtoForTable;
 import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyLayoutDto;

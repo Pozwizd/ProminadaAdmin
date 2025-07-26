@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface RealtorSpecification {
 
-    public static Specification<Realtor> filterBy(RealtorFilter filter) {
+    static Specification<Realtor> filterBy(RealtorFilter filter) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 

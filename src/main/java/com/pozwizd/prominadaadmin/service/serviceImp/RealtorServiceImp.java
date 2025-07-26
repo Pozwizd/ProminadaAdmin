@@ -132,6 +132,7 @@ public class RealtorServiceImp implements RealtorService {
             if (realtor.getId() == null) {
                 throw new IllegalArgumentException("Realtor ID cannot be null for an update operation");
             }
+
             log.info("Обновление риелтора: {}", realtor);
             Realtor updatedRealtor = realtorRepository.save(realtor);
             log.info("Риелтор с ID {} успешно обновлен", updatedRealtor.getId());
@@ -155,9 +156,10 @@ public class RealtorServiceImp implements RealtorService {
                 log.warn("ID в пути и в теле запроса не совпадают");
                 throw new IllegalArgumentException("ID в пути и в теле запроса не совпадают");
             }
-            Realtor realtorToUpdate = realtorMapper.toEntity(realtorRequest);
-            realtorToUpdate.setId(id);
+            Realtor realtorToUpdate = readById(id);
+            realtorMapper.partialUpdate(realtorRequest, realtorToUpdate);
 
+            realtorRepository.save(realtorToUpdate);
             log.info("Риелтор с ID {} успешно обновлен из запроса", id);
             return realtorMapper.toRealtorResponse(realtorRepository.save(realtorToUpdate));
         } catch (Exception e) {

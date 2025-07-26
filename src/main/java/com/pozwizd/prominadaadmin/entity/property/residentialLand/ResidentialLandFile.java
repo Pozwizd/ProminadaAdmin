@@ -1,13 +1,16 @@
-package com.pozwizd.prominadaadmin.entity.property.ResidentialLand;
+package com.pozwizd.prominadaadmin.entity.property.residentialLand;
 
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "residential_land_file")
 public class ResidentialLandFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,10 +19,11 @@ public class ResidentialLandFile {
 
     private String name;
 
-    private String filePath; // Changed from 'path' to 'filePath'
+    private String filePath;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "residential_land_id")
+    @ToString.Exclude
     private ResidentialLand residentialLand;
 
 

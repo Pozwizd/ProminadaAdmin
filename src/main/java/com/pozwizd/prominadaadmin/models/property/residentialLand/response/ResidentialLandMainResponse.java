@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-
 @Data
 public class ResidentialLandMainResponse implements Serializable {
     Long id;
@@ -21,14 +20,16 @@ public class ResidentialLandMainResponse implements Serializable {
     Double FreePlotAreaAcres;
     Boolean landOwnership;
     DesignatedUseOfLand designatedUseOfLand;
-    int houseCount;
-    int floors;
-    int rooms;
-    int bedrooms;
-    double ceilingHeight;
-    double totalArea;
-    double livingArea;
-    double kitchenArea;
+
+    Integer houseCount;
+    Integer floors;
+    Integer rooms;
+    Integer bedrooms;
+    Double ceilingHeight;
+    Double totalArea;
+    Double livingArea;
+    Double kitchenArea;
+
     String wallMaterial;
     ConditionInterior conditionInterior;
     ConditionBuilding conditionBuilding;

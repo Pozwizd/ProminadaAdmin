@@ -1,10 +1,16 @@
 package com.pozwizd.prominadaadmin.entity.property;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "housing_state")
 public class HousingState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

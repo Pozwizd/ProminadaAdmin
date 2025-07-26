@@ -30,11 +30,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OperationException.class)
     public ResponseEntity<ProblemDetail> handleOperationException(OperationException ex) {
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.INTERNAL_SERVER_ERROR,
+                ex.getStatus(),
                 ex.getMessage()
         );
-        return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(problemDetail, ex.getStatus());
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {

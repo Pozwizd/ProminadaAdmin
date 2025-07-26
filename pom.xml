@@ -127,7 +127,7 @@
         <dependency>
             <groupId>com.github.darrachequesne</groupId>
             <artifactId>spring-data-jpa-datatables</artifactId>
-            <version>7.0.1</version>
+            <version>7.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -153,17 +153,17 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version> <!-- Используем переменную для версии Lombok -->
+                            <version>${lombok.version}</version>
                         </path>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version> <!-- Используем переменную для версии MapStruct -->
+                            <version>${mapstruct.version}</version>
                         </path>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>0.2.0</version> <!-- Версия из зависимостей -->
+                            <version>0.2.0</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

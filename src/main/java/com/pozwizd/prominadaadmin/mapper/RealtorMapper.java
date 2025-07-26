@@ -4,10 +4,8 @@ import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
 import com.pozwizd.prominadaadmin.service.serviceImp.FileServiceImp;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {FileServiceImp.class, DocumentFeedbackMapper.class},
@@ -22,4 +20,13 @@ public interface RealtorMapper {
 
     @Mapping(target = "documentFeedbackResponses", source = "documentFeedbacks")
     RealtorResponse toRealtorResponse(Realtor realtor);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "pathAvatar", source = "pathAvatar", qualifiedByName = "uploadFileIfPresent",
+            conditionExpression = "java(realtorRequest.getPathAvatar() != null " +
+                    "&& !realtorRequest.getPathAvatar().isEmpty()" +
+                    "&& realtorRequest.getPathAvatar().getSize() > 0)")
+    @Mapping(target = "phoneNumbers", source = "phoneNumbers")
+    @Mapping(target = "documentFeedbacks", source = "documentFeedbackRequests")
+    void partialUpdate(RealtorRequest realtorRequest, @MappingTarget Realtor realtor);
 }

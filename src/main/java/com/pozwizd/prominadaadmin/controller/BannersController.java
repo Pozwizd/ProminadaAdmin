@@ -1,7 +1,6 @@
 package com.pozwizd.prominadaadmin.controller;
 
 import com.pozwizd.prominadaadmin.models.banner.BannerRequest;
-import com.pozwizd.prominadaadmin.models.branch.BranchRequest;
 import com.pozwizd.prominadaadmin.service.BannerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

@@ -1,10 +1,16 @@
 package com.pozwizd.prominadaadmin.entity.property.commercial;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "commercial_properties_gallery_image")
 public class CommercialPropertiesGalleryImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,8 +21,9 @@ public class CommercialPropertiesGalleryImage {
 
     private String pathImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commercial_properties_id")
+    @ToString.Exclude
     private CommercialProperties commercialProperties;
 
 }

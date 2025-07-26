@@ -1,12 +1,10 @@
 package com.pozwizd.prominadaadmin.models.property.residentialLand.response;
 
-import com.pozwizd.prominadaadmin.entity.SourceInformation;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandMain;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandMain;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDate;
 
 /**
  * ResidentialLandMainTableResponse for {@link ResidentialLandMain}

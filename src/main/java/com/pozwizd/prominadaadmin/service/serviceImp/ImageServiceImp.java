@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.service.serviceImp;
 
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandGalleryImage;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandGalleryImage;
 import com.pozwizd.prominadaadmin.repository.primary.ResidentialLandGalleryImageRepository;
 import com.pozwizd.prominadaadmin.service.ImageService;
 
@@ -106,7 +106,6 @@ public class ImageServiceImp implements ImageService {
 
             ResidentialLandGalleryImage galleryImage = new ResidentialLandGalleryImage();
             galleryImage.setPathImage(filePath); // Changed to setPathImage
-            galleryImage.setResidentialLand(residentialLand);
             residentialLandGalleryImageRepository.save(galleryImage);
         } catch (Exception e) {
             log.error("Failed to store image {}: {}", file.getOriginalFilename(), e.getMessage());

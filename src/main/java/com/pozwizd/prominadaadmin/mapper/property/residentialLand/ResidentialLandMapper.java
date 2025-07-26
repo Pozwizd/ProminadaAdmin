@@ -1,27 +1,24 @@
-package com.pozwizd.prominadaadmin.mapper;
+package com.pozwizd.prominadaadmin.mapper.property.residentialLand;
 
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.request.ResidentialLandRequest;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.response.ResidentialLandResponse;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.response.ResidentialLandTableResponse;
 import com.pozwizd.prominadaadmin.service.forMapper.EntityLookupService;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 
+import java.util.Collections;
 import java.util.List;
 
 
-@Mapper(componentModel = "spring",
-        uses = {EntityLookupService.class},
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {EntityLookupService.class,
+                ResidentialLandMainMapper.class,
+                ResidentialLandGalleryImageMapper.class},
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ResidentialLandMapper {
 
-
-    @Mapping(source = "id", target = "id")
-    @Mapping(source = "houseNumber", target = "houseNumber")
     @Mapping(source = "street.name", target = "street")
     @Mapping(source = "region.name", target = "regDistrictName", defaultExpression = "java(null)")
     @Mapping(source = "district.name", target = "districtName", defaultExpression = "java(null)")
@@ -42,28 +39,45 @@ public interface ResidentialLandMapper {
 
     default List<ResidentialLandTableResponse> toResidentialLandTableResponses(List<ResidentialLand> residentialLands) {
         if (residentialLands == null) {
-            return java.util.Collections.emptyList();
+            return Collections.emptyList();
         }
         return residentialLands.stream()
                 .map(this::toResidentialLandTableResponse)
                 .toList();
     }
 
-
-    ResidentialLandResponse toResidentialLandResponse(ResidentialLand residentialLand);
-
-
-
     default Page<ResidentialLandTableResponse> toResidentialLandTableResponses(Page<ResidentialLand> residentialLands){
         return residentialLands.map(this::toResidentialLandTableResponse);
-    };
+    }
 
 
-    @Mapping(target = "street", source = "streetId", qualifiedByName = "findStreetById")
-    @Mapping(target = "district", source = "districtId", qualifiedByName = "findDistrictById")
-    @Mapping(target = "city", source = "cityId", qualifiedByName = "findCityById")
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "region.id", target = "regionId")
+    @Mapping(source = "city.id", target = "cityId")
+    @Mapping(source = "district.id", target = "districtId")
+    @Mapping(source = "street.id", target = "streetId")
+    @Mapping(source = "house.id", target = "houseId")
+    @Mapping(source = "topozone.id", target = "topozoneId")
+    @Mapping(source = "residentialLandMain", target = "residentialLandMain", qualifiedByName = "toResidentialLandMainResponse")
+    @Mapping(source = "realtor.id", target = "realtorId")
+    ResidentialLandResponse toResidentialLandResponse(ResidentialLand residentialLand);
+
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "region", source = "regionId", qualifiedByName = "findRegionById")
+    @Mapping(target = "city", source = "cityId", qualifiedByName = "findCityById")
+    @Mapping(target = "district", source = "districtId", qualifiedByName = "findDistrictById")
+    @Mapping(target = "street", source = "streetId", qualifiedByName = "findStreetById")
+    @Mapping(target = "house", source = "houseId", qualifiedByName = "findHouseById")
     @Mapping(target = "topozone", source = "topozoneId", qualifiedByName = "findTopozoneById")
     void updateResidentialLandFromRequest(ResidentialLandRequest request,
                                           @MappingTarget ResidentialLand residentialLand);
+
+
+    @Mapping(target = "region", source = "regionId", qualifiedByName = "findRegionById")
+    @Mapping(target = "city", source = "cityId", qualifiedByName = "findCityById")
+    @Mapping(target = "district", source = "districtId", qualifiedByName = "findDistrictById")
+    @Mapping(target = "street", source = "streetId", qualifiedByName = "findStreetById")
+    @Mapping(target = "house", source = "houseId", qualifiedByName = "findHouseById")
+    @Mapping(target = "topozone", source = "topozoneId", qualifiedByName = "findTopozoneById")
+    ResidentialLand toResidentialLand(ResidentialLandRequest residentialLandRequest);
 }

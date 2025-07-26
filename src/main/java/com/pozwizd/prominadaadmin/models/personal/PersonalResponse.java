@@ -4,6 +4,7 @@ import com.pozwizd.prominadaadmin.entity.Personal;
 import com.pozwizd.prominadaadmin.models.documentFeedback.DocumentFeedbackResponse;
 import com.pozwizd.prominadaadmin.models.feedback.FeedbackResponse;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * PersonalTableResponse for {@link Personal}
  */
 @Data
+@ToString
 public class PersonalResponse {
     private Long id;
     private String surname;

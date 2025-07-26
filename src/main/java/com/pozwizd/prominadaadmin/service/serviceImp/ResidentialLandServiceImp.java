@@ -1,10 +1,11 @@
 package com.pozwizd.prominadaadmin.service.serviceImp;
 
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandFile;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.exception.OperationException;
 import com.pozwizd.prominadaadmin.filter.ResidentialLandFilterRequest;
-import com.pozwizd.prominadaadmin.mapper.ResidentialLandMapper;
+import com.pozwizd.prominadaadmin.mapper.property.residentialLand.ResidentialLandMapper;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.request.ResidentialLandRequest;
+import com.pozwizd.prominadaadmin.models.property.residentialLand.response.ResidentialLandResponse;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.response.ResidentialLandTableResponse;
 import com.pozwizd.prominadaadmin.repository.primary.DataTablesRepository.ResidentialLandRepositoryDT;
 import com.pozwizd.prominadaadmin.repository.primary.ResidentialLandFileRepository;
@@ -13,15 +14,16 @@ import com.pozwizd.prominadaadmin.service.FileService;
 import com.pozwizd.prominadaadmin.service.ImageService;
 import com.pozwizd.prominadaadmin.service.ResidentialLandService;
 import com.pozwizd.prominadaadmin.specification.ResidentialLandSpecification;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +47,16 @@ public class ResidentialLandServiceImp implements ResidentialLandService {
     @Override
     public Optional<ResidentialLand> findById(Long id) {
         return residentialLandRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public ResidentialLandResponse readById(Long id) {
+        ResidentialLand residentialLand = residentialLandRepository.findByIdWithDetails(id)
+                .orElseThrow(() -> new OperationException("получении участка",
+                "Участок с ID " + id + " не найден", HttpStatus.NOT_FOUND));
+        log.info("Участок с ID {} успешно получен", id);
+        return residentialLandMapper.toResidentialLandResponse(residentialLand);
     }
 
     @Override
@@ -94,46 +106,32 @@ public class ResidentialLandServiceImp implements ResidentialLandService {
 
 
     @Override
-    public void updateResidentialLand(ResidentialLandRequest residentialLandRequest) {
-        ResidentialLand residentialLand = residentialLandRepository.findById(residentialLandRequest.getId())
-                .orElseThrow(() -> {
-                    log.error("ResidentialLand not found with id {}", residentialLandRequest.getId());
-                    return new RuntimeException("ResidentialLand not found with id " + residentialLandRequest.getId());
-                });
+    @Transactional
+    public ResidentialLandResponse updateResidentialLand(ResidentialLandRequest residentialLandRequest) {
+        ResidentialLand residentialLand = residentialLandRepository.findByIdWithDetails(
+                residentialLandRequest.getId()
+        ).orElseThrow(() -> new OperationException("получении участка",
+                "Участок с ID " + residentialLandRequest.getId() + " не найден", HttpStatus.NOT_FOUND));
 
         residentialLandMapper.updateResidentialLandFromRequest(residentialLandRequest, residentialLand);
+        log.info("Участок с ID {} успешно обновлен", residentialLandRequest.getId());
+        return residentialLandMapper.toResidentialLandResponse(residentialLand);
 
-        if (residentialLandRequest.getResidentialLandGalleryImages() != null && !residentialLandRequest.getResidentialLandGalleryImages().isEmpty()) {
-            residentialLandRequest.getResidentialLandGalleryImages().forEach(imageRequest -> {
-                if (imageRequest.getFile() != null) {
-                    imageService.saveResidentialLandGalleryImage(imageRequest.getFile(), residentialLand);
-                }
-            });
-        }
 
-        if (residentialLandRequest.getResidentialLandFiles() != null && !residentialLandRequest.getResidentialLandFiles().isEmpty()) {
-            residentialLandRequest.getResidentialLandFiles().forEach(fileRequest -> {
-                if (fileRequest.getFile() != null) {
-                    fileService.saveResidentialLandFile(fileRequest.getFile(), residentialLand);
-                    try {
-                        String filePath = fileService.uploadFile(fileRequest.getFile());
-                        ResidentialLandFile residentialLandFile = new ResidentialLandFile();
-                        residentialLandFile.setFilePath(filePath);
-                        residentialLandFile.setResidentialLand(residentialLand);
-                        residentialLandFileRepository.save(residentialLandFile);
-                    } catch (IOException e) {
-                        log.error("Failed to store file {}: {}", fileRequest.getFile().getOriginalFilename(), e.getMessage());
-                        throw new RuntimeException("Failed to store file " + fileRequest.getFile().getOriginalFilename(), e);
-                    }
-                }
-            });
-        }
-
-        residentialLandRepository.save(residentialLand);
     }
 
     @Override
-    public void saveFromRequest(ResidentialLandRequest residentialLandRequest) {
+    public ResidentialLandResponse saveFromRequest(ResidentialLandRequest residentialLandRequest) {
+        try {
+            ResidentialLand residentialLand =
+                    residentialLandRepository.save(
+                            residentialLandMapper.toResidentialLand(residentialLandRequest));
+            log.info("Участок с ID {} успешно создан", residentialLandRequest.getId());
+            return residentialLandMapper.toResidentialLandResponse(residentialLand);
+        } catch (Exception e) {
+            log.error("Ошибка при создании участка", e);
+            throw new RuntimeException("Ошибка при создании участка", e);
+        }
 
     }
 }

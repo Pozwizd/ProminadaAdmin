@@ -1,6 +1,6 @@
 package com.pozwizd.prominadaadmin.service;
 
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

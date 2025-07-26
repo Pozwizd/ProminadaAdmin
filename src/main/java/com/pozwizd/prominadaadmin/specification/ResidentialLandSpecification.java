@@ -2,8 +2,8 @@ package com.pozwizd.prominadaadmin.specification;
 
 import com.pozwizd.prominadaadmin.entity.location.District;
 import com.pozwizd.prominadaadmin.entity.location.Topozone;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLandMain;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
+import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandMain;
 import com.pozwizd.prominadaadmin.filter.ResidentialLandFilterRequest;
 import org.springframework.data.jpa.domain.Specification;
 

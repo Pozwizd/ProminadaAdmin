@@ -1,10 +1,5 @@
 package com.pozwizd.prominadaadmin.entity;
 
-import com.pozwizd.prominadaadmin.entity.customer.Customer;
-import com.pozwizd.prominadaadmin.entity.property.ResidentialLand.ResidentialLand;
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
-import com.pozwizd.prominadaadmin.entity.property.investorProperty.InvestorProperty;
-import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
