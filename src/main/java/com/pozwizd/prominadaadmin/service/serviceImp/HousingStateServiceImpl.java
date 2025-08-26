@@ -6,6 +6,8 @@ import com.pozwizd.prominadaadmin.service.HousingStateService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class HousingStateServiceImpl implements HousingStateService {
@@ -40,5 +42,10 @@ public class HousingStateServiceImpl implements HousingStateService {
             throw new IllegalArgumentException("Housing state not found with id: " + id);
         }
         housingStateRepository.deleteById(id);
+    }
+
+    @Override
+    public List<HousingState> findAll() {
+        return housingStateRepository.findAll();
     }
 }

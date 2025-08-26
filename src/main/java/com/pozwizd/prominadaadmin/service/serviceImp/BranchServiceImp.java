@@ -11,6 +11,7 @@ import com.pozwizd.prominadaadmin.specification.BranchSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,13 @@ public class BranchServiceImp implements BranchService {
     private final BranchRepository branchRepository;
     private final BranchMapper branchMapper;
     private final FileService fileService;
+
+
+    @Named("getBranchByCode")
+    @Override
+    public Branch getByCode(String code) {
+        return branchRepository.findByCode(code).orElse(null);
+    }
 
     /**
      * Получает список всех филиалов.

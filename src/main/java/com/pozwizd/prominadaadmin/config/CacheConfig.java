@@ -12,9 +12,9 @@ public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        CaffeineCacheManager cacheManager = new CaffeineCacheManager("regions", "allRegions");
-        cacheManager.setCacheSpecification("maximumSize=1000,expireAfterWrite=30m");
-        cacheManager.setAsyncCacheMode(true);
-        return cacheManager;
+        CaffeineCacheManager cm = new CaffeineCacheManager();
+        cm.setCacheSpecification("maximumSize=10000,expireAfterWrite=30m");
+        cm.setAsyncCacheMode(true);
+        return cm;
     }
 }

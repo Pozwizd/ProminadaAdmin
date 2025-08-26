@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface PageService {
 
+    com.pozwizd.prominadaadmin.entity.Page createPage(com.pozwizd.prominadaadmin.entity.Page page);
+
     PageResponse createPage(@Valid PageResponse pageResponse);
 
     PageResponse getPageById(Long id);

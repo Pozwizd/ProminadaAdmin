@@ -1,11 +1,10 @@
 package com.pozwizd.prominadaadmin.specification;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
-import com.pozwizd.prominadaadmin.filter.RealtorFilter;
+import com.pozwizd.prominadaadmin.models.filter.RealtorFilter;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 

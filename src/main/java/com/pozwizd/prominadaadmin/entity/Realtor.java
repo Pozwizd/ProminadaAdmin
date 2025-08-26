@@ -22,7 +22,7 @@ public class Realtor {
     @Column(nullable = false)
     private Long id;
 
-    private Long code;
+    private String code;
 
     private String pathAvatar;
 
@@ -54,22 +54,6 @@ public class Realtor {
             inverseJoinColumns = @JoinColumn(name = "feedback_id")
     )
     private List<Feedback> feedBacks = new ArrayList<>();
-
-
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "realtor")
-//    private List<Customer> customer;
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
-//    private List<InvestorProperty> investorProperties;
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
-//    private List<SecondaryProperty> secondaryProperties;
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
-//    private List<ResidentialLand> residentialLands;
-
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "realtor")
-//    private List<CommercialProperties> commercialProperties;
 
     @Override
     public final boolean equals(Object o) {

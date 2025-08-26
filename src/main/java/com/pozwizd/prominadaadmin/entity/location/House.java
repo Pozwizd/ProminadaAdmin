@@ -14,6 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @Builder
 @Entity
+@Table(name = "house")
 public class House {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

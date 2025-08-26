@@ -5,7 +5,6 @@ import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
 import com.pozwizd.prominadaadmin.service.serviceImp.FileServiceImp;
 import org.mapstruct.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
         uses = {FileServiceImp.class, DocumentFeedbackMapper.class},

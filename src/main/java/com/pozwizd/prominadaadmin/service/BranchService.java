@@ -4,6 +4,7 @@ import com.pozwizd.prominadaadmin.entity.Branch;
 import com.pozwizd.prominadaadmin.models.branch.BranchRequest;
 import com.pozwizd.prominadaadmin.models.branch.BranchResponse;
 import jakarta.validation.Valid;
+import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,6 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BranchService {
+
+    @Named("getBranchByCode")
+    Branch getByCode(String code);
+
     List<Branch> findAll();
 
     List<BranchResponse> findAllResponse();

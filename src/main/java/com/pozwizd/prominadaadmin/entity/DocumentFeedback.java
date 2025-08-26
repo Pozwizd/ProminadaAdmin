@@ -23,10 +23,6 @@ public class DocumentFeedback {
     private String name;
     private String pathImage;
 
-
-//    @ManyToMany(mappedBy = "documentFeedbacks", fetch = FetchType.LAZY)
-//    private List<Personal> personals = new ArrayList<>();
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

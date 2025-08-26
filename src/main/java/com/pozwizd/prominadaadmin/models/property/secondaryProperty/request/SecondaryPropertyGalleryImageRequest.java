@@ -3,6 +3,7 @@ package com.pozwizd.prominadaadmin.models.property.secondaryProperty.request;
 import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryPropertyGalleryImage;
 import lombok.Data;
 import lombok.Value;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 
@@ -13,5 +14,5 @@ import java.io.Serializable;
 public class SecondaryPropertyGalleryImageRequest implements Serializable {
     Long id;
     String name;
-    String pathImage;
+    MultipartFile pathImage;
 }

@@ -1,16 +1,20 @@
 package com.pozwizd.prominadaadmin.service;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
-import com.pozwizd.prominadaadmin.filter.RealtorFilter;
+import com.pozwizd.prominadaadmin.models.filter.RealtorFilter;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
+import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public interface RealtorService {
+
+    @Named("getRealtorByCode")
+    Realtor getByCode(String code);
 
     Page<RealtorResponse> getPageableRealtors(RealtorFilter filter);
 
@@ -27,4 +31,6 @@ public interface RealtorService {
     Boolean deleteById(Long id);
 
     RealtorResponse readResponseById(Long id);
+
+    List<Realtor> findAll();
 }

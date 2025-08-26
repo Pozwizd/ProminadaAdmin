@@ -1,7 +1,7 @@
 package com.pozwizd.prominadaadmin.models.property.commercialProperty.response;
 
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialPropertiesMain;
+import com.pozwizd.prominadaadmin.entity.property.commercialProperty.CommercialPropertiesMain;
 import com.pozwizd.prominadaadmin.models.property.HousingStateResponse;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import lombok.Data;
@@ -23,7 +23,6 @@ public class CommercialPropertiesMainResponse implements Serializable {
     String personalName;
     Double price;
     String landmark;
-    HousingStateResponse housingState;
     LocalDate completionDate;
     LocalDate commissioningDate;
     Integer floor;

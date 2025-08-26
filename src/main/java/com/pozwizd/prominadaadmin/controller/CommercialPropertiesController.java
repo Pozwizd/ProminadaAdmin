@@ -1,7 +1,10 @@
 package com.pozwizd.prominadaadmin.controller;
 
+import com.pozwizd.prominadaadmin.models.filter.PropertiesFilter;
 import com.pozwizd.prominadaadmin.models.property.commercialProperty.request.CommercialPropertiesRequest;
 import com.pozwizd.prominadaadmin.models.property.commercialProperty.response.CommercialPropertiesResponse;
+import com.pozwizd.prominadaadmin.models.property.commercialProperty.response.CommercialPropertiesResponseForTable;
+import com.pozwizd.prominadaadmin.models.property.investor.response.InvestorPropertyResponseForTable;
 import com.pozwizd.prominadaadmin.service.CommercialPropertiesService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -45,11 +48,19 @@ public class CommercialPropertiesController {
                 ResponseEntity.ok(commercialPropertiesService.deleteById(id)));
     }
 
-    @GetMapping("/hetAll")
+    @GetMapping("/getAll")
     public CompletableFuture<ResponseEntity<Page<CommercialPropertiesResponse>>> getPages(@RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "10") Integer size){
         return CompletableFuture.supplyAsync(() ->
                 ResponseEntity.ok(commercialPropertiesService.getPageCommercialProperties(page, size)));
     }
+
+    @PostMapping("/getByFiltration")
+    public CompletableFuture<ResponseEntity<Page<CommercialPropertiesResponseForTable>>> getCommercialPropertiesByFiltration(
+            @RequestBody PropertiesFilter filter) {
+        return CompletableFuture.supplyAsync(() ->
+                ResponseEntity.ok(commercialPropertiesService.getCommercialPropertiesByPagination(filter)));
+    }
+
 
 }

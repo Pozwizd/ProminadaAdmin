@@ -14,7 +14,6 @@ import java.util.List;
 public interface ImageBannerMapper {
 
     // to Entity
-
     default ImageBanner toEntity(ImageBannerRequest imageBannerRequest, @Context FileService fileService) {
         if (imageBannerRequest == null) {
             return null;

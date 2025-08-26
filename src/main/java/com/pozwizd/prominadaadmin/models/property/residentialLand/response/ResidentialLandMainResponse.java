@@ -2,11 +2,13 @@ package com.pozwizd.prominadaadmin.models.property.residentialLand.response;
 
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 @Data
+@Builder
 public class ResidentialLandMainResponse implements Serializable {
     Long id;
     PublicationStatus publicationStatus;
@@ -17,7 +19,7 @@ public class ResidentialLandMainResponse implements Serializable {
     Double price;
     TypeProperty typeProperty;
     Double landAreaAcres;
-    Double FreePlotAreaAcres;
+    Double freePlotAreaAcres;
     Boolean landOwnership;
     DesignatedUseOfLand designatedUseOfLand;
 
@@ -56,7 +58,7 @@ public class ResidentialLandMainResponse implements Serializable {
     Boolean isOpenObject;
     Boolean fromMediator;
     String description;
-    String AdvertisingHeadline;
-    String AdvertisingText;
+    String advertisingHeadline;
+    String advertisingText;
     Boolean isAdvertising;
 }

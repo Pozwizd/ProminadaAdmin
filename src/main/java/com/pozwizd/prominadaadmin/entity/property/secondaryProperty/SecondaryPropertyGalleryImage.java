@@ -1,11 +1,17 @@
 package com.pozwizd.prominadaadmin.entity.property.secondaryProperty;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
-@Data
+@Builder
+@AllArgsConstructor
+@Table(name = "secondary_property_gallery_image")
 public class SecondaryPropertyGalleryImage {
 
     @Id
@@ -17,7 +23,8 @@ public class SecondaryPropertyGalleryImage {
 
     private String pathImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "secondary_property_id")
+    @ToString.Exclude
     private SecondaryProperty secondaryProperty;
 }

@@ -16,6 +16,7 @@ import java.util.Set;
 @Entity
 @Builder
 @AllArgsConstructor
+@Table(name = "region")
 public class Region {
 
     @Id

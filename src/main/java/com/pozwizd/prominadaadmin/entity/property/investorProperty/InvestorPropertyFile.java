@@ -1,12 +1,16 @@
 package com.pozwizd.prominadaadmin.entity.property.investorProperty;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "investor_property_file")
 public class InvestorPropertyFile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,10 +19,11 @@ public class InvestorPropertyFile {
 
     private String name;
 
-    private String pathImage;
+    private String path;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "investor_property_id")
+    @ToString.Exclude
     private InvestorProperty investorProperty;
 
 }

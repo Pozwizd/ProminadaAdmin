@@ -1,12 +1,16 @@
 package com.pozwizd.prominadaadmin.entity.property.investorProperty;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "investor_property_gallery_image")
 public class InvestorPropertyGalleryImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +21,9 @@ public class InvestorPropertyGalleryImage {
 
     private String pathImage;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "investor_property_id")
+    @ToString.Exclude
     private InvestorProperty investorProperty;
 
 }

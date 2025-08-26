@@ -1,55 +1,77 @@
 package com.pozwizd.prominadaadmin.models.property.commercialProperty.request;
 
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialPropertiesMain;
-import com.pozwizd.prominadaadmin.models.property.HousingStateResponse;
+import com.pozwizd.prominadaadmin.entity.property.commercialProperty.CommercialPropertiesMain;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
+import com.pozwizd.prominadaadmin.validator.branch.NotFoundBranch;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * Response for {@link CommercialPropertiesMain}
+ * Request for {@link CommercialPropertiesMain}
  */
 @Data
+@NotFoundBranch(
+        message = "Филиал по branchCode не найден",
+        branchCodeField = "branchCode",
+        nullable = false
+)
 public class CommercialPropertiesMainRequest implements Serializable {
+
+    // Identifiers
     Long id;
     Long housingStateId;
-    PublicationStatus publicationStatus;
+
+    // Strings
     String objectCode;
-    Integer branchCode;
-    Integer employeeCode;
     String personalName;
-    Double price;
     String landmark;
-    HousingStateResponse housingState;
-    LocalDate completionDate;
-    LocalDate commissioningDate;
-    Integer floor;
-    Integer totalFloor;
-    Integer roomCount;
-    TypeCommercialBuilding typeCommBuilding;
-    Boolean isVnp;
-    LocalDate vnpDate;
-    SourceInformation sourceInformation;
-    Double area;
-    Double livingArea;
     String roomSizes;
     String ceilingHeight;
     String siteArea;
-    Double livingSiteArea;
-    DesignatedUseOfLand designatedUseOfLand;
-    Boolean landOwnership;
-    ConditionInterior conditionInterior;
-    ConditionBuilding conditionBuilding;
-    Integer bathroom;
     String viewFromWindows;
+    String description;
+    String advertisingHeadline;
+    String advertisingText;
+
+    // Integers (codes and counts)
+    String branchCode;
+    String employeeCode;
+    Integer floor;
+    Integer totalFloor;
+    Integer roomCount;
+    Integer bathroom;
+
+    // Numerics
+    Double price;
+    Double area;
+    Double livingArea;
+    Double livingSiteArea;
+
+    // Booleans
+    Boolean isVnp;
+    Boolean landOwnership;
     Boolean hasFurnishings;
     Boolean hasCarPark;
     Boolean hasHousingStock;
     Boolean hasFacade;
     Boolean hasRailwayTracks;
+    Boolean hasTrade;
+    Boolean hasExclusive;
+    Boolean urgent;
+    Boolean isFree;
+    Boolean isOpenObject;
+    Boolean fromMediator;
+    Boolean isAdvertising;
+
+    // Enums
+    PublicationStatus publicationStatus;
+    TypeCommercialBuilding typeCommercialBuilding;
+    DesignatedUseOfLand designatedUseOfLand;
+    ConditionInterior conditionInterior;
+    ConditionBuilding conditionBuilding;
     Gas gas;
     WaterSupply waterSupply;
     Sewage sewage;
@@ -62,15 +84,15 @@ public class CommercialPropertiesMainRequest implements Serializable {
     TypeWindows typeWindows;
     CarpentryCondition carpentryCondition;
     EntranceDoor entranceDoor;
+
+    // Dates
+    LocalDate completionDate;
+    LocalDate commissioningDate;
+    LocalDate vnpDate;
     LocalDate lastCommunication;
-    Boolean hasTrade;
-    Boolean hasExclusive;
-    Boolean urgent;
-    Boolean isFree;
-    Boolean isOpenObject;
-    Boolean fromMediator;
-    String description;
-    String advertisingHeadline;
-    String advertisingText;
-    Boolean isAdvertising;
+
+    // Complex types
+    SourceInformation sourceInformation;
+
+    // Enums
 }

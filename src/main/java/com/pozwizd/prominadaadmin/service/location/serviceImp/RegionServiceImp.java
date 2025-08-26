@@ -3,11 +3,9 @@ package com.pozwizd.prominadaadmin.service.location.serviceImp;
 import com.pozwizd.prominadaadmin.entity.location.Region;
 import com.pozwizd.prominadaadmin.repository.secondary.RegionRepository;
 import com.pozwizd.prominadaadmin.service.location.RegionService;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@CacheConfig(cacheNames = "regions") // дефолтный кэш для класса
 public class RegionServiceImp implements RegionService {
 
     private final RegionRepository regionRepository;
@@ -27,7 +26,7 @@ public class RegionServiceImp implements RegionService {
     }
 
     @Override
-    @Cacheable(value = "regions", key = "#name")
+    @Cacheable(key = "#name") // берёт cacheNames = "regions" из @CacheConfig
     public CompletableFuture<Region> getOrCreate(String name) {
         return CompletableFuture.supplyAsync(() -> {
             log.debug("Attempting to get or create region with name: {}", name);
@@ -46,12 +45,10 @@ public class RegionServiceImp implements RegionService {
                 throw e;
             }
         });
-
-
     }
 
     @Override
-    @Cacheable(value = "allRegions")
+    @Cacheable(cacheNames = "allRegions") // точечное переопределение кэша
     public CompletableFuture<List<Region>> getRegions() {
         return CompletableFuture.supplyAsync(() -> {
             log.debug("Fetching all regions");
@@ -63,9 +60,8 @@ public class RegionServiceImp implements RegionService {
 
     @Override
     public List<Region> getPageableRegions(String region) {
-        return regionRepository.findAll((root, query, criteriaBuilder)
-                -> criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + region.toLowerCase() + "%"));
+        return regionRepository.findAll((root, query, cb) ->
+                cb.like(cb.lower(root.get("name")), "%" + region.toLowerCase() + "%")
+        );
     }
-
-
 }

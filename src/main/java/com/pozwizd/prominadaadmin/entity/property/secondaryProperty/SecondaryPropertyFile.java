@@ -1,10 +1,16 @@
 package com.pozwizd.prominadaadmin.entity.property.secondaryProperty;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "secondary_property_file")
 public class SecondaryPropertyFile {
 
     @Id
@@ -16,8 +22,9 @@ public class SecondaryPropertyFile {
 
     private String path;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "secondary_property_id")
+    @ToString.Exclude
     private SecondaryProperty secondaryProperty;
 
 }

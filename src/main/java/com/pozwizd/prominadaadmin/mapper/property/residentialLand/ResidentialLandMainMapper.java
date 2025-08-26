@@ -3,16 +3,16 @@ package com.pozwizd.prominadaadmin.mapper.property.residentialLand;
 import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandMain;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.request.ResidentialLandMainRequest;
 import com.pozwizd.prominadaadmin.models.property.residentialLand.response.ResidentialLandMainResponse;
+import com.pozwizd.prominadaadmin.service.forMapper.EntityLookupService;
 import org.mapstruct.*;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {EntityLookupService.class},
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ResidentialLandMainMapper {
 
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    ResidentialLandMain partialUpdate(ResidentialLandMainResponse residentialLandMainResponse,
-                                      @MappingTarget ResidentialLandMain residentialLandMain);
-
+    @Named("toResidentialLandMainEntity")
     @Mapping(target = "residentialLand", ignore = true)
     ResidentialLandMain toEntity(ResidentialLandMainRequest request);
 
@@ -20,10 +20,11 @@ public interface ResidentialLandMainMapper {
     ResidentialLandMainResponse toResponse(ResidentialLandMain entity);
 
 
+    @Named("partialUpdateResidentialLandMain")
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "residentialLand", ignore = true)
     @Mapping(target = "id", ignore = true)
-    ResidentialLandMain partialUpdate(
+    void partialUpdate(
             ResidentialLandMainRequest request,
             @MappingTarget ResidentialLandMain entity
     );

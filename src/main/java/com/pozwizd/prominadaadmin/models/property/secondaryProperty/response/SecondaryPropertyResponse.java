@@ -13,13 +13,15 @@ import java.util.List;
  */
 @Data
 public class SecondaryPropertyResponse implements Serializable {
+
     Long id;
-    String street;
+    Long regionId;
     Long cityId;
-    Long regDistrictId;
     Long districtId;
+    Long streetId;
+    Long houseId;
     Long topozoneId;
-    String houseNumber;
+
     String houseSection;
     String flatNumber;
     String ownerFullName;

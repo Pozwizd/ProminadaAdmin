@@ -1,6 +1,6 @@
 package com.pozwizd.prominadaadmin.models.property.commercialProperty.response;
 
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialPropertiesGalleryImage;
+import com.pozwizd.prominadaadmin.entity.property.commercialProperty.CommercialPropertiesGalleryImage;
 import lombok.Data;
 
 import java.io.Serializable;

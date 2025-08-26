@@ -1,15 +1,23 @@
 package com.pozwizd.prominadaadmin.entity.property.secondaryProperty;
 
+import com.pozwizd.prominadaadmin.entity.Branch;
+import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
 import com.pozwizd.prominadaadmin.entity.property.HousingState;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
+@ToString
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
+@Table(name = "secondary_property_main")
 public class SecondaryPropertyMain {
 
     @Id
@@ -17,25 +25,34 @@ public class SecondaryPropertyMain {
     @Column(nullable = false)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "secondary_property_id")
+    @ToString.Exclude
     private SecondaryProperty secondaryProperty;
+
+    @ManyToOne
+    @JoinColumn(name = "realtor_id")
+    private Realtor realtor;
+
+    @ManyToOne
+    @JoinColumn(name = "branch_id")
+    private Branch branch;
+
+    @ManyToOne
+    @JoinColumn(name = "housing_state_id")
+    private HousingState housingState;
 
     private PublicationStatus publicationStatus;
 
     private String objectCode;
 
-    private Integer branchCode;
+    private String branchCode;
 
-    private Integer employeeCode;
+    private String employeeCode;
 
     private String personalName;
 
     private String landmark;
-
-    @OneToOne
-    @JoinColumn(name = "housing_state_id")
-    private HousingState housingState;
 
     private int floor;
 
@@ -45,7 +62,6 @@ public class SecondaryPropertyMain {
 
     private Double price;
 
-    // Дата ввода в эксплуатацию
     private LocalDate commissioningDate;
 
     private TypePropertySecondary typeProperty;
@@ -112,15 +128,16 @@ public class SecondaryPropertyMain {
 
     private Boolean fromMediator;
 
-    // С обстановкой
     private Boolean withFurniture;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String description;
 
     private String AdvertisingHeadline;
 
     @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String AdvertisingText;
 
     private Boolean isAdvertising;

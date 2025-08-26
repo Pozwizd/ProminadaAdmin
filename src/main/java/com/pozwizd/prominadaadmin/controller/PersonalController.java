@@ -37,6 +37,34 @@ public class PersonalController {
     private final PersonalService personalService;
     private final PersonalMapper personalMapper;
 
+    @GetMapping("/getProfile")
+    public @ResponseBody ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            log.error("Попытка получить профиль без аутентификации");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Пользователь не аутентифицирован"));
+        }
+
+        try {
+            Optional<Personal> personalOpt = personalService.findByEmail(userDetails.getUsername());
+
+            if (personalOpt.isEmpty()) {
+                log.error("Пользователь с email {} не найден в базе", userDetails.getUsername());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("error", "Пользователь не найден"));
+            }
+
+            PersonalResponse response = personalMapper.toPersonalProfileResponse(personalOpt.get());
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            log.error("Ошибка при получении профиля пользователя", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Ошибка при получении профиля"));
+        }
+    }
+
+
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/create")
     public ResponseEntity<PersonalResponse> createPersonal(@Valid @ModelAttribute PersonalRequest personalRequest) {

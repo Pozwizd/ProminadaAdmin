@@ -1,6 +1,6 @@
 package com.pozwizd.prominadaadmin.repository.primary;
 
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
+import com.pozwizd.prominadaadmin.entity.property.commercialProperty.CommercialProperties;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;

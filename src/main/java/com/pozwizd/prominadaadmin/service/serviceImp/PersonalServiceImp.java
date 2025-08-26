@@ -155,21 +155,6 @@ public class PersonalServiceImp implements PersonalService {
         }
     }
 
-
-
-    /**
-     * Получает постраничный список пользователей с возможностью фильтрации.
-     *
-     * @param page        Номер страницы
-     * @param size        Размер страницы
-     * @param surname     Фамилия для фильтрации
-     * @param name        Имя для фильтрации
-     * @param lastName    Отчество для фильтрации
-     * @param phoneNumber Телефон для фильтрации
-     * @param email       Email для фильтрации
-     * @param role        Роль для фильтрации
-     * @return Страница с данными пользователей, соответствующих критериям фильтрации
-     */
     @Override
     public Page<PersonalTableResponse> getPageablePersonal(int page, Integer size,
                                                            String surname,
@@ -190,14 +175,7 @@ public class PersonalServiceImp implements PersonalService {
         }
     }
 
-    /**
-     * Сохраняет информацию о пользователе из PersonalRequest.
-     * Обрабатывает вложенные отзывы и файлы.
-     * Устанавливает двустороннюю связь с филиалами.
-     *
-     * @param personalRequest PersonalRequest с данными пользователя
-     * @return Сохраненный пользователь с обновленными данными
-     */
+
     @Transactional
     @Override
     public PersonalResponse saveFromRequest(PersonalRequest personalRequest) {

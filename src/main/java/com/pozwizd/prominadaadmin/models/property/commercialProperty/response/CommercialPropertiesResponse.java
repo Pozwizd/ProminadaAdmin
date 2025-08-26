@@ -1,6 +1,6 @@
 package com.pozwizd.prominadaadmin.models.property.commercialProperty.response;
 
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
+import com.pozwizd.prominadaadmin.entity.property.commercialProperty.CommercialProperties;
 import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
 import lombok.Data;
 

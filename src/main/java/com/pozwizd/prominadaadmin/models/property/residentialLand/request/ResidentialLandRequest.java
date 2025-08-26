@@ -2,6 +2,7 @@ package com.pozwizd.prominadaadmin.models.property.residentialLand.request;
 
 import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLand;
 import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,6 +18,11 @@ import java.util.List;
 public class ResidentialLandRequest implements Serializable {
     Long id;
 
+    @Valid
+    ResidentialLandMainRequest residentialLandMain;
+    List<ResidentialLandGalleryImageRequest> residentialLandGalleryImages;
+    List<ResidentialLandFileRequest> residentialLandFiles;
+
     Long regionId;
     Long cityId;
     Long streetId;
@@ -30,9 +36,6 @@ public class ResidentialLandRequest implements Serializable {
     String importantComment;
     String cadastralNumber;
     String langPurpose;
-    List<ResidentialLandFileRequest> residentialLandFiles;
     String adminComment;
-    ResidentialLandMainRequest residentialLandMain;
-    List<ResidentialLandGalleryImageRequest> residentialLandGalleryImages;
     LocalDate dateOfCreating;
 }

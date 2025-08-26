@@ -13,5 +13,5 @@ import java.io.Serializable;
 public class ResidentialLandFileRequest implements Serializable {
     Long id;
     String name;
-    MultipartFile file;
+    MultipartFile filePath;
 }

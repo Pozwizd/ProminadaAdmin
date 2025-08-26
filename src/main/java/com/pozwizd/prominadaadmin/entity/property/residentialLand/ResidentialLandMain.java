@@ -16,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Builder
 @AllArgsConstructor
+@Table(name = "residential_land_main")
 public class ResidentialLandMain {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -121,13 +122,21 @@ public class ResidentialLandMain {
     @Basic(fetch = FetchType.EAGER)
     private String description;
 
-    private String AdvertisingHeadline;
+    private String advertisingHeadline;
 
     @Lob
     @Basic(fetch = FetchType.EAGER)
-    private String AdvertisingText;
+    private String advertisingText;
 
     private Boolean isAdvertising;
+
+    public void setResidentialLand(ResidentialLand residentialLand) {
+        this.residentialLand = residentialLand;
+        if (residentialLand != null) {
+            residentialLand.setResidentialLandMain(this);
+        }
+    }
+
 
     @Override
     public final boolean equals(Object o) {

@@ -1,0 +1,86 @@
+SecondaryPropertyRequest for valid test
+```
+
+id:1
+houseId:15
+regionId:1
+cityId:1
+streetId:1
+districtId:1
+topozoneId:1
+houseSection:A
+flatNumber:12
+ownerFullName:Иванов Иван Иванович
+phoneNumber:+7-999-123-45-67
+acquisitionDate:2023-01-15
+ownershipDoc:OWNERSHIP_CERTIFICATE
+importantComment:Важная информация об объекте
+adminComment:Проверено администратором
+realtorId:5
+dateOfCreating:2024-01-01
+
+//secondaryPropertyMainRequest.id:1
+secondaryPropertyMainRequest.publicationStatus:PUBLICATED
+secondaryPropertyMainRequest.objectCode:RES-001
+secondaryPropertyMainRequest.branchCode:101
+secondaryPropertyMainRequest.employeeCode:2001
+secondaryPropertyMainRequest.personalName:Петров П.П.
+secondaryPropertyMainRequest.landmark:Рядом с парком
+secondaryPropertyMainRequest.housingStateId:1
+secondaryPropertyMainRequest.floor:3
+secondaryPropertyMainRequest.floors:10
+secondaryPropertyMainRequest.rooms:4
+secondaryPropertyMainRequest.price:5500000.0
+secondaryPropertyMainRequest.commissioningDate:2020-06-01
+secondaryPropertyMainRequest.typeProperty:INDIVIDUAL
+secondaryPropertyMainRequest.totalArea:150.5
+secondaryPropertyMainRequest.livingArea:80.0
+secondaryPropertyMainRequest.kitchenArea:15.0
+secondaryPropertyMainRequest.apartmentLayout:SEPARATE
+secondaryPropertyMainRequest.roomSizes:20/18/16/12
+secondaryPropertyMainRequest.ceilingHeight:2.7
+secondaryPropertyMainRequest.projectHouse:MONOLITH
+secondaryPropertyMainRequest.wallMaterial:BRICK
+secondaryPropertyMainRequest.conditionFlat:AFTER_RENOVATION
+secondaryPropertyMainRequest.kitchen:STANDARD
+secondaryPropertyMainRequest.bathroom:2
+secondaryPropertyMainRequest.balcony:LOGGIA
+secondaryPropertyMainRequest.viewFromWindows:Двор и парк
+secondaryPropertyMainRequest.cooker:GAS
+secondaryPropertyMainRequest.heating:AUTONOMOUS
+secondaryPropertyMainRequest.stairs:Concrete
+secondaryPropertyMainRequest.floorType:LAMINATE
+secondaryPropertyMainRequest.typeWindows:PVC
+secondaryPropertyMainRequest.carpentryCondition:NEW
+secondaryPropertyMainRequest.entranceDoor:ARMORED
+secondaryPropertyMainRequest.lastCommunication:2024-12-01
+secondaryPropertyMainRequest.isVnp:false
+secondaryPropertyMainRequest.vnpDate:
+secondaryPropertyMainRequest.sourceInformation:INTERNET
+secondaryPropertyMainRequest.hasTrade:true
+secondaryPropertyMainRequest.hasExclusive:false
+secondaryPropertyMainRequest.urgent:false
+secondaryPropertyMainRequest.isFree:false
+secondaryPropertyMainRequest.isOpenObject:true
+secondaryPropertyMainRequest.forOffice:false
+secondaryPropertyMainRequest.fromMediator:false
+secondaryPropertyMainRequest.withFurniture:true
+secondaryPropertyMainRequest.description:Прекрасная квартира в тихом районе
+secondaryPropertyMainRequest.AdvertisingHeadline:Квартира мечты в центре города!
+secondaryPropertyMainRequest.AdvertisingText:Продается уютная квартира с отличной планировкой
+secondaryPropertyMainRequest.isAdvertising:true
+
+//secondaryPropertyFileRequests[0].id:1
+//secondaryPropertyFileRequests[0].name:contract.pdf
+//secondaryPropertyFileRequests[0].filePath:
+#secondaryPropertyFileRequests[1].id:2
+#secondaryPropertyFileRequests[1].name:certificate.pdf
+#secondaryPropertyFileRequests[1].filePath:
+
+//secondaryPropertyGalleryImageRequests[0].id:1
+//secondaryPropertyGalleryImageRequests[0].name:main_photo.jpg
+//secondaryPropertyGalleryImageRequests[0].pathImage:
+#secondaryPropertyGalleryImageRequests[1].id:2
+#secondaryPropertyGalleryImageRequests[1].name:interior_photo.jpg
+#secondaryPropertyGalleryImageRequests[1].pathImage:
+```

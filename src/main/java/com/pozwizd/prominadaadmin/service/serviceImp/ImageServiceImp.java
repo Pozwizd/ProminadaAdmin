@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j // Added
+@Slf4j
 public class ImageServiceImp implements ImageService {
 
     private final ResidentialLandGalleryImageRepository residentialLandGalleryImageRepository;
@@ -105,7 +105,7 @@ public class ImageServiceImp implements ImageService {
             save(file, filePath);
 
             ResidentialLandGalleryImage galleryImage = new ResidentialLandGalleryImage();
-            galleryImage.setPathImage(filePath); // Changed to setPathImage
+            galleryImage.setPathImage(filePath);
             residentialLandGalleryImageRepository.save(galleryImage);
         } catch (Exception e) {
             log.error("Failed to store image {}: {}", file.getOriginalFilename(), e.getMessage());

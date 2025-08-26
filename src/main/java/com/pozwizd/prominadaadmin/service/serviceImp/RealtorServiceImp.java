@@ -2,7 +2,7 @@ package com.pozwizd.prominadaadmin.service.serviceImp;
 
 import com.pozwizd.prominadaadmin.entity.Realtor;
 import com.pozwizd.prominadaadmin.exception.OperationException;
-import com.pozwizd.prominadaadmin.filter.RealtorFilter;
+import com.pozwizd.prominadaadmin.models.filter.RealtorFilter;
 import com.pozwizd.prominadaadmin.mapper.RealtorMapper;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
@@ -12,6 +12,7 @@ import com.pozwizd.prominadaadmin.specification.RealtorSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
+import org.mapstruct.Named;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.concurrent.CompletionException;
 
 @Service
@@ -28,6 +30,12 @@ public class RealtorServiceImp implements RealtorService {
 
     private final RealtorRepository realtorRepository;
     private final RealtorMapper realtorMapper;
+
+    @Named("getRealtorByCode")
+    @Override
+    public Realtor getByCode(String code) {
+        return realtorRepository.findByCode(code).orElse(null);
+    }
 
     @Override
     public Page<RealtorResponse> getPageableRealtors(RealtorFilter filter) {
@@ -44,12 +52,6 @@ public class RealtorServiceImp implements RealtorService {
         }
     }
 
-    /**
-     * Создает нового риелтора из сущности.
-     *
-     * @param realtor Данные риелтора для создания
-     * @return Сохраненный риелтор
-     */
     @Transactional
     @Override
     public Realtor create(Realtor realtor) {
@@ -78,13 +80,6 @@ public class RealtorServiceImp implements RealtorService {
             throw new CompletionException(new OperationException("создании риелтора из запроса", e.getMessage()));
         }
     }
-
-    /**
-     * Читает риелтора по ID.
-     *
-     * @param id ID риелтора
-     * @return Найденный риелтор
-     */
     @Override
     public Realtor readById(Long id) {
         try {
@@ -99,12 +94,6 @@ public class RealtorServiceImp implements RealtorService {
         }
     }
 
-    /**
-     * Читает ответ риелтора по ID.
-     *
-     * @param id ID риелтора
-     * @return RealtorResponse
-     */
     @Override
     public RealtorResponse readResponseById(Long id) {
         try {
@@ -119,12 +108,11 @@ public class RealtorServiceImp implements RealtorService {
         }
     }
 
-    /**
-     * Обновляет риелтора из сущности.
-     *
-     * @param realtor Данные риелтора для обновления
-     * @return Обновленный риелтор
-     */
+    @Override
+    public List<Realtor> findAll() {
+        return realtorRepository.findAll();
+    }
+
     @Transactional
     @Override
     public Realtor update(Realtor realtor) {
@@ -168,12 +156,6 @@ public class RealtorServiceImp implements RealtorService {
         }
     }
 
-    /**
-     * Удаляет риелтора по ID.
-     *
-     * @param id ID риелтора
-     * @return true если удалено успешно
-     */
     @Transactional
     @Override
     public Boolean deleteById(Long id) {
@@ -191,7 +173,4 @@ public class RealtorServiceImp implements RealtorService {
             throw new OperationException("удалении риелтора с ID " + id, e.getMessage());
         }
     }
-
-
-
 }

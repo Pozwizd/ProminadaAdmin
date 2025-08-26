@@ -25,14 +25,6 @@ public class Feedback {
 
     private String description;
 
-    // @ManyToOne
-    // @JoinColumn(name = "personal_id")
-    // private Personal personal;
-    //
-    // @ManyToOne
-    // @JoinColumn(name = "realtor_id")
-    // private Realtor realtor;
-
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

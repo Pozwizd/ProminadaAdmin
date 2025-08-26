@@ -1,6 +1,6 @@
 package com.pozwizd.prominadaadmin.controller;
 
-import com.pozwizd.prominadaadmin.filter.RealtorFilter;
+import com.pozwizd.prominadaadmin.models.filter.RealtorFilter;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorRequest;
 import com.pozwizd.prominadaadmin.models.realtor.RealtorResponse;
 import com.pozwizd.prominadaadmin.service.RealtorService;
@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,7 @@ public class RealtorController {
     }
 
     @GetMapping("/{id}")
+    @Async
     public CompletableFuture<ResponseEntity<?>> getRealtorById(@PathVariable Long id) {
         return CompletableFuture.supplyAsync(() -> {
             try {

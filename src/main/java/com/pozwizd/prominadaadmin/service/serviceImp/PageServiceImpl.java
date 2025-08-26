@@ -21,6 +21,11 @@ public class PageServiceImpl implements PageService {
     private final PageMapper pageMapper;
 
     @Override
+    public Page createPage(Page page) {
+        return pageRepository.save(page);
+    }
+
+    @Override
     public PageResponse createPage(PageResponse pageResponse) {
         try {
             Page page = pageRepository.save(pageMapper.toEntity(pageResponse));

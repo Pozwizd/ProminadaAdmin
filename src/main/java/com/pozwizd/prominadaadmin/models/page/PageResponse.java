@@ -1,5 +1,7 @@
 package com.pozwizd.prominadaadmin.models.page;
 
+import lombok.Builder;
+import lombok.Data;
 import lombok.Value;
 
 import java.io.Serializable;
@@ -7,7 +9,8 @@ import java.io.Serializable;
 /**
  * DTO for {@link com.pozwizd.prominadaadmin.entity.Page}
  */
-@Value
+@Data
+@Builder
 public class PageResponse implements Serializable {
     Long id;
     String name;

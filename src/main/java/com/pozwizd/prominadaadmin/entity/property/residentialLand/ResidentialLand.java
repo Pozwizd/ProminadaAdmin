@@ -21,6 +21,28 @@ import java.util.Objects;
 @AllArgsConstructor
 public class ResidentialLand {
 
+    @OneToOne(cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.EAGER,
+            mappedBy = "residentialLand")
+    @ToString.Exclude
+    private ResidentialLandMain residentialLandMain;
+
+    @OneToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "residentialLand")
+    @ToString.Exclude
+    private List<ResidentialLandFile> residentialLandFiles
+            = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            mappedBy = "residentialLand")
+    @ToString.Exclude
+    private List<ResidentialLandGalleryImage> residentialLandGalleryImages = new ArrayList<>();
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
@@ -67,26 +89,6 @@ public class ResidentialLand {
 
     private String langPurpose;
 
-    @OneToOne(cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.EAGER,
-            mappedBy = "residentialLand")
-    @ToString.Exclude
-    private ResidentialLandMain residentialLandMain;
-
-    @OneToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "residentialLand")
-    @ToString.Exclude
-    private List<ResidentialLandFile> residentialLandFiles = new ArrayList<>();
-
-    @OneToMany(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            mappedBy = "residentialLand")
-    @ToString.Exclude
-    private List<ResidentialLandGalleryImage> residentialLandGalleryImages = new ArrayList<>();
 
     @Lob
     @Basic(fetch = FetchType.EAGER)

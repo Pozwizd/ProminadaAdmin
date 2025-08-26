@@ -1,7 +1,8 @@
 package com.pozwizd.prominadaadmin.models.property.commercialProperty.request;
 
-import com.pozwizd.prominadaadmin.entity.property.commercial.CommercialProperties;
+import com.pozwizd.prominadaadmin.entity.property.commercialProperty.CommercialProperties;
 import com.pozwizd.prominadaadmin.entity.property.enums.OwnershipDoc;
+import jakarta.validation.Valid;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,6 +15,8 @@ import java.util.List;
 @Data
 public class CommercialPropertiesRequest implements Serializable {
     Long id;
+
+    @Valid
     CommercialPropertiesMainRequest commercialPropertiesMain;
     List<CommercialPropertiesFileRequest> commercialPropertiesFiles;
     List<CommercialPropertiesGalleryImageRequest> commercialPropertiesGalleryImages;

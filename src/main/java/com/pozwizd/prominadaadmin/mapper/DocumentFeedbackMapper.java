@@ -40,24 +40,20 @@ public interface DocumentFeedbackMapper {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toSet());
 
-        // Удаляем элементы, которых нет в запросах
         documentFeedbacks.removeIf(feedback ->
                 feedback.getId() != null && !requestIds.contains(feedback.getId()));
 
-        // Создаем карту существующих элементов
         Map<Long, DocumentFeedback> existingFeedbackMap = documentFeedbacks.stream()
                 .filter(feedback -> feedback.getId() != null)
                 .collect(Collectors.toMap(DocumentFeedback::getId, Function.identity()));
 
         for (DocumentFeedbackRequest request : documentFeedbackRequests) {
             if (request.getId() != null) {
-                // Обновляем существующий элемент
                 DocumentFeedback existingFeedback = existingFeedbackMap.get(request.getId());
                 if (existingFeedback != null) {
                     partialUpdate(request, existingFeedback);
                 }
             } else {
-                // Создаем новый элемент
                 DocumentFeedback newFeedback = toEntity(request);
                 documentFeedbacks.add(newFeedback);
             }

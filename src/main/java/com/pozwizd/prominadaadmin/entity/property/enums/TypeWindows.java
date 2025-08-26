@@ -11,7 +11,6 @@ public enum TypeWindows {
 
     private final String description;
 
-    // Конструктор
     TypeWindows(String description) {
         this.description = description;
     }

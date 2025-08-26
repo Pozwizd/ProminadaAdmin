@@ -13,5 +13,5 @@ import java.io.Serializable;
 public class ResidentialLandGalleryImageRequest implements Serializable {
     Long id;
     String name;
-    MultipartFile file;
+    MultipartFile pathImage;
 }

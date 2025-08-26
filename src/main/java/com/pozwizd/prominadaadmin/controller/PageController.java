@@ -5,6 +5,7 @@ import com.pozwizd.prominadaadmin.service.PageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,8 +19,10 @@ public class PageController {
 
     private final PageService pageService;
 
-    @PostMapping("/create")
-    public CompletableFuture<ResponseEntity<PageResponse>> createPage(@Valid @ModelAttribute PageResponse pageResponse) {
+    @PostMapping(value ="/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public CompletableFuture<ResponseEntity<PageResponse>> createPage(@Valid @RequestBody PageResponse pageResponse) {
         return CompletableFuture.supplyAsync(() -> ResponseEntity.ok(pageService.createPage(pageResponse)));
     }
 

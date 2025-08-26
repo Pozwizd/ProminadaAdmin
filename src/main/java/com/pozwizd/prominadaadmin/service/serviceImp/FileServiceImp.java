@@ -17,11 +17,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-/**
- * Сервис для управления файлами в системе.
- * Обеспечивает функционал загрузки, хранения, получения и удаления файлов.
- * Поддерживает работу как с временными, так и с постоянными файлами.
- */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -33,8 +28,6 @@ public class FileServiceImp implements FileService {
 
     private final ResidentialLandFileRepository residentialLandFileRepository;
 
-
-    // Условие для проверки валидности файла
     @Named("isValidFile")
     public boolean isValidFile(MultipartFile file) {
         return file != null &&
@@ -67,23 +60,18 @@ public class FileServiceImp implements FileService {
         return "uploads/" + fileName;
     }
 
-    // Новый метод для условной загрузки файла
+
+    @Override
     @Named("uploadFileIfPresent")
     public String uploadFileIfPresent(MultipartFile file) throws IOException {
         if (file == null || file.isEmpty()) {
-            return null; // Возвращаем null, чтобы MapStruct игнорировал это поле
+            return null;
         }
         return uploadFile(file);
     }
 
 
-    /**
-     * Удаляет файл из системы по его имени.
-     *
-     * @param fileName Имя файла для удаления
-     * @return true, если файл был успешно удален, false если файл не существует
-     * @throws IOException если произошла ошибка при удалении файла
-     */
+
     @Override
     @Named("deleteFile")
     public boolean deleteFile(String fileName) throws IOException {

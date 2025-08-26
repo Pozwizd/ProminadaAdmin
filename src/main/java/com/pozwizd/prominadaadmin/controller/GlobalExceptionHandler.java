@@ -2,6 +2,7 @@ package com.pozwizd.prominadaadmin.controller;
 
 import com.pozwizd.prominadaadmin.exception.OperationException;
 import jakarta.persistence.OptimisticLockException;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -56,11 +58,27 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleGeneralException(Exception ex) {
+    public ResponseEntity<ProblemDetail> handleGeneralException(Exception ex, HttpServletRequest request) {
+        // Логируем с контекстом запроса
+        log.error("Unhandled exception for request {} {}: {}",
+                request.getMethod(), request.getRequestURI(), ex.getMessage(), ex);
+
+        String errorMessage;
+        if (ex.getMessage() != null && !ex.getMessage().trim().isEmpty()) {
+            errorMessage = ex.getMessage();
+        } else {
+            errorMessage = "Произошла внутренняя ошибка сервера: " + ex.getClass().getSimpleName();
+        }
+
         ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
                 HttpStatus.INTERNAL_SERVER_ERROR,
-                "Internal Server Error: " + ex.getMessage()
+                errorMessage
         );
+
+        problemDetail.setProperty("timestamp", Instant.now());
+        problemDetail.setProperty("path", request.getRequestURI());
+
         return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 }

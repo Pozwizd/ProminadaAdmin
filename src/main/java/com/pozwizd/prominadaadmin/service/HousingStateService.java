@@ -3,6 +3,7 @@ package com.pozwizd.prominadaadmin.service;
 import com.pozwizd.prominadaadmin.entity.property.HousingState;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -15,4 +16,6 @@ public interface HousingStateService {
     HousingState update(Long id, HousingState housingState);
 
     void delete(Long id);
+
+    List<HousingState> findAll();
 }

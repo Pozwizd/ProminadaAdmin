@@ -3,7 +3,11 @@ package com.pozwizd.prominadaadmin.models.property.residentialLand.request;
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
 import com.pozwizd.prominadaadmin.entity.property.residentialLand.ResidentialLandMain;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
+import com.pozwizd.prominadaadmin.validator.branch.NotFoundBranch;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -12,6 +16,14 @@ import java.time.LocalDate;
  * Request for {@link ResidentialLandMain}
  */
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@NotFoundBranch(
+        message = "Филиал по branchCode не найден",
+        branchCodeField = "branchCode",
+        nullable = false
+)
 public class ResidentialLandMainRequest implements Serializable {
     Long id;
     PublicationStatus publicationStatus;
@@ -22,7 +34,7 @@ public class ResidentialLandMainRequest implements Serializable {
     Double price;
     TypeProperty typeProperty;
     Double landAreaAcres;
-    Double FreePlotAreaAcres;
+    Double freePlotAreaAcres;
     Boolean landOwnership;
     DesignatedUseOfLand designatedUseOfLand;
     Integer houseCount;
@@ -59,7 +71,7 @@ public class ResidentialLandMainRequest implements Serializable {
     Boolean isOpenObject;
     Boolean fromMediator;
     String description;
-    String AdvertisingHeadline;
-    String AdvertisingText;
+    String advertisingHeadline;
+    String advertisingText;
     Boolean isAdvertising;
 }

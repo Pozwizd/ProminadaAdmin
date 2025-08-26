@@ -17,8 +17,8 @@ public class SecondaryPropertyMainResponse implements Serializable {
     Long id;
     PublicationStatus publicationStatus;
     String objectCode;
-    Integer branchCode;
-    Integer employeeCode;
+    String branchCode;
+    String employeeCode;
     String personalName;
     String landmark;
     Long housingStateId;

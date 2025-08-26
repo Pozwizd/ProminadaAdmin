@@ -3,97 +3,181 @@ package com.pozwizd.prominadaadmin.mapper.property.builderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderProperty;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyGalleryImage;
 import com.pozwizd.prominadaadmin.entity.property.builderProperty.BuilderPropertyLayouts;
-import com.pozwizd.prominadaadmin.models.media.MediaDtoDrop;
-import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDto;
-import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyDtoForTable;
-import com.pozwizd.prominadaadmin.models.property.builderProperty.BuilderPropertyLayoutDto;
-import org.mapstruct.Mapper;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.response.BuilderPropertyResponseForTable;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.request.BuilderPropertyRequest;
+import com.pozwizd.prominadaadmin.models.property.builderProperty.response.BuilderPropertyResponse;
+import com.pozwizd.prominadaadmin.service.FileService;
+import com.pozwizd.prominadaadmin.service.forMapper.EntityLookupService;
+import org.mapstruct.*;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING,
+        uses = {EntityLookupService.class,
+                BuilderPropertyGalleryImageMapper.class,
+                BuilderPropertyLayoutsMapper.class,
+                FileService.class
+        },
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface BuilderPropertyMapper {
 
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "region.id", target = "regionId")
+    @Mapping(source = "city.id", target = "cityId")
+    @Mapping(source = "district.id", target = "districtId")
+    @Mapping(source = "street.id", target = "streetId")
+    @Mapping(source = "house.id", target = "houseId")
+    @Mapping(source = "topozone.id", target = "topozoneId")
+    @Mapping(source = "buildingCompany.id", target = "buildingCompanyId")
+    @Mapping(source = "builderPropertyGalleryImages", target = "builderPropertyGalleryImages",
+            qualifiedByName = "toBuilderPropertyGalleryImageResponseList")
+    @Mapping(source = "builderPropertyLayouts", target = "builderPropertyLayouts",
+            qualifiedByName = "toBuilderPropertyLayoutsResponseList")
+    BuilderPropertyResponse toResponse(BuilderProperty builderProperty);
 
-    default Page<BuilderPropertyDtoForTable> toDto(Page<BuilderProperty> page) {
-        return page.map(this::toResponseForTable);
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "region", source = "regionId", qualifiedByName = "findRegionById")
+    @Mapping(target = "city", source = "cityId", qualifiedByName = "findCityById")
+    @Mapping(target = "district", source = "districtId", qualifiedByName = "findDistrictById")
+    @Mapping(target = "street", source = "streetId", qualifiedByName = "findStreetById")
+    @Mapping(target = "house", source = "houseId", qualifiedByName = "findHouseById")
+    @Mapping(target = "topozone", source = "topozoneId", qualifiedByName = "findTopozoneById")
+    @Mapping(target = "buildingCompany", source = "buildingCompanyId", qualifiedByName = "findBuildingCompanyById")
+    @Mapping(target = "builderPropertyGalleryImages", source = "builderPropertyGalleryImageRequests",
+            qualifiedByName = "partialUpdateBuilderPropertyGalleryImageList")
+    @Mapping(target = "builderPropertyLayouts", source = "builderPropertyLayoutsRequests",
+            qualifiedByName = "partialUpdateBuilderPropertyLayoutsList")
+    @Mapping(
+            source = "pathToChessPlanFile",
+            target = "pathToChessPlanFile",
+            qualifiedByName = "uploadFileIfPresent",
+            conditionExpression =
+                    "java(" +
+                            "builderPropertyRequest.getPathToChessPlanFile() != null" +
+                            " && !builderPropertyRequest.getPathToChessPlanFile().isEmpty()" +
+                            " && builderPropertyRequest.getPathToChessPlanFile().getSize() > 0" +
+                            ")"
+    )
+    @Mapping(
+            source = "pathToMortgageConditionsFile",
+            target = "pathToMortgageConditionsFile",
+            qualifiedByName = "uploadFileIfPresent",
+            conditionExpression =
+                    "java(" +
+                            "builderPropertyRequest.getPathToMortgageConditionsFile() != null" +
+                            " && !builderPropertyRequest.getPathToMortgageConditionsFile().isEmpty()" +
+                            " && builderPropertyRequest.getPathToMortgageConditionsFile().getSize() > 0" +
+                            ")"
+    )
+    @Mapping(
+            source = "pathToPriceFile",
+            target = "pathToPriceFile",
+            qualifiedByName = "uploadFileIfPresent",
+            conditionExpression =
+                    "java(" +
+                            "builderPropertyRequest.getPathToPriceFile() != null" +
+                            " && !builderPropertyRequest.getPathToPriceFile().isEmpty()" +
+                            " && builderPropertyRequest.getPathToPriceFile().getSize() > 0" +
+                            ")"
+    )
+    void updateFromRequest(BuilderPropertyRequest builderPropertyRequest,
+                           @MappingTarget BuilderProperty builderProperty);
+
+    @AfterMapping
+    default void wireAfterUpdate(@MappingTarget BuilderProperty builderProperty) {
+        List<BuilderPropertyGalleryImage> galleryImages = builderProperty.getBuilderPropertyGalleryImages();
+        if (galleryImages != null) {
+            for (BuilderPropertyGalleryImage image : galleryImages) {
+                if (image != null) image.setBuilderProperty(builderProperty);
+            }
+        }
+        List<BuilderPropertyLayouts> layouts = builderProperty.getBuilderPropertyLayouts();
+        if (layouts != null) {
+            for (BuilderPropertyLayouts layout : layouts) {
+                if (layout != null) layout.setBuilderProperty(builderProperty);
+            }
+        }
     }
 
-    default BuilderPropertyDto toDto(BuilderProperty entity) {
-        List<MediaDtoDrop> medias = entity.getBuilderPropertyGalleryImages().stream().map(this::toDto).toList();
-        List<BuilderPropertyLayoutDto> layouts = entity.getBuilderPropertyLayouts().stream().map(this::toDto).toList();
-        return BuilderPropertyDto.builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .street(entity.getStreet())
-                .totalFloor(entity.getTotalFloor())
-                .pathToChessPlanFile(entity.getPathToChessPlanFile())
-                .pathToMortgageConditionsFile(entity.getPathToMortgageConditionsFile())
-                .pathToPriceFile(entity.getPathToPriceFile())
-                .cityId(entity.getCity() != null ? entity.getCity().getId().toString() : null)
-                .regDistrictId(entity.getRegion() != null ? entity.getRegion().getId().toString() : null)
-                .districtId(entity.getDistrict() != null ? entity.getDistrict().getId().toString() : null)
-                .topozoneId(entity.getTopozone() != null ? entity.getTopozone().getId().toString() : null)
-                .buildingCompanyId(entity.getBuildingCompany() != null ? entity.getBuildingCompany().getId().toString() : null)
-                .deliveryDateId(entity.getDeliveryDate()!=null?entity.getDeliveryDate().toString():null)
-                .houseNumber(entity.getHouseNumber())
-                .phoneNumber(entity.getPhoneNumber())
-                .description(entity.getDescription())
-                .actionDescription(entity.getActionDescription())
-                .actionTitle(entity.getActionTitle())
-                .isAction(entity.getIsAction())
-                .filesDto(medias)
-                .layoutDto(layouts)
-                .build();
+    @Mapping(target = "region", source = "regionId", qualifiedByName = "findRegionById")
+    @Mapping(target = "city", source = "cityId", qualifiedByName = "findCityById")
+    @Mapping(target = "district", source = "districtId", qualifiedByName = "findDistrictById")
+    @Mapping(target = "street", source = "streetId", qualifiedByName = "findStreetById")
+    @Mapping(target = "house", source = "houseId", qualifiedByName = "findHouseById")
+    @Mapping(target = "topozone", source = "topozoneId", qualifiedByName = "findTopozoneById")
+    @Mapping(target = "buildingCompany", source = "buildingCompanyId", qualifiedByName = "findBuildingCompanyById")
+    @Mapping(target = "builderPropertyGalleryImages", source = "builderPropertyGalleryImageRequests",
+            qualifiedByName = "toBuilderPropertyGalleryImageEntity")
+    @Mapping(target = "builderPropertyLayouts", source = "builderPropertyLayoutsRequests",
+            qualifiedByName = "toBuilderPropertyLayoutsEntity")
+    @Mapping(
+            source = "pathToChessPlanFile",
+            target = "pathToChessPlanFile",
+            qualifiedByName = "uploadFileIfPresent",
+            conditionExpression =
+                    "java(" +
+                            "builderPropertyRequest.getPathToChessPlanFile() != null" +
+                            " && !builderPropertyRequest.getPathToChessPlanFile().isEmpty()" +
+                            " && builderPropertyRequest.getPathToChessPlanFile().getSize() > 0" +
+                            ")"
+    )
+    @Mapping(
+            source = "pathToMortgageConditionsFile",
+            target = "pathToMortgageConditionsFile",
+            qualifiedByName = "uploadFileIfPresent",
+            conditionExpression =
+                    "java(" +
+                            "builderPropertyRequest.getPathToMortgageConditionsFile() != null" +
+                            " && !builderPropertyRequest.getPathToMortgageConditionsFile().isEmpty()" +
+                            " && builderPropertyRequest.getPathToMortgageConditionsFile().getSize() > 0" +
+                            ")"
+    )
+    @Mapping(
+            source = "pathToPriceFile",
+            target = "pathToPriceFile",
+            qualifiedByName = "uploadFileIfPresent",
+            conditionExpression =
+                    "java(" +
+                            "builderPropertyRequest.getPathToPriceFile() != null" +
+                            " && !builderPropertyRequest.getPathToPriceFile().isEmpty()" +
+                            " && builderPropertyRequest.getPathToPriceFile().getSize() > 0" +
+                            ")"
+    )
+    BuilderProperty toEntity(BuilderPropertyRequest builderPropertyRequest);
+
+    @AfterMapping
+    default void wireAfterCreate(@MappingTarget BuilderProperty builderProperty) {
+        List<BuilderPropertyGalleryImage> galleryImages = builderProperty.getBuilderPropertyGalleryImages();
+        if (galleryImages != null) {
+            for (BuilderPropertyGalleryImage image : galleryImages) {
+                if (image != null) image.setBuilderProperty(builderProperty);
+            }
+        }
+        List<BuilderPropertyLayouts> layouts = builderProperty.getBuilderPropertyLayouts();
+        if (layouts != null) {
+            for (BuilderPropertyLayouts layout : layouts) {
+                if (layout != null) layout.setBuilderProperty(builderProperty);
+            }
+        }
     }
 
-    default BuilderPropertyDtoForTable toResponseForTable(BuilderProperty entity) {
-        return BuilderPropertyDtoForTable
-                .builder()
-                .id(entity.getId())
-                .name(entity.getName())
-                .nameDistrict(entity.getDistrict() != null ? entity.getDistrict().getName() : null)
-                .nameTopozone(entity.getTopozone() != null ? entity.getTopozone().getName() : null)
-                .street(entity.getStreet())
-                .totalFloor(entity.getPathToChessPlanFile())
-                .build();
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "city.name", target = "city")
+    @Mapping(source = "district.name", target = "district")
+    @Mapping(source = "street.name", target = "street")
+    @Mapping(source = "topozone.name", target = "topozone")
+    @Mapping(source = "totalFloor", target = "totalFloor")
+    BuilderPropertyResponseForTable toResponseForTable(BuilderProperty builderProperty);
+
+    default Page<BuilderPropertyResponseForTable> toResponseForTablePage(Page<BuilderProperty> builderProperties) {
+        return builderProperties.map(this::toResponseForTable);
     }
 
-    BuilderProperty toEntityFromRequest(BuilderPropertyDto dto);
-
-    BuilderPropertyGalleryImage toEntityFromRequest(MediaDtoDrop dto);
-
-    MediaDtoDrop toDto(BuilderPropertyGalleryImage gallery);
-
-    BuilderPropertyLayoutDto toDto(BuilderPropertyLayouts entity);
-    default BuilderPropertyGalleryImage toEntityFromRequest(MediaDtoDrop dto, BuilderProperty entity) {
-        BuilderPropertyGalleryImage gallery = new BuilderPropertyGalleryImage();
-        gallery.setId(dto.getId());
-        gallery.setName(dto.getName());
-        gallery.setPathImage(dto.getPathImage());
-        gallery.setBuilderProperty(entity);
-        return gallery;
+    default List<BuilderPropertyResponseForTable> toResponseForTableList(List<BuilderProperty> builderProperties) {
+        return builderProperties.stream()
+                .map(this::toResponseForTable)
+                .toList();
     }
 
-    default BuilderPropertyLayouts toEntityFromRequest(BuilderPropertyLayoutDto dto, BuilderProperty entity) {
-        BuilderPropertyLayouts layout = new BuilderPropertyLayouts();
-        layout.setId(dto.getId());
-        layout.setName(dto.getName());
-        layout.setPriceByM2(dto.getPriceByM2());
-        layout.setRooms(dto.getRooms());
-        layout.setTotalArea(dto.getTotalArea());
-        layout.setLivingArea(dto.getLivingArea());
-        layout.setKitchenArea(dto.getKitchenArea());
-        layout.setVisibleForSite(dto.getVisibleForSite());
-        layout.setNameFile1(dto.getFileName1());
-        layout.setNameFile2(dto.getFileName2());
-        layout.setNameFile3(dto.getFileName3());
-        layout.setPathImage1(dto.getPathImage1());
-        layout.setPathImage2(dto.getPathImage2());
-        layout.setPathImage3(dto.getPathImage3());
-        layout.setDescription(dto.getDescription());
-        layout.setBuilderProperty(entity);
-        return layout;
-    }
 }

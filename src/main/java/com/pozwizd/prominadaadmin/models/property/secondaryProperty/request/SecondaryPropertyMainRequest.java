@@ -3,6 +3,7 @@ package com.pozwizd.prominadaadmin.models.property.secondaryProperty.request;
 import com.pozwizd.prominadaadmin.entity.SourceInformation;
 import com.pozwizd.prominadaadmin.entity.property.enums.*;
 import com.pozwizd.prominadaadmin.entity.property.secondaryProperty.SecondaryPropertyMain;
+import com.pozwizd.prominadaadmin.validator.branch.NotFoundBranch;
 import lombok.Data;
 import lombok.Value;
 
@@ -13,14 +14,20 @@ import java.time.LocalDate;
  * Request for {@link SecondaryPropertyMain}
  */
 @Data
+@NotFoundBranch(
+        message = "Филиал по branchCode не найден",
+        branchCodeField = "branchCode",
+        nullable = false
+)
 public class SecondaryPropertyMainRequest implements Serializable {
     Long id;
     PublicationStatus publicationStatus;
     String objectCode;
-    Integer branchCode;
-    Integer employeeCode;
+    String branchCode;
+    String employeeCode;
     String personalName;
     String landmark;
+    Long housingStateId;
     int floor;
     int floors;
     int rooms;
